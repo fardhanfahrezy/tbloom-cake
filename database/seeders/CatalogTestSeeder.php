@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\DailyAvailability;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
@@ -29,6 +30,7 @@ class CatalogTestSeeder extends Seeder
             Product::factory()
                 ->has(ProductVariant::factory()->count(2), 'variants')
                 ->has(ProductImage::factory(), 'images')
+                ->has(DailyAvailability::factory(), 'dailyAvailabilities')
                 ->create([
                     'name' => '[TEST] '.$category->value,
                     'category' => $category,

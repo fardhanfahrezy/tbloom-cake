@@ -36,6 +36,14 @@ class Product extends Model
     }
 
     /**
+     * @return HasMany<DailyAvailability, $this>
+     */
+    public function dailyAvailabilities(): HasMany
+    {
+        return $this->hasMany(DailyAvailability::class);
+    }
+
+    /**
      * @return HasMany<ProductImage, $this>
      */
     public function images(): HasMany
