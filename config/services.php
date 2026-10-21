@@ -2,6 +2,12 @@
 
 return [
 
+    'midtrans' => [
+        'server_key' => env('MIDTRANS_SERVER_KEY'),
+        'is_production' => env('MIDTRANS_IS_PRODUCTION', true),
+        'run_sandbox_contract_tests' => env('MIDTRANS_SANDBOX_CONTRACT_TESTS', false),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services

@@ -7,9 +7,9 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase 1 berjalan; P1-04 Daily Availability schema selesai dan terverifikasi; G-PAY runtime tetap terbuka |
+| Status keseluruhan | Phase 1 berjalan; prasyarat G-PAY untuk P1-05 sedang diverifikasi; discovery merchant dan dua probe live awal lulus |
 | Fase aktif | Phase 1, persetujuan pengguna tetap berlaku; Phase 2 belum dimulai |
-| Task aktif | P1-04 COMPLETED; menunggu bukti G-PAY untuk task berikutnya P1-05 |
+| Task aktif | P1-05 IN PROGRESS pada prasyarat G-PAY; migration orders/items NOT RUN |
 | Milestone berikutnya | Bukti sandbox finalitas per channel sebelum schema payment/order terkait dan payment/release runtime |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -55,7 +55,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | Phase | Total Tasks | Completed | In Progress | Blocked | Not Started |
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
-| 1 — Database foundation | 14 | 6 | 0 | 0 | 8 |
+| 1 — Database foundation | 14 | 6 | 1 | 0 | 7 |
 | 2 — Authentication & authorization | 5 | 0 | 0 | 0 | 5 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
@@ -67,9 +67,9 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **11** | **0** | **0** | **59** |
+| **Total** | **70** | **11** | **1** | **0** | **58** |
 
-Progres audit/roadmap: 5/5 task Phase0. Phase1: enam task selesai termasuk P1-04 atas instruksi eksplisit terbaru pengguna, delapan task belum dimulai. G-PAY tidak dianggap lulus dari adanya kredensial.
+Progres audit/roadmap: 5/5 task Phase0. Phase1: enam task selesai, P1-05 sedang mengerjakan prasyarat G-PAY, tujuh task belum dimulai. Tidak menandai P1-05 selesai dari discovery atau penerimaan payload Snap.
 
 ## C. Detailed Implementation Checklist
 
@@ -97,7 +97,7 @@ Gate G-APPROVAL wajib sebelum seluruh task fase ini. Models/enums/factories diba
 | [x] P1-02 | Expand/validate/contract users; role/WA aktif; F-002/010 | Shrink/backfill sah, unique WA, role/active CHECK, UTC preserve; DBT-01/03/19 bagian users | P1-01, G-DATA | Dua migration baru; User.php; UserFactory.php; Models/UserRole.php; UserFoundationTest.php | 14 MySQL tests passed/41 assertions; Review Standards+Spec awal3 temuan, semua diperbaiki dan re-review tanpa required finding. Belum deploy |
 | [x] P1-03 | DDL products/variants/images; F-001/009, C-01/07 | Types/unique/prices/category/RESTRICT; DBT-01/02/03 bagian katalog | P1-02 | Tiga models/factories/migrations/tests; ProductCategory; CatalogTestSeeder | 26 MySQL tests passed/67 assertions; seeder khusus tbloom_testing, review Standards1 temuan diperbaiki/Spec0; full regression sebelum seeder52 passed114 assertions |
 | [x] P1-04 | DDL daily availability; F-004, BR-12/13 | Unique produk/tanggal, FK/updater, composite parent key, quota tanpa counter kedua; DBT-01/02/03 sebagian | P1-03; instruksi eksplisit pengguna22 Oktober untuk mengerjakan schema dan test tbloom_testing | DailyAvailability model/factory/migration/test; Product relation; CatalogTestSeeder | COMPLETED schema-only:24 test P1-04; bersama katalog35 passed/99 assertions; full MySQL90/210; Review0/0 required findings. D-012; runtime quota/release/concurrency belum dibuat |
-| [ ] P1-05 | DDL orders/items + snapshots; F-002/005, C-01/04/07 | One item/order, composite FK, money/deadline/pickup/terms CHECK; DBT-01/02/03 | P1-04, G-PAY | migrations; enums/models/factories/tests per slice | NOT RUN |
+| [~] P1-05 | DDL orders/items + snapshots; F-002/005, C-01/04/07 | One item/order, composite FK, money/deadline/pickup/terms CHECK; DBT-01/02/03 | P1-04, G-PAY | Prasyarat aktual: config/services.php, routes/console.php, MidtransSandboxPreflightTest, MidtransSandboxContractTest dan tracker; migration/model belum dibuat | IN PROGRESS prasyarat: GET merchant22 kanal aktif,24 fake-HTTP tests/81 assertions,2 opt-in live session probes/8 assertions. Gate effective expiry/success timing/final close belum lulus; DDL NOT RUN |
 | [ ] P1-06 | DDL payments/events dan closure FK terakhir; F-006 | Unique reference/payment, claim/lease, same-payment closure; DBT-01/02/03 | P1-05, G-PAY | migrations; models/factories; focused tests | NOT RUN; kontrak channel harus dibuktikan sebelum migration terkait |
 | [ ] P1-07 | DDL canonical movements; F-006/007, C-05 | Immutable facts, provenance/dedup/correction representation; DBT-01/02/06/07 | P1-06, P1-09, G-LEDGER | migration setelah transfers; model/factory; focused tests | NOT RUN; urutan file DDL mengikuti FK, bukan nomor checklist |
 | [ ] P1-08 | DDL order_requests; F-007, C-03/06 | Composite ownership, generated pending slot, state timestamps; DBT-01/02/03 | P1-05 | migration; model/factory; enum; test | NOT RUN |
@@ -242,6 +242,10 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
+- Task aktif: **P1-05**, masih pada prasyarat **G-PAY**. Recovery Git cocok d77212a; hanya .env.example pihak lain dirty sebelum perubahan baru. Tidak mengulang P1-04 atau membuka Phase2.
+- Checkpoint prasyarat selesai: command read-only midtrans:sandbox-preflight, config key/mode, strict channel parsing dan redaksi errors;24 fake-HTTP tests/81 assertions. GET merchant berhasil dengan key lokal,22 kanal aktif terverifikasi tanpa mengubah preferensi.
+- Dua live probes opt-in lulus/8 assertions: request Snap berisi22 identifier + expiry30menit absolut diterima; request BCA dengan start_time mundur10menit diterima. Sesi belum dipilih metode dan Core status menghasilkan logical404; HTTP200/provider404 dikonfirmasi terpisah. Ini bukan bukti effective instrument expiry, paid_at atau final closure.
+- Pekerjaan belum selesai: pemilihan/konfirmasi instrumen per kanal, boundary tepat deadline, pemetaan waktu sukses dan presisi, race close/settle serta webhook recovery. Konfirmasi provider tentang timestamp/finalitas sudah ditanyakan sebagai sumber tambahan; tidak mengubah K-01 atau mengurangi kanal tanpa keputusan pengguna.
 - Task terakhir: **P1-04 — Daily availability**, COMPLETED schema-only sesuai instruksi eksplisit pengguna (D-012). RED→GREEN schema dan fixture; tes terkait35 passed/99 assertions di tbloom_testing. Review Standards0/Spec0 required findings.
 - Implementasi selesai: tabel dengan unique produk/tanggal dan produk/id, index tanggal/produk, quota unsigned tanpa default/counter kedua, FK RESTRICT produk/updater, tanggal kalender DATE dan timestamps DATETIME(0). Model/date cast, relasi, factory snapshot default dan guarded synthetic seeder tersedia.
 - Pekerjaan parsial domain: operasi materialisasi production, transaksi ubah quota, perhitungan used dari alokasi, checkout concurrency dan release belum dibuat; tetap P3/P4/P5. DBT-02 composite order-item FK baru dapat dibuktikan setelah P1-05; sekarang parent key terverifikasi.
@@ -250,7 +254,7 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 - Acceptance scope: schema/model/factory/test seeder dan integritas database. Katalog publik/Admin, auth, checkout dan visibilitas testimoni tetap fase berikutnya; bukan fitur UI selesai.
 - DDL/DML hanya dijalankan pada tbloom_testing. Database development tetap sembilan tabel scaffold; migration aplikasi baru belum diterapkan ke development/production.
 - Gate berikutnya: bukti per channel untuk waktu sukses/zona/presisi, absolute expiry, final close versus settlement/recovery; dokumentasi provider umum atau mock tidak menutup gate sandbox.
-- Final regression P1-04:90 MySQL tests passed/210 assertions; profil default14 passed/76 skipped/15 assertions. Pint passed; git diff --check passed. Tidak memulai P1-05, Phase2 atau deployment.
+- Final regression checkpoint P1-04:90 MySQL tests passed/210 assertions; profil default14 passed/76 skipped/15 assertions. Pint/diff check saat itu passed. Sesi baru belum menjalankan DDL P1-05, Phase2 atau deployment.
 
 ## E. Completed Tasks
 
@@ -293,7 +297,7 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
-| G-PAY | Pemeriksaan22 Oktober: server/client key lokal tersedia dan MIDTRANS_IS_PRODUCTION=false; nilai key tidak dicetak/disalin. Active channels, timestamp precision/timezone, absolute expiry dan final-close race belum dibuktikan melalui API | P1-04 schema-only diotorisasi eksplisit (D-012); gate runtime payment/expiry/release dan P1-05/06 tetap terbuka. Presence credentials, dokumentasi umum dan fake HTTP bukan bukti merchant |
+| G-PAY | Key Sandbox berhasil mengakses GET preferences:22 kanal aktif. Dua live session probes menerima payload expiry absolut, tetapi effective expiry setelah pemilihan instrumen, timestamp/presisi sukses dan final-close race belum dibuktikan. Kartu/3DS memakai expiry issuer setelah Pay menurut docs | P1-05 baru prasyarat; DDL orders/items dan P1-06 tetap belum dijalankan. Seluruh kanal pilihan pengguna dipertahankan. Tuntaskan DBT-16 per kanal dan konfirmasi provider untuk kontrak waktu/finalitas yang belum jelas; discovery/token acceptance bukan pass gate |
 | G-NOTIFY | Fonnte token tidak ada; mail driver log; recipient configuration/device/provider idempotency/status belum dibuktikan | Automated tests fake saja; real sandbox/internal-recipient test hanya dengan izin. Jangan kirim customer nyata |
 | G-CONTENT | Logo/foto/alamat toko/contact/allowlist rasa/filling/harga/unit kemasan dan desain Figma aktual belum tersedia dalam scope audit | Jangan mengarang master bisnis. Plumbing/factory sintetis boleh setelah fase disetujui; data publik final menunggu sumber |
 | G-ARCHITECT | Tool/skill bernama AI Software Architect tidak ditemukan dalam katalog sesi | Fallback review teknis standar berdasarkan dokumen; tidak mengaku plugin architect dijalankan. Skill lokal improve-codebase-architecture diperiksa: fokus refactor scaffold, tidak sesuai tugas audit ini |
@@ -316,6 +320,28 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 - Target Laravel Cloud dalam PRD belum diganti oleh aturan kondisional Railway. Tidak ada keputusan platform baru dibuat pada sesi ini.
 - CLAUDE.md masih berisi bootstrap pemasangan PHP8.5/Boost. Prasyarat PHP8.4 dan Boost sudah tersedia, sehingga tidak menjalankan ulang bootstrap atau mengubah dependency; instruksi target pengguna dan AGENTS.md berlaku.
 - Tidak ditemukan kontradiksi baru yang memerlukan perubahan persentase refund, scope checkout, H-2/H-3/H-7, batas3/D90, penerima K-19, atau kebijakan K-01–20.
+
+### G-PAY — bukti merchant dan gap kontrak,22 Oktober2026
+
+Pengguna menyatakan kanal Snap Sandbox aktif dan mengotorisasi informasi ini untuk pengujian gate. GET live resmi mengembalikan22 identifier: akulaku, alfamart, bca_va, bni_va, bri_va, bsi_va, cimb_va, credit_card, dana, danamon_va, echannel, google_pay, gopay, indomaret, kredivo, other_qris, other_va, ovo, permata_va, saqu_va, seabank_va, shopeepay. Identifier induk tidak membuktikan subfitur GoPay Later/SpayLater atau activation production. Tidak mengirim PATCH atau mengubah toggle merchant.
+
+| Kelompok pilihan pengguna | Bukti yang tersedia | Bukti yang belum tersedia |
+|---|---|---|
+| VA11 identifier termasuk echannel/other_va | Enabled preference terbaca; dimasukkan bulk enabled_payments pada request Snap yang diterima; BCA delayed session creation10menit diterima | Pemilihan/charge instrumen aktual, expiry_time efektif, asal timestamp customer paid, close/settle race per bank |
+| GoPay/ShopeePay/OVO/DANA/other_qris |5 identifier enabled dan tercakup request sesi | Variasi QR/deeplink/PayLater, timestamp/presisi sukses, absolute instrument expiry, final close/race |
+| credit_card/google_pay |2 identifier enabled dan tercakup request sesi | Capture time customer, issuer OTP/3DS expiry, Google Pay instrument path, final close/race |
+| alfamart/indomaret |2 identifier enabled dan tercakup request sesi | Kode bayar/expiry metode, waktu aksi customer versus laporan provider, final close/race |
+| akulaku/kredivo |2 identifier enabled dan tercakup request sesi dengan synthetic item_details | Approval/pembayaran aktual, timestamp/presisi, expiry efektif, final close/race |
+
+Sumber resmi dan batas interpretasi:
+
+- [Preference API](https://docs.midtrans.com/reference/snap-checkout-preference-api): GET /snap/v3/merchant-preferences memakai Basic server key dan memberi name/enabled. Command menampilkan identifier valid saja; identity, body error, key dan token tidak dicetak.
+- [Expiry Snap](https://docs.midtrans.com/reference/expire-a-snap-session): expiry.start_time mengikat blanket expiry; page expiry saja tidak menghapus kesempatan membayar melalui instrumen yang masih valid. Setelah kartu masuk OTP/3DS, expiry dipengaruhi issuer. Dokumentasi ini belum membuktikan pemenuhan BR-10 per kanal merchant.
+- [GET status](https://docs.midtrans.com/docs/get-status-api-requests): transaction_time bukan definisi universal waktu customer membayar; card capture dapat mendahului settlement. [Webhook caveat](https://docs.midtrans.com/docs/https-notification-webhooks) menjelaskan Core not-found dapat muncul sebelum customer memilih kanal Snap. Live GET terhadap sesi sintetis memang menghasilkan HTTP200/status_code404, tanpa transaction_status.
+- [Snap request](https://docs.midtrans.com/reference/request-body-json-parameter) dan [Integration Guide](https://docs.midtrans.com/docs/snap-snap-integration-guide): identifier order maksimum50 karakter. Probe memakai prefix TBLOOM-GPAY- ditambah UUID,48 karakter, dan nominal sintetis500000, bukan master harga toko. Request awal dengan53 karakter ditolakHTTP400; setelah prefix diperbaiki, sesi berhasil dibuat.
+- Session token/redirect URL tidak disimpan/dicetak. Probe hanya membuat sesi tanpa customer_details, VA/QR/card charge, atau pembayaran; sesi sintetis dibiarkan mengikuti expiry yang diminta. Tidak ada fakta pembayaran/closure/order/quota aplikasi yang dibuat dari probe.
+
+**Status G-PAY: OPEN.** Token acceptance termasuk backdated start_time bukan bukti deadline efektif saat kanal dipilih belakangan. Belum ada verified payment timestamp atau final-close evidence. Konfirmasi teknis provider diminta mengenai field sukses/presisi dan finalitas close versus settlement, khususnya kartu/3DS; pengujian instrumen dan simulator DBT-16 tetap harus dikerjakan sebelum DDL P1-05. Tidak ada dukungan kanal yang diarang atau kanal pengguna yang dinonaktifkan diam-diam.
 
 ## G. Test Execution Log
 
@@ -356,6 +382,14 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | P1-04 | Formatter | php vendor/bin/pint --dirty --format agent | PASSED |Result passed, exit0 |
 | 2026-10-22 | P1-04 final regression | Seluruh automated tests tersedia, profil MySQL | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED |90 passed/210 assertions; duration_ms85239; DDL/DML hanya tbloom_testing, serial; bukan full acceptance bisnis |
 | 2026-10-22 | P1-04 final regression | Profil default | php vendor/bin/pest --compact | PASSED |14 passed/76 MySQL-only skipped/15 assertions; duration_ms7668; skipped bukan bukti schema |
+| 2026-10-22 | P1-05 / G-PAY | Console seam RED→GREEN | php vendor/bin/pest --compact tests/Feature/MidtransSandboxPreflightTest.php | PASSED setelah RED |Command belum ada→1 pass/3 assertions; discovery belum ada→2 pass/11; malformed records5 failed→9 pass/32. Key opaque regression1 failed→GREEN9/32; semua HTTP fake |
+| 2026-10-22 | P1-05 / G-PAY | Guard/config/error regression | php vendor/bin/pest --compact --configuration phpunit.mysql.xml tests/Feature/MidtransSandboxPreflightTest.php | PASSED |24 passed/81 assertions; duration_ms2771; production/staging/mode ambiguity/key kosong, invalid payload,401/403/429/500/302, connection failure, empty set dan no leak; tidak membuat DB records |
+| 2026-10-22 | P1-05 / G-PAY | Merchant discovery live | php artisan midtrans:sandbox-preflight --no-interaction | PASSED |HTTP GET autentikasi berhasil;22 enabled IDs di subsection F; tidak mencetak key/merchant identity atau mengubah preferences. Guard prefix awal terlalu ketat dan ditolak lokal; fix memakai nonblank key+modefalse+fixed sandbox host, autentikasi tetap provider |
+| 2026-10-22 | P1-05 / G-PAY | Live probe diagnosis | MIDTRANS_SANDBOX_CONTRACT_TESTS=true, direct Pest phpunit.mysql.xml MidtransSandboxContractTest | FAILED lalu direkonsiliasi |Pertama2xHTTP400; reference53 karakter melebihi max50, diganti prefix sehingga48. Berikutnya creation accepted tetapi assertion transport404 salah (actualHTTP200). Read-only GET terhadap reference yang sama membuktikan logical status_code404 dan transaction_status absent; tidak menyimpulkan final unpaid |
+| 2026-10-22 | P1-05 / G-PAY | Live session acceptance + preselection not-found | Flag opt-in sementara=true; php vendor/bin/pest --compact --configuration phpunit.mysql.xml tests/Feature/MidtransSandboxContractTest.php | PASSED |2 passed/8 assertions; duration_ms2708. Flag dipulihkan dalam finally dan exit runner dipropagasi. Acceptance payload + logical404 saja; belum effective expiry/timing/finality. Tidak charge/payment/refund, PII, notifikasi customer, atau mutation DB |
+| 2026-10-22 | P1-05 / G-PAY | Formatter | php vendor/bin/pint --dirty --format agent | PASSED |Run awal memperbaiki ordered_imports; run terakhirpassed exit0 |
+| 2026-10-22 | P1-05 / G-PAY | MySQL regression | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED |114 passed/291 assertions,2 opt-in live skipped; duration_ms44493. Sesudah review mempersempit3 HTTP fake, focused24/81 diulang lulus duration_ms2982; source aplikasi tidak berubah |
+| 2026-10-22 | P1-05 / G-PAY | Default regression setelah review fix | php vendor/bin/pest --compact | PASSED |38 passed/96 assertions,78 skipped (76 MySQL-only+2 opt-in live); duration_ms10802. Tidak ada network Sandbox dari suite default |
 
 ## H. Decision Log dan Plugin Execution Log
 
@@ -375,6 +409,8 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | D-010 / 2026-10-22 | Selesaikan P1-12 yang independen saat quota tertahan; hanya schema dan metadata sintetis | Tidak mengklaim Should Have UI selesai, tidak menerbitkan ulasan customer, tidak menjadikan pekerjaan testimoni pengganti gate pembayaran |
 | D-011 / 2026-10-22 | Simpan checkpoint lokal dalam commit terpisah pada codex/phase1-database-foundation | Empat source commits setelah tests/reviews; Git CLI dipakai untuk staging/commit lokal, tidak ada operasi remote. .env.example pihak lain tidak di-stage |
 | D-012 / 2026-10-22 | Pengguna secara eksplisit mengotorisasi P1-04 Daily Availability dan tes tbloom_testing setelah menyediakan kredensial sandbox | Scope P1-04 ditajamkan ke schema/model/factory/fixtures/relasi, tanpa payment/release operation. Dependensi G-PAY yang sebelumnya terlalu luas pada task ini tidak dianggap bukti payment finality; G-PAY tetap wajib untuk runtime pembayaran/expiry/release dan task P1-05/06 terkait. Tidak mengubah K-01–20 atau mengklaim sandbox pass |
+| D-013 / 2026-10-22 | Kerjakan prasyarat G-PAY sebelum DDL P1-05; gunakan GET preference resmi dan opt-in synthetic Snap probes | Pilihan22 kanal berasal dari konfirmasi pengguna dan merchant live, bukan allowlist production baru. Diagnostic hanya local/testing, fixed Sandbox host, no redirects,5s connect/15s response, tanpa retries; ini budget probe, bukan parameter G-RETRY domain. Flag live false secara default; keys/token/payload tidak masuk output/tracker |
+| D-014 / 2026-10-22 | Pisahkan HTTP transport, status_code provider, session acceptance, dan bukti pembayaran final | Live Core GET menghasilkan HTTP200/provider404 sebelum metode dipilih. Prefix key bukan kontrak autentikasi; provider GET membuktikan key. Reference sintetis48 karakter mempertahankan UUID utuh dalam batas50 resmi. Tidak memperlakukan token issuance/404 sebagai izin release atau waive G-PAY |
 
 ### Plugin yang benar-benar dijalankan
 
@@ -395,6 +431,10 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | Build + Laravel Boost / P1-04,2026-10-22 | Workflow incremental/TDD diterapkan; Boost search_docs migrations/index/FK/factory dan database_schema mysql_testing sebelum perubahan; versi package diverifikasi ulang | DailyAvailability model/factory/migration/test, Product relation, guarded CatalogTestSeeder. D-012; tidak menambah dependency atau memanggil API Midtrans |
 | Review / P1-04,2026-10-22 | Workflow dua reviewer source-only paralel dijalankan ulang terhadap working patch baseline e82dcd5. Standards0/Spec0 required findings; tidak ada judgment smell yang memerlukan perubahan | Scope schema/model/factory/fixtures dan tests; kedua reviewer tidak menjalankan test/DDL sehingga runner database tetap serial |
 | Build git-workflow / P1-04,2026-10-22 | Checkpoint lokal P1-04 pada branch existing; hanya tujuh file task/tracker disertakan | .env.example tetap perubahan pihak lain. Tidak ada push/PR atau operasi GitHub remote baru |
+| Build + Laravel Boost / P1-05 prerequisite,2026-10-22 | Workflow TDD/incremental, Artisan test generators; Boost search_docs console tests/HTTP auth/fakes dan package versions diverifikasi ulang | services config, console command, fake-HTTP tests, opt-in live tests. Tidak menambah dependency atau menulis orders/items migration |
+| Research skill lokal + web / P1-05 prerequisite | Background source-only research memakai reviewer agent; parent membaca halaman API resmi Midtrans dan menjalankan probe hanya terhadap Sandbox merchant | Subsection F menyimpan sumber dan gap; skill meminta file Markdown, pengguna menentukan tracker tunggal sehingga findings ditulis di sini, tanpa dokumen baru. Bukan plugin AI Software Architect |
+| Debug / P1-05 prerequisite | Diagnose guard format key dengan metadata boolean tanpa value, length constraint ref dan HTTP/provider code mismatch; regression/probe ulang berhasil | D-014, log G; tidak mengubah .env/ACL/vendor atau keputusan bisnis |
+| Review / P1-05 prerequisite | Dua reviewer source-only Standards/Spec terhadap working patch baseline d77212a. Standards meminta fake tepat endpoint;3 calls diperbaiki dan re-review resolved. Spec0 required findings | Tidak ada required finding tersisa; tidak mengklaim DBT-16 atau G-PAY lulus. Reviewer tidak menjalankan API merchant atau test/DDL |
 
 Skill pendukung yang diterapkan: using-superpowers (pemilihan workflow), laravel-best-practices/config (audit config), testing-best-practices/isolation (rencana coverage dan batas test), verification-before-completion (bukti sebelum status selesai). Ini skill lokal, bukan klaim scan keamanan atau code review plugin telah selesai.
 
@@ -450,10 +490,20 @@ Pada sesi berikutnya tambahkan setiap penggunaan nyata yang memengaruhi kode/con
 - Review Standards0 required findings dan Spec0 required findings; source-only. Tidak ada tes database paralel, dependency baru, schema development reset, payment/release operation atau deployment.
 - P1-04 COMPLETED schema-only; Phase1 menjadi6/14. Delapan task lain belum dimulai. P1-05 tetap menunggu bukti merchant/channel G-PAY; credential readiness bukan sandbox finality proof.
 
+### 22 Oktober2026 — Prasyarat G-PAY sebelum P1-05
+
+- Recovery tujuh sumber terkait, tracker, AGENTS/CLAUDE dan Git: checkpoint d77212a sesuai; .env.example tetap perubahan pihak lain. .ai/rules absent. Tidak menjalankan ulang bootstrap PHP/Boost atau mengubah dependency.
+- Pengguna mengonfirmasi seluruh kanal Snap Sandbox aktif untuk pengujian. Command preflight read-only ditulis di routes/console.php, config di services.php,24 fake-HTTP tests dan2 live opt-in tests di Feature. Tidak ada model/migration orders/items dibuat.
+- Live GET mengonfirmasi22 kanal; empat sesi sintetis diterima dalam dua run setelah ref diperbaiki, tanpa instrumen/customer/payment. Run terakhir2 probes passed/8 assertions. Timestamp start_time BCA mundur10menit diterima sebagai payload; effective instrument expiry belum diuji.
+- Diagnosis penting: probe awalHTTP400 dengan reference53 karakter, batas resmi50; prefix diperpendek tanpa memotong UUID. Core transportHTTP200/provider404 pada sesi tanpa pilihan metode dikonfirmasi read-only. Error diagnostik awal PHP -r tanpa autoload menghasilkan class-not-found; pengukuran berikutnya memakai bootstrap yang benar, tanpa patch dependency.
+- Pengujian deterministik24/81; MySQL regression114/291 dengan2 live skipped; setelah review fake dipersempit, focused24/81 diulang dan default38/96 dengan78 skipped lulus. Pint passed. Standards1 finding diperbaiki/re-review resolved, Spec0.
+- P1-05 masih IN PROGRESS pada prasyarat, schema NOT RUN. G-PAY OPEN untuk effective expiry, timestamp/presisi dan final close/settle per kanal. Konfirmasi teknis provider diminta melalui pertanyaan pengguna; tidak menganggap belum adanya jawaban sebagai persetujuan bypass. Phase1 tetap6/14 completed; Phase2/deployment tidak dimulai.
+- Checkpoint Git lokal mencakup lima file task/tracker; .env.example tidak di-stage, tidak ada push/PR. Codex Security scan dan Figma/Railway tidak dijalankan pada slice ini; bukti security scan tetap task P11-02.
+
 ## J. Next Action
 
-**Task berikutnya: P1-05 — orders/items, setelah bukti G-PAY yang diwajibkan tersedia.**
+**Task aktif berikutnya tetap P1-05: tuntaskan G-PAY sebelum menulis migration orders/items.**
 
-P1-04 selesai dengan schema, relasi, factory, guarded fixtures, focused/full tests serta Standards/Spec review. Tidak ada implementasi P1-04 yang terputus. Simpan kredensial lokal; gate ledger/bank/files berlaku untuk slice terkait.
+Checkpoint discovery dan dua session probes selesai; source/tests terverifikasi. Langkah berikutnya: uji pemilihan instrumen melalui simulator resmi per kanal, bandingkan expiry_time dengan created_at+30menit saat late selection/refresh, lalu close/settle race dan timestamp sukses per kanal. Bukti provider yang diminta diperlukan untuk mengikat arti waktu sukses/finalitas yang tidak terjawab oleh token creation atau sampel API.
 
 G-PAY tetap memerlukan bukti sandbox merchant/channel tentang absolute expiry sejak created_at, timestamp sukses/zona/presisi, final close/settlement race dan recovery ambigu sebelum slice payment/order terkait. Pembuktian transaksi/concurrency checkout memerlukan fase domain yang sesuai. Jangan membuka Phase2 sebelum Phase1 selesai dan persetujuan berikutnya diberikan.
