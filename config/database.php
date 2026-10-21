@@ -64,6 +64,23 @@ return [
             ]) : [],
         ],
 
+        'mysql_testing' => [
+            'driver' => 'mysql',
+            'host' => '127.0.0.1',
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'tbloom_testing',
+            'username' => env('TEST_DB_USERNAME', env('DB_USERNAME', 'root')),
+            'password' => env('TEST_DB_PASSWORD', env('DB_PASSWORD', '')),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => 'InnoDB',
+            'timezone' => '+00:00',
+            'isolation_level' => 'READ COMMITTED',
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
