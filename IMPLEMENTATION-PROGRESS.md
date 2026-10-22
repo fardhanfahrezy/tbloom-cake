@@ -7,14 +7,14 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 23 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase 3 selesai dan terverifikasi (4/4); menunggu persetujuan Phase 4 |
-| Fase aktif | Tidak ada implementasi aktif; berhenti pada batas akhir Phase 3 |
-| Task aktif | Tidak ada; menunggu persetujuan Phase 4 |
-| Milestone berikutnya | Persetujuan Phase 4, lalu P4-01 dengan gate konten rasa/filling aktual |
+| Status keseluruhan | Phase 3 selesai; Phase 4 diotorisasi, persiapan P4-01 aktif |
+| Fase aktif | Phase 4; tidak melewati gate konten atau akhir fase tanpa persetujuan |
+| Task aktif | Tambahan logo/favicon, lalu P4-01; data rasa/filling ditanyakan ke pengguna |
+| Milestone berikutnya | P4-01 dengan gate konten rasa/filling aktual; push branch setelah verifikasi |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
 | Checkpoint source akhir Phase 1 | Branch lokal codex/phase1-database-foundation; checkpoint fbabe6a (ledger), 352a725 (private storage), 9a80568/d9892ae (custom), 7ca58c1/0a7699e/7b8a09e (identity/audit/outbox), diikuti checkpoint P1-14; tidak ada merge/push/PR |
-| Batas eksekusi | Phase 3 disetujui instruksi lanjut pengguna; test sintetis hanya tbloom_testing. Tidak mereset development DB, deploy, transfer bank, atau mengirim notifikasi nyata |
+| Batas eksekusi | Instruksi lanjut23Oktober mengotorisasi Phase4, penggunaan public/icon.PNG + favicon.PNG dan push GitHub. Test sintetis hanya tbloom_testing/SQLite memory; tanpa development DB reset, merge main, deploy, transfer atau notifikasi nyata |
 
 Sumber yang sudah dibaca seluruhnya: PRD-TBloom-Cake-v2.1.md, Architecture-Document.md, Database-Schema.md, Laravel-Structure-Document.md, Acceptance-Criteria.md, Test-Cases.md, Traceability-Matrix.md. Dokumen sumber tetap merupakan spesifikasi, bukan bukti implementasi. Instruksi master prompt lampiran dan AGENTS.md berlaku. `.ai/rules` tidak ditemukan pada audit ini.
 
@@ -646,6 +646,15 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-23 | Phase3 smoke | Live guest HTTP/build/routes | GET catalog/catalog?category=cupcake/login on isolated QA server8877; route:list | PASSED | ThreeHTTP200 with viewport/catalognavigation,36routes,buildpassed optionalfontainewarning. Previous QA process ended when tool session changed; restarted scoped process for these GETs. Chrome unavailable; not a visual/JS-runtime proof |
 
 ## H. Decision Log dan Plugin Execution Log
+
+### D-040 - Phase 4 authorization, brand assets and GitHub push
+
+Pengguna mengotorisasi kelanjutan Phase4, penggunaan dua PNG publik yang disediakan dan push GitHub. Baseline7b8d201; Phase1-3 tidak diulang. Graphify masih snapshot95fab79, BookingCalendar tidak terindeks; current already-located source dibaca langsung. Boost docs dan composer versions diperiksa. .ai/rules tidak ditemukan. Existing AGENTS.md, .env.example dan perubahan baru .gitignore milik pengguna tidak ditulis/stage oleh agen. Kedua PNG sekarang termasuk scope eksplisit pengguna. Push menggunakan branch kerja yang sama, bukan merge/force-push main; origin/main masih95fab79 saat ls-remote. Pertanyaan daftar resmi rasa/filling dan cakupan per produk/ukuran dikirim sebelum implementasi P4-01; tidak ada master bisnis fiktif.
+
+Tambahan branding selesai: BrandAssetsTest awalRED2failed/4assert (logo belum dirender), lalu BrandAssetsTest+ExampleTest GREEN3passed/13assert,duration_ms610 setelah Pint. npm run build lulus3.88s dengan warning fontaine optional yang sudah ada. File: public/icon.PNG, public/favicon.PNG, account-layout/welcome Blade, BrandAssetsTest, tracker. PNG sumber tidak diedit.
+
+Ruling: tambahan branding hanya memakai header bersama, favicon dan halaman awal dengan navigasi katalog yang sudah tersedia; tidak menandai P10-01 company profile selesai. Risiko jika penempatan logo perlu revisi adalah perubahan tampilan kecil, bukan aturan checkout. Logo mempertahankan ukuran intrinsik1475x568 dan latar putih agar terbaca pada mode gelap; aset sumber tidak diedit.
+
 
 ### D-038 - Default and dated quota management
 
