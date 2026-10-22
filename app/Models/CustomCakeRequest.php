@@ -6,6 +6,7 @@ use Database\Factories\CustomCakeRequestFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CustomCakeRequest extends Model
 {
@@ -34,5 +35,11 @@ class CustomCakeRequest extends Model
     public function assignedAdmin(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_admin_id');
+    }
+
+    /** @return HasMany<CustomCakeRequestAttachment, $this> */
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(CustomCakeRequestAttachment::class);
     }
 }
