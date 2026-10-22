@@ -110,3 +110,8 @@ test('recovers an outdated browser date without redirecting back to the invalid 
         ->assertRedirect('/catalog')->assertSessionHasErrors('pickup_date');
     $this->withCookie(config('session.cookie'), session()->getId())->get('/catalog')->assertOk()->assertSee('Pilih tanggal pengambilan dalam rentang yang tersedia.')->assertSee('value="2026-10-23"', false)->assertSee($product->name);
 });
+
+test('displays exact rupiah values at the integer money boundary', function () {
+    $variant = ProductVariant::factory()->create(['price' => PHP_INT_MAX]);
+    $this->get('/catalog/'.$variant->product->slug)->assertOk()->assertSee('Rp9.223.372.036.854.775.807');
+});

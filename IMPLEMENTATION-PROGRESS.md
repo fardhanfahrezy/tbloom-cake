@@ -9,7 +9,7 @@
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
 | Status keseluruhan | Phase 1 dan 2 terverifikasi; Phase 3 disetujui melalui instruksi lanjut pengguna; P3-01 aktif |
 | Fase aktif | Phase 3 katalog dan availability; berhenti pada akhir fase untuk persetujuan Phase 4 |
-| Task aktif | Tidak ada; P3-01 selesai, berikutnya P3-02 |
+| Task aktif | Tidak ada; P3-02 selesai, berikutnya P3-03 |
 | Milestone berikutnya | P3-01 katalog/tanggal/detail/unit sizes, hanya setelah persetujuan Phase 3 |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -57,7 +57,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
 | 1 — Database foundation | 14 | 14 | 0 | 0 | 0 |
 | 2 — Authentication & authorization | 5 | 5 | 0 | 0 | 0 |
-| 3 — Catalog & availability | 4 | 1 | 0 | 0 | 3 |
+| 3 — Catalog & availability | 4 | 2 | 0 | 0 | 2 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
 | 5 — Payment | 7 | 0 | 0 | 0 | 7 |
 | 6 — Cancellation & refund | 7 | 0 | 0 | 0 | 7 |
@@ -67,7 +67,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **25** | **0** | **0** | **45** |
+| **Total** | **70** | **26** | **0** | **0** | **44** |
 
 Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Phase2 5/5 selesai: final MySQL962passed/2832assert+2live skipped (964total,duration_ms569227); default90passed/210assert+874skipped,duration_ms52285. Tidak seluruh acceptance bisnis dianggap lulus.
 
@@ -127,7 +127,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
 | [x] P3-01 | Katalog/tanggal/detail/unit sizes; F-001 | F001-AC1–3, R1-AC14/15; T-03/05, DBT-04/17 | Phase 2 gate, P1-03/04 | BookingCalendar,CatalogQuery,CatalogBrowseRequest,CatalogController,5catalogviews,accountlayout,app.js,routes,CatalogBrowseTest | COMPLETED22cases/78assert; withAuthentication38passed/173assert afterPint,duration_ms27147. Buildpassed. RED19/21 missingroutes; eagerload HasMany type corrected. StaleURL RED1->GREEN, browser-session cookie preserved in follow-up test. No row materialization; checkout assertions remain P4-02 |
-| [ ] P3-02 | Admin produk/harga/archive; F-009 | F009-AC1/2; old snapshot tidak berubah; DBT-03/15 | P3-01 | requests/controller/policy/views/test | NOT RUN |
+| [x] P3-02 | Admin produk/harga/archive; F-009 | F009-AC1/2; old snapshot tidak berubah; DBT-03/15 | P3-01 | CatalogManager,ProductPolicy,2controllers,2requests,3staffproductviews,dashboard/routes,CatalogManagementTest,CatalogBrowseTest | COMPLETED26cases; combinedmanagement+browse+staff71passed/350assert,duration_ms18784 afterPint. RED22failed+1fixtureerror; corrected productVariant fixture then properRED404. Currentprice/archive/reactivate/scopedvariants/snapshot/auditrollback/uniqueracefeedback/formescaping tested. Buildpassed |
 | [ ] P3-03 | Product image processing/storage; F-001/009 | MIME/content/alt/dimensions, safe public output; DBT-14 | P3-02, G-FILES | upload request/controller/view/test | NOT RUN |
 | [ ] P3-04 | Admin quota/default override; F-004/009 | F004-AC1–4/F009-AC3, R1-AC03/15; T-03–05/24, DBT-04 | P3-02, P1-04/05 | quota operation/controller/request/view/test | NOT RUN; direct quota races MySQL; 20 actual checkout proof menunggu P4-05 |
 
@@ -635,7 +635,13 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 
 | 2026-10-22 | P3-01 | Public catalog/calendar/unit availability | CatalogBrowseTest+AuthenticationTest,phpunit.mysql.xml; Pint; npm run build | PASSED | 38passed/173assert,duration_ms27147; catalog22/78. RED19 missingroutes; initialGREEN14/21 exposed eagerloadcallback type, fixed HasMany. Stale-date redirect RED1, follow-up needs same browser session cookie; finalGREEN. Chrome unavailable, JS visibility behavior not visually claimed; buildpassed optionalfontainewarning |
 
+| 2026-10-22 | P3-02 | Product/size/price/archive management | CatalogManagementTest+CatalogBrowseTest+StaffAccountTest,phpunit.mysql.xml; Pint; npm run build | PASSED | 71passed/350assert,duration_ms18784; management26cases. InitialRED22failed+1wrongrelationfixture; corrected fixture yielded proper404RED. FirstGREEN23/125, expandedform/race/recoverytests allpassed. IntegerpriceMAXdisplay tested unchanged. No production catalog seed or historical snapshot rewrite |
+
 ## H. Decision Log dan Plugin Execution Log
+
+### D-036 - Catalog management boundary
+
+Active Admin/Owner manage product metadata and per-product sizes/prices. Public inputs cannot rewrite default quota, foreign product IDs, media paths or archive timestamps; server creates archive time and deactivates archived products. No delete endpoint for product/variant history. Editing and reactivation leave all OrderItem snapshots unchanged. Staff actor is rechecked under user lock before product/variant locks, with minimal redacted audit in the same transaction. Product fields are logged by changed key rather than copying description; price/active before-after are retained for variant audit. Unique constraints produce validation feedback on conflict. Product description is bounded to10000characters (at most40000UTF8bytes, within existing TEXT); no dependency/schema change. Separate product and size forms avoid mixing old checkbox values between forms. Kuota edits remain P3-04. PHP8.4 number_format at signed-integer money maximum was verified by an additional browsing test; no formatter change was needed.
 
 ### D-035 - Phase 3 execution and catalog read model
 
@@ -961,4 +967,4 @@ Katalog publik dengan filter kategori/tanggal, detail slug, harga ukuran aktif, 
 
 ## J. Next Action
 
-P3-01 selesai dan terverifikasi. Next P3-02 admin produk/harga/archive; kuota/default edits tetap P3-04. Phase3 disetujui, Phase4 belum diotorisasi. Tidak menjalankan migration/seed pada database development.
+P3-02 selesai dan terverifikasi pada baseline P3-01b380f21. Next P3-03 public product image processing/storage; G-FILES private foundation telah selesai, tetapi public sanitized output perlu pembuktian terpisah. PHP gd dan fileinfo tersedia. Phase4 belum diotorisasi.
