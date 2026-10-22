@@ -14,6 +14,9 @@
             <a href="{{ route('home') }}" class="text-xl font-semibold tracking-tight text-brand-burgundy focus-visible:outline-2 focus-visible:outline-offset-4 dark:text-brand-pink">TBloom Cake</a>
             <div class="flex flex-wrap items-center gap-5 text-sm">
                 @auth
+                    @if (in_array(auth()->user()->role, [\App\Models\UserRole::Admin, \App\Models\UserRole::Owner], true))
+                        <a href="{{ route('staff.dashboard') }}" class="underline underline-offset-4">Area staf</a>
+                    @endif
                     @if (Route::has('profile.edit'))
                         <a href="{{ route('profile.edit') }}" class="underline underline-offset-4">Profil saya</a>
                     @endif

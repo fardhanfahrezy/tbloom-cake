@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -150,4 +151,14 @@ test('returns validation feedback if a canonical contact wins the insert race', 
     } finally {
         Event::forget('eloquent.creating: '.User::class);
     }
+});
+
+test('treats a bcrypt-looking registration password as a literal secret', function () {
+    $literal = Hash::make('short');
+
+    $this->post('/register', registrationPayload(['password' => $literal, 'password_confirmation' => $literal]))
+        ->assertRedirect('/')->assertSessionHasNoErrors();
+
+    expect(Auth::validate(['email' => 'customer@example.test', 'password' => $literal]))->toBeTrue();
+    expect(Auth::validate(['email' => 'customer@example.test', 'password' => 'short']))->toBeFalse();
 });

@@ -3,6 +3,7 @@
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -133,4 +134,16 @@ test('builds recovery links from the configured application origin instead of an
 
         return true;
     });
+});
+
+test('treats a bcrypt-looking recovery password as a literal secret', function () {
+    $user = User::factory()->create();
+    $token = Password::createToken($user);
+    $literal = Hash::make('short');
+
+    $this->post('/reset-password', resetPayload($user, $token, ['password' => $literal, 'password_confirmation' => $literal]))
+        ->assertRedirect('/login')->assertSessionHasNoErrors();
+
+    expect(Auth::validate(['email' => $user->email, 'password' => $literal]))->toBeTrue();
+    expect(Auth::validate(['email' => $user->email, 'password' => 'short']))->toBeFalse();
 });

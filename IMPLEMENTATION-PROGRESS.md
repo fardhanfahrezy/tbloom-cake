@@ -7,10 +7,10 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase 1 selesai14/14; Phase 2 disetujui melalui instruksi lanjut pengguna; P2-01 aktif |
-| Fase aktif | Phase 2 authentication/authorization; berhenti lagi pada akhir fase untuk persetujuan Phase 3 |
-| Task aktif | P2-05 Owner/staff boundary, Admin management dan last-Owner lock |
-| Milestone berikutnya | P2-01 ->P2-02 ->P2-03 ->P2-04 ->P2-05 sesuai dependency; tanpa Phase3 |
+| Status keseluruhan | Phase 1 selesai14/14; Phase 2 selesai5/5 dan terverifikasi; menunggu persetujuan Phase 3 |
+| Fase aktif | Tidak ada fase berjalan; berhenti pada akhir Phase 2 untuk persetujuan Phase 3 |
+| Task aktif | Tidak ada; P2-01 sampai P2-05 selesai dan terverifikasi |
+| Milestone berikutnya | P3-01 katalog/tanggal/detail/unit sizes, hanya setelah persetujuan Phase 3 |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
 | Checkpoint source akhir Phase 1 | Branch lokal codex/phase1-database-foundation; checkpoint fbabe6a (ledger), 352a725 (private storage), 9a80568/d9892ae (custom), 7ca58c1/0a7699e/7b8a09e (identity/audit/outbox), diikuti checkpoint P1-14; tidak ada merge/push/PR |
@@ -56,7 +56,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
 | 1 — Database foundation | 14 | 14 | 0 | 0 | 0 |
-| 2 — Authentication & authorization | 5 | 4 | 1 | 0 | 0 |
+| 2 — Authentication & authorization | 5 | 5 | 0 | 0 | 0 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
 | 5 — Payment | 7 | 0 | 0 | 0 | 7 |
@@ -67,9 +67,9 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **23** | **1** | **0** | **46** |
+| **Total** | **70** | **24** | **0** | **0** | **46** |
 
-Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Tidak seluruh acceptance bisnis dianggap lulus.
+Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Phase2 5/5 selesai: final MySQL962passed/2832assert+2live skipped (964total,duration_ms569227); default90passed/210assert+874skipped,duration_ms52285. Tidak seluruh acceptance bisnis dianggap lulus.
 
 ## C. Detailed Implementation Checklist
 
@@ -120,7 +120,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | [x] P2-02 | Login/logout dan active-account boundary | Session regenerate/invalidate, throttling, inactive ditolak | P2-01 | AuthenticatedSessionController,AccountController,LoginRequest,EnsureActiveAccount,provider/routes,login/accountviews,AuthenticationTest | COMPLETED16focused/95assert; combined50passed/277assert,duration_ms32159; RED16failed/16assert,duration_ms25120. Canonical login/activefresh/rolefresh/sessionlogout/remember/throttle covered; ChromeGETlogin verified |
 | [x] P2-03 | Email password reset | Token terbatas/hash, anti-enumeration, mail fake, no real send | P2-02 | PasswordResetLinkController,NewPasswordController,2requests,2views,provider/bootstrap/routes,PasswordResetTest,brandCSS | COMPLETED17cases/85assert; combined67passed/362assert afterPint,duration_ms35083. RED16initial+1Hostcase. Brokerhash/expiry/singleuse/genericresponse/inactive/secretflash/trusted-origin/oldsession tested; emailNotificationfake,realSMTP pending |
 | [x] P2-04 | Profile + own-resource policies; F-002/010 | Re-auth contact changes; snapshot historis tetap; cross-customer403/404; R1-AC19, DBT-14 | P2-02 | ProfileController,UpdateProfileRequest,profileview,OwnedResourceAccess,8policies,routes,ProfileTest/ResourcePolicyTest | COMPLETED30cases/119assert; withAuthentication46passed/214assert afterPint,duration_ms31409. Selfboundprofile/reauthunderlock/canonicalunique/race/privacy/snapshotpreservation;8policyownershipmappings+active-rolematrix/404deny; futuredomainHTTP/fileintegration remainsPhase4/6/7 |
-| [~] P2-05 | Owner kelola Admin, role middleware | Customer dashboard staf ditolak; last active Owner dilindungi dengan lock | P2-04 | staff controller/policy/middleware/views/test | NOT RUN; tidak seeder akun produksi tanpa persetujuan |
+| [x] P2-05 | Owner kelola Admin, role middleware | Customer dashboard staf ditolak; last active Owner dilindungi dengan lock | P2-04 | StaffAccountManager/Controller,EnsureRole,2requests,UserPolicy,bootstrap/routes,2staffviews,accountlayout,StaffAccountTest/ConcurrencyTest | Focused22passed/121assert; combined Phase2 119passed/602assert afterPint. Review hash-literal finding reproduced3failed/12assert then fixed3passed/15assert; full MySQL962passed/2832assert+2live skipped; default90passed/210assert+874skipped. Review0remaining. Tidak seeder akun produksi |
 
 ### Phase 3 — Product Catalog & Availability
 
@@ -243,6 +243,8 @@ flowchart TD
 Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update tracker. Sesudah setiap fase: laporkan bukti aktual dan tunggu persetujuan fase berikutnya sesuai master prompt. Domain outbox producer/audit ditulis pada fase domain yang bersangkutan; transport dan recovery lengkap di Phase 9. Status order paid/cancelled/expired dan alokasi tidak diubah sementara untuk mengejar urutan roadmap.
 
 ## D. Current Task
+
+**P2-05 COMPLETED:**22focused passed/121assert,duration_ms74335; allsevenPhase2files119passed/602assert,duration_ms82933 afterPint. Owner-onlyAdmincreation,staffactivationwithrequiredreason,atomicredactedaudit,rolebeforebinding,staleactorchecks andlastOwnerorderedlocks verified. TwoindependentMySQLconnections demonstrate contenderwait1205 followedbyfreshactor rejection. Freshphase review foundonehash-literalpassworddefect;3regressions RED3failed/12assert -> GREEN3passed/15assert,duration_ms19677. ExplicitHash::make nowusedatregistration/reset/Admincreation. Reviewerrecheckedzero requiredfindings; earlier sessionhashconcern retracted afterinstalledSessionGuard sourcecheck. FinalfullMySQL962passed/2832assert+2live skipped,duration_ms569227; default90passed/210assert+874skipped,duration_ms52285. Phase2 5/5complete; noPhase3work. Browserretry reportsselectedChromeunavailable; nofurther visualpassclaimed.
 
 **P2-04 COMPLETED:**30cases/119assert; withP2-02 46passed/214assert afterPint,duration_ms31409. Profileboundedtoauthenticateduser,privileged/foreign/password fieldsignored; contactchanges requirecurrentpassword bothvalidation andunderuserlock; normalization/unique/race handled; oldOrder/Custom snapshots unchanged. Eight policies autodiscoveredviaGate,activeowncustomer/activeAdminOwner view allowed,foreigncustomer404; financialgenericupdate/delete remainclosed. InitialRED19failed+9errors; twoinvalidrefundfixtures fixed processingstate,properRED policy9failed/7missingmethoderrors; firstGREEN27/28,before-snapshot fixture refreshedDBdefaults,thenGREEN. Policies testedasauthorizationcontracts; no fakeproductioncheckout/downloadroute or fullDBT14claim. NextP2-05,lasttaskPhase2.
 
@@ -623,7 +625,23 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 
 | 2026-10-22 | P2-04 | Profile/policy contracts | ProfileTest+ResourcePolicyTest+AuthenticationTest,phpunit.mysql.xml | PASSED |Final46passed/214assert,duration_ms31409 afterPint; P2-04subset30/119. EarlierRED andfixturecorrections notedD. Current-password racewindow/uniqueracefeedback/snapshotretention/8Gatepolicies tested; futuredomainHTTPintegration deferred |
 
+| 2026-10-22 | P2-05 | Staff boundaries and Owner lock | StaffAccountTest + StaffAccountConcurrencyTest,phpunit.mysql.xml | PASSED | InitialRED19failed; concurrencyREDmissingmethod. GREEN22passed/121assert,duration_ms74335; combinedPhase2119passed/602assert,duration_ms82933 afterPint. TwoMySQLconnections,atomicrollbacks,auditredaction,existing/missingtargetprivacy tested |
+| 2026-10-22 | Phase2 review fix | Literal hash-looking passwords | RegistrationTest+PasswordResetTest+StaffAccountTest --filter=bcrypt-looking | PASSED | RED3failed/12assert,duration_ms21427 -> GREEN3passed/15assert,duration_ms19677. Pintfixed6files; finalfullMySQL962passed/2832assert+2live skipped. npmrunbuild alreadypassed; no dependencychange |
+
+| 2026-10-22 | Phase2 HTTP smoke | Guest account forms | GET register/login/forgot-password/reset-password/synthetic-qa-token; artisan route:list --except-vendor | PASSED | Empat HTTP200, semua memiliki CSRF dan viewport;17rute terdaftar. Chrome retry tidak tersedia, sehingga halaman lanjutan belum dinyatakan lolos visual. Server QA lokal dihentikan; port8877 tidak lagi listening |
+
+| 2026-10-22 | Final Phase2 | Complete MySQL regression | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED | 964total:962passed,2opt-inlive skipped,2832assertions,duration_ms569227. Only tbloom_testing; Phase1 regressions and all122Phase2cases included |
+| 2026-10-22 | Final Phase2 | Default suite and final checks | php vendor/bin/pest --compact; Pint dirty; npm run build; git diff --check scoped | PASSED | Default964total:90passed,874MySQL/live skipped,210assertions,duration_ms52285. Pint applied,buildpassed optionalfontainewarning,17routes and4guestHTTP200. Freshreview0required findings afterfix. NoPhase3work |
+
 ## H. Decision Log dan Plugin Execution Log
+
+### D-034 - Literal password handling after independent review
+
+HTTP passwords are always literal secrets, including strings resembling bcrypt hashes. The installed hashed cast deliberately preserves recognized hashes, so raw request passwords now pass through explicit Hash::make before assignment at registration, recovery and staff creation. Three behavioral regressions validate the literal and reject its short preimage. Installed SessionGuard::login already binds password_hash_web; no redundant session fix was added after reviewer retraction. Final review has zero required findings. Future private bank/evidence endpoints must enforce assigned-staff access separately from broad metadata view; DBT-14 is not fully claimed by Phase2 policies.
+
+### D-033 - Owner-managed staff boundary
+
+Only active Owners create active unverified Admin accounts or change existing staff activation; public inputs cannot create/promote Owners or change customer roles. UserPolicy and role middleware apply before target binding. Staff writes recheck the actor under database locks and commit minimal audit data atomically. Activation locks all Owner candidates in ID order before actor/target rows, protecting the last active Owner across competing transactions. Existing Owner activation is allowed under the same invariant; no production account seeder. Synthetic two-connection proof uses only tbloom_testing. Staff area contains only implemented account navigation; domain operations remain in their roadmap phases.
 
 ### D-032 - Profile and owned-resource authorization
 
@@ -898,6 +916,37 @@ Perubahan sejak checkpoint `f3241cc`: 66 file task (termasuk tracker), berdasark
 | `tests/Feature` | `AuditLogFoundationTest.php`, `CustomCakeRequestAttachmentFoundationTest.php`, `CustomCakeRequestFoundationTest.php`, `EnumIntegrityTest.php`, `NotificationDeliveryFoundationTest.php`, `NotificationRecipientIdentityTest.php`, `PaymentMovementCorrectionConcurrencyTest.php`, `PaymentMovementCorrectionFoundationTest.php`, `PaymentMovementFoundationTest.php`, `PrivateUploadRecoveryTest.php`, `PrivateUploadStorageTest.php`, `SchemaIntegrityTest.php`, `SchemaRecoveryTest.php`, `SchemaUpgradeTest.php` |
 | `tests/Unit` | `PaymentMovementKeyTest.php` |
 
+### Penutupan Phase 2 - 22 Oktober 2026
+
+- P2-01 registrasi, P2-02 sesi/login/logout, P2-03 pemulihan password, P2-04 profil/policies, dan P2-05 pengelolaan staf selesai secara berurutan setelah dependency masing-masing terverifikasi. Tidak mengulang implementasi Phase1.
+- Regresi final setelah formatter: MySQL962passed/2live skipped/2832assertions; default90passed/874skipped/210assertions. Build dan diff-check lulus; satu temuan review password literal diperbaiki dengan RED/GREEN, review ulang tanpa temuan wajib.
+- Tidak ada blocker implementasi Phase2. Bukti SMTP nyata belum tersedia; visual halaman lanjutan belum selesai karena koneksi Chrome terputus. Private bank/evidence assignment tetap kewajiban integrasi Phase6, bukan acceptance yang dianggap lulus dari broad metadata policies. Tidak ada notifikasi nyata atau perubahan database development.
+- Server QA sementara dihentikan. Branch lokal dipertahankan, tanpa push/merge/PR. Perubahan pengguna dan dua PNG untracked dipertahankan di luar checkpoint. AGENTS.md existing tidak ditimpa.
+- Berhenti sesuai instruksi pengguna. Next P3-01 hanya setelah persetujuan Phase3. Untuk verifikasi tambahan di lingkungan pengguna, jalankan `php artisan test --compact`; bukti InnoDB tetap menggunakan konfigurasi `phpunit.mysql.xml`.
+
+### File aktual Phase 2
+
+Dibandingkan checkpoint akhir Phase 1 `de73337`: 51 file implementasi/test/tracker. Empat checkpoint task: `52ff700`, `140f5d5`, `1352281`, `09d7588`; P2-05 dan perbaikan review termasuk checkpoint penutupan Phase2. `.env.example`, `public/favicon.PNG`, dan `public/icon.PNG` yang ada di working tree tidak ditulis agen dan dikecualikan dari checkpoint. `AGENTS.md` existing dipertahankan.
+
+| Direktori | File aktual |
+|---|---|
+| `root` | `IMPLEMENTATION-PROGRESS.md` |
+| `app` | `AccountPassword.php`, `CanonicalContact.php`, `OwnedResourceAccess.php`, `StaffAccountManager.php` |
+| `app/Http/Controllers` | `AccountController.php`, `AuthenticatedSessionController.php`, `NewPasswordController.php`, `PasswordResetLinkController.php`, `ProfileController.php`, `RegistrationController.php`, `StaffAccountController.php` |
+| `app/Http/Middleware` | `EnsureActiveAccount.php`, `EnsureRole.php` |
+| `app/Http/Requests` | `LoginRequest.php`, `NewPasswordRequest.php`, `PasswordResetLinkRequest.php`, `RegisterCustomerRequest.php`, `StoreAdminRequest.php`, `UpdateProfileRequest.php`, `UpdateStaffStatusRequest.php` |
+| `app/Policies` | `CustomCakeRequestAttachmentPolicy.php`, `CustomCakeRequestPolicy.php`, `OrderPolicy.php`, `OrderRequestPolicy.php`, `PaymentPolicy.php`, `RefundEvidencePolicy.php`, `RefundLogPolicy.php`, `RefundTransferPolicy.php`, `UserPolicy.php` |
+| `app/Providers` | `AppServiceProvider.php` |
+| `bootstrap` | `app.php` |
+| `resources/css` | `app.css` |
+| `resources/views` | `account.blade.php` |
+| `resources/views/auth` | `forgot-password.blade.php`, `login.blade.php`, `register.blade.php`, `reset-password.blade.php` |
+| `resources/views/components` | `account-layout.blade.php`, `form-field.blade.php` |
+| `resources/views/profile` | `edit.blade.php` |
+| `resources/views/staff` | `accounts.blade.php`, `dashboard.blade.php` |
+| `routes` | `web.php` |
+| `tests/Feature` | `AuthenticationTest.php`, `PasswordResetTest.php`, `ProfileTest.php`, `RegistrationTest.php`, `ResourcePolicyTest.php`, `StaffAccountConcurrencyTest.php`, `StaffAccountTest.php` |
+
 ## J. Next Action
 
-P2-05 aktif: Owner-onlyAdmincreation/staffactivation,roleboundary,redactedaudit,lastactiveOwner underorderedcandidateOwnerlocks. NoOwnercreation/promotion,customerstaffaccessdenied. SyntheticMySQLconcurrencyproof. Phase2 4/5complete; finalfullsuite/build/freshreview thenstopforPhase3approval.
+Phase2 selesai5/5; tidak ada task aktif atau blocked. Menunggu persetujuan pengguna sebelum Phase3. Setelah disetujui, lanjutkan P3-01 katalog/tanggal/detail/unit sizes (dependency Phase2 gate dan P1-03/P1-04), baca ulang sumber terkait dan keadaan repository. Jangan menganggap policy metadata sebagai bukti akses private bank/file atau membuka gate provider yang belum terpenuhi.

@@ -6,7 +6,9 @@ use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\StaffAccountController;
 use App\Http\Middleware\EnsureActiveAccount;
+use App\Http\Middleware\EnsureRole;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
@@ -23,6 +25,12 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware(['auth', EnsureActiveAccount::class, 'auth.session'])->group(function (): void {
+    Route::view('/staff', 'staff.dashboard')->middleware(EnsureRole::class.':admin,owner')->name('staff.dashboard');
+    Route::middleware(EnsureRole::class.':owner')->prefix('staff/accounts')->name('staff.accounts.')->group(function (): void {
+        Route::get('/', [StaffAccountController::class, 'index'])->name('index');
+        Route::post('/', [StaffAccountController::class, 'store'])->middleware('throttle:10,1')->name('store');
+        Route::patch('/{user}', [StaffAccountController::class, 'update'])->middleware('throttle:10,1')->name('update');
+    });
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->middleware('throttle:10,1')->name('profile.update');
     Route::get('/account', [AccountController::class, 'show'])->name('account.show');

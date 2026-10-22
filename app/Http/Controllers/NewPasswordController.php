@@ -8,6 +8,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -29,7 +30,7 @@ class NewPasswordController extends Controller
             }
 
             return Password::reset(array_merge($request->safe()->only(['email', 'token', 'password']), ['is_active' => true]), function (User $user, string $password): void {
-                $user->forceFill(['password' => $password, 'remember_token' => Str::random(60)])->save();
+                $user->forceFill(['password' => Hash::make($password), 'remember_token' => Str::random(60)])->save();
                 event(new PasswordReset($user));
             });
         });
