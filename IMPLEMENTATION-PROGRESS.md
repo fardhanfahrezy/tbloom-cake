@@ -7,9 +7,9 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase 1 selesai14/14; Phase 2 selesai5/5 dan terverifikasi; menunggu persetujuan Phase 3 |
-| Fase aktif | Tidak ada fase berjalan; berhenti pada akhir Phase 2 untuk persetujuan Phase 3 |
-| Task aktif | Tidak ada; P2-01 sampai P2-05 selesai dan terverifikasi |
+| Status keseluruhan | Phase 1 dan 2 terverifikasi; Phase 3 disetujui melalui instruksi lanjut pengguna; P3-01 aktif |
+| Fase aktif | Phase 3 katalog dan availability; berhenti pada akhir fase untuk persetujuan Phase 4 |
+| Task aktif | Tidak ada; P3-01 selesai, berikutnya P3-02 |
 | Milestone berikutnya | P3-01 katalog/tanggal/detail/unit sizes, hanya setelah persetujuan Phase 3 |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -57,7 +57,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
 | 1 — Database foundation | 14 | 14 | 0 | 0 | 0 |
 | 2 — Authentication & authorization | 5 | 5 | 0 | 0 | 0 |
-| 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
+| 3 — Catalog & availability | 4 | 1 | 0 | 0 | 3 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
 | 5 — Payment | 7 | 0 | 0 | 0 | 7 |
 | 6 — Cancellation & refund | 7 | 0 | 0 | 0 | 7 |
@@ -67,7 +67,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **24** | **0** | **0** | **46** |
+| **Total** | **70** | **25** | **0** | **0** | **45** |
 
 Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Phase2 5/5 selesai: final MySQL962passed/2832assert+2live skipped (964total,duration_ms569227); default90passed/210assert+874skipped,duration_ms52285. Tidak seluruh acceptance bisnis dianggap lulus.
 
@@ -126,7 +126,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
-| [ ] P3-01 | Katalog/tanggal/detail/unit sizes; F-001 | F001-AC1–3, R1-AC14/15; T-03/05, DBT-04/17 | Phase 2 gate, P1-03/04 | catalog controller/query/views/test | NOT RUN; final checkout assertions dilengkapi P4-02 |
+| [x] P3-01 | Katalog/tanggal/detail/unit sizes; F-001 | F001-AC1–3, R1-AC14/15; T-03/05, DBT-04/17 | Phase 2 gate, P1-03/04 | BookingCalendar,CatalogQuery,CatalogBrowseRequest,CatalogController,5catalogviews,accountlayout,app.js,routes,CatalogBrowseTest | COMPLETED22cases/78assert; withAuthentication38passed/173assert afterPint,duration_ms27147. Buildpassed. RED19/21 missingroutes; eagerload HasMany type corrected. StaleURL RED1->GREEN, browser-session cookie preserved in follow-up test. No row materialization; checkout assertions remain P4-02 |
 | [ ] P3-02 | Admin produk/harga/archive; F-009 | F009-AC1/2; old snapshot tidak berubah; DBT-03/15 | P3-01 | requests/controller/policy/views/test | NOT RUN |
 | [ ] P3-03 | Product image processing/storage; F-001/009 | MIME/content/alt/dimensions, safe public output; DBT-14 | P3-02, G-FILES | upload request/controller/view/test | NOT RUN |
 | [ ] P3-04 | Admin quota/default override; F-004/009 | F004-AC1–4/F009-AC3, R1-AC03/15; T-03–05/24, DBT-04 | P3-02, P1-04/05 | quota operation/controller/request/view/test | NOT RUN; direct quota races MySQL; 20 actual checkout proof menunggu P4-05 |
@@ -633,7 +633,15 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | Final Phase2 | Complete MySQL regression | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED | 964total:962passed,2opt-inlive skipped,2832assertions,duration_ms569227. Only tbloom_testing; Phase1 regressions and all122Phase2cases included |
 | 2026-10-22 | Final Phase2 | Default suite and final checks | php vendor/bin/pest --compact; Pint dirty; npm run build; git diff --check scoped | PASSED | Default964total:90passed,874MySQL/live skipped,210assertions,duration_ms52285. Pint applied,buildpassed optionalfontainewarning,17routes and4guestHTTP200. Freshreview0required findings afterfix. NoPhase3work |
 
+| 2026-10-22 | P3-01 | Public catalog/calendar/unit availability | CatalogBrowseTest+AuthenticationTest,phpunit.mysql.xml; Pint; npm run build | PASSED | 38passed/173assert,duration_ms27147; catalog22/78. RED19 missingroutes; initialGREEN14/21 exposed eagerloadcallback type, fixed HasMany. Stale-date redirect RED1, follow-up needs same browser session cookie; finalGREEN. Chrome unavailable, JS visibility behavior not visually claimed; buildpassed optionalfontainewarning |
+
 ## H. Decision Log dan Plugin Execution Log
+
+### D-035 - Phase 3 execution and catalog read model
+
+User continuation authorizes Phase3 only. Implement P3-01 through P3-04 sequentially, with focused tests and tracker updates per task, one fresh whole-phase review and final regression before stopping for Phase4 approval. Existing Phase1/2 implementation remains baseline7bdcc86. User changes in .env.example and two untracked PNGs remain excluded; AGENTS.md already exists and is preserved. No .ai/rules directory found. Boost tools unavailable; official Laravel13 docs and installed package source are fallback.
+
+Catalog reads active unarchived products, active variants, images and product/date availability without materializing rows. SUM of unreleased order_items is authoritative across sizes/statuses; deadlines do not release units. Existing row quota wins over changed product defaults. Shared BookingCalendar handles Jakarta earliest date/cutoff/D90 already needed by catalog; P4-01 will reuse it and add checkout/personalization rules. GET filters and visibility refresh keep display current; final checkout validation remains Phase4. Approved seven-document spec and sequential phase workflow supply the design/approval; no extra plan document or per-task design approval.
 
 ### D-034 - Literal password handling after independent review
 
@@ -947,6 +955,10 @@ Dibandingkan checkpoint akhir Phase 1 `de73337`: 51 file implementasi/test/track
 | `routes` | `web.php` |
 | `tests/Feature` | `AuthenticationTest.php`, `PasswordResetTest.php`, `ProfileTest.php`, `RegistrationTest.php`, `ResourcePolicyTest.php`, `StaffAccountConcurrencyTest.php`, `StaffAccountTest.php` |
 
+### P3-01 selesai
+
+Katalog publik dengan filter kategori/tanggal, detail slug, harga ukuran aktif, foto/alt dan label kemasan tersedia. Kuota berasal dari SUM unreleased item lintas ukuran/status; zero quota ditandai penuh. GET tidak membuat availability; default produk hanya fallback untuk tanggal belum materialized. Kalender Jakarta/D90 dipakai bersama untuk task berikutnya. Tanggal browser kedaluwarsa kembali ke pilihan valid dan pesan validasi; error-session test mempertahankan cookie browser. Blade escaping dan record nonaktif/archive diuji. Chrome tidak terhubung; HTTP/Blade/build terbukti, runtime JS/visual belum diverifikasi. Tidak ada checkout baru atau klaim full DBT-04/17.
+
 ## J. Next Action
 
-Phase2 selesai5/5; tidak ada task aktif atau blocked. Menunggu persetujuan pengguna sebelum Phase3. Setelah disetujui, lanjutkan P3-01 katalog/tanggal/detail/unit sizes (dependency Phase2 gate dan P1-03/P1-04), baca ulang sumber terkait dan keadaan repository. Jangan menganggap policy metadata sebagai bukti akses private bank/file atau membuka gate provider yang belum terpenuhi.
+P3-01 selesai dan terverifikasi. Next P3-02 admin produk/harga/archive; kuota/default edits tetap P3-04. Phase3 disetujui, Phase4 belum diotorisasi. Tidak menjalankan migration/seed pada database development.

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\ProfileController;
@@ -12,6 +13,8 @@ use App\Http\Middleware\EnsureRole;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
+Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
+Route::get('/catalog/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
