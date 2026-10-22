@@ -49,4 +49,10 @@ class Order extends Model
     {
         return $this->hasOne(OrderItem::class);
     }
+
+    /** @return HasOne<Payment, $this> */
+    public function payment(): HasOne
+    {
+        return $this->hasOne(Payment::class);
+    }
 }
