@@ -7,10 +7,10 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 23 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | P3-01 sampai P3-04 selesai; verifikasi penutupan Phase 3 aktif |
-| Fase aktif | Phase 3 katalog dan availability; berhenti pada akhir fase untuk persetujuan Phase 4 |
-| Task aktif | Tidak ada; full regression dan final review Phase 3 |
-| Milestone berikutnya | Final regression/review Phase 3, lalu persetujuan Phase 4 sebelum P4-01 |
+| Status keseluruhan | Phase 3 selesai dan terverifikasi (4/4); menunggu persetujuan Phase 4 |
+| Fase aktif | Tidak ada implementasi aktif; berhenti pada batas akhir Phase 3 |
+| Task aktif | Tidak ada; menunggu persetujuan Phase 4 |
+| Milestone berikutnya | Persetujuan Phase 4, lalu P4-01 dengan gate konten rasa/filling aktual |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
 | Checkpoint source akhir Phase 1 | Branch lokal codex/phase1-database-foundation; checkpoint fbabe6a (ledger), 352a725 (private storage), 9a80568/d9892ae (custom), 7ca58c1/0a7699e/7b8a09e (identity/audit/outbox), diikuti checkpoint P1-14; tidak ada merge/push/PR |
@@ -69,7 +69,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
 | **Total** | **70** | **28** | **0** | **0** | **42** |
 
-Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Phase2 5/5 selesai: final MySQL962passed/2832assert+2live skipped (964total,duration_ms569227); default90passed/210assert+874skipped,duration_ms52285. Tidak seluruh acceptance bisnis dianggap lulus.
+Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Phase2 5/5 selesai: final MySQL962passed/2832assert+2live skipped (964total,duration_ms569227); default90passed/210assert+874skipped,duration_ms52285. Phase3 4/4 selesai: final MySQL1054passed/3349assert+2live skipped (1056total,duration_ms772139); default90passed/210assert+966skipped,duration_ms69053. Tidak seluruh acceptance bisnis dianggap lulus.
 
 ## C. Detailed Implementation Checklist
 
@@ -640,6 +640,9 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | P3-03 | Public image pipeline and metadata | CatalogImageTest+CatalogManagementTest+CatalogBrowseTest,phpunit.mysql.xml; Pint; npm run build | PASSED | 69passed/366assert,duration_ms33465; image20cases. RED15failed/15assert,duration_ms20102 -> firstGREEN15/103. Synthetic actual local writes through fakepublic disk, PNG/JPEG/WebP encode/decode, corrupt/spoof/SVG/GIF rejection, replacement/auditrollback/write-readback errors and private-file isolation tested. Chrome unavailable; production storageURL/durability not claimed |
 
 | 2026-10-23 | P3-04 | Default/daily capacity and locking | CatalogBrowseTest+CatalogManagementTest+CatalogImageTest+CatalogQuotaTest+CatalogQuotaConcurrencyTest,phpunit.mysql.xml; Pint; npm run build | PASSED | AllPhase392passed/517assert,duration_ms135408; quota23cases. InitialnormalRED16failed/16assert; concurrencyRED2errors/6assert; firstGREEN18/120,duration_ms66781. Twoindependentconnections and ordered-lock synthetic allocator, no outer test transaction; actual checkout concurrency remainsP4-05 |
+| 2026-10-23 | Phase3 full regression | Seluruh unit/feature dengan InnoDB | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED | 1056total,1054passed,2live skipped,3349assertions,duration_ms772139; hanya tbloom_testing. Source checkpoint ef30142, tanpa perubahan PHP sesudahnya |
+| 2026-10-23 | Phase3 default regression | Seluruh suite dengan konfigurasi default | php vendor/bin/pest --compact | PASSED | 1056total,90passed,966skipped,210assertions,duration_ms69053. Kasus MySQL dilewati di konfigurasi SQLite; bukan bukti row locks |
+| 2026-10-23 | Phase3 final review | Fresh read-only review 7bdcc86..ef30142 | phase3_fresh_review | COMPLETE | 0Critical/0Important/1Minor deferred (explicit image width/height); declined-to-judge diputuskan di bagian final review. Tidak ada fix pass PHP tambahan |
 | 2026-10-23 | Phase3 smoke | Live guest HTTP/build/routes | GET catalog/catalog?category=cupcake/login on isolated QA server8877; route:list | PASSED | ThreeHTTP200 with viewport/catalognavigation,36routes,buildpassed optionalfontainewarning. Previous QA process ended when tool session changed; restarted scoped process for these GETs. Chrome unavailable; not a visual/JS-runtime proof |
 
 ## H. Decision Log dan Plugin Execution Log
@@ -650,7 +653,7 @@ Quota changes lock fresh active staff user, product and dated availability in th
 
 ### D-039 - Graphify and Boost reconnection on 23 October
 
-Latest user AGENTS instructions add Graphify-before-text-search. Graphify graph_stats confirms a connected promoted graph for repository fardhanfahrezy/tbloom-cake, but snapshot95fab79 contains only183nodes/178edges; graphify_find CatalogManager returns zero matches. Current local Phase1-3 files are unindexed, so their already-located source is inspected directly. No graph reindex/upload or repository memory write was requested. Boost tools became available; application_info reconfirms Laravel13.35/PHP8.4/Pest5.3, search-docs reviewed locking, scoped bindings and storage. Earlier fallback notes remain historical. User-modified AGENTS.md is preserved/excluded along with .env.example and the two PNGs. Full Phase3 focused suite already92passed/517assert; final whole-suite/review still pending at this checkpoint.
+Latest user AGENTS instructions add Graphify-before-text-search. Graphify graph_stats confirms a connected promoted graph for repository fardhanfahrezy/tbloom-cake, but snapshot95fab79 contains only183nodes/178edges; graphify_find CatalogManager returns zero matches. Current local Phase1-3 files are unindexed, so their already-located source is inspected directly. No graph reindex/upload or repository memory write was requested. Boost tools became available; application_info reconfirms Laravel13.35/PHP8.4/Pest5.3, search-docs reviewed locking, scoped bindings and storage. Earlier fallback notes remain historical. User-modified AGENTS.md is preserved/excluded along with .env.example and the two PNGs. Pada checkpoint P3-04, focused suite92passed/517assert dan final whole-suite/review masih pending; hasil penutupan dicatat terpisah di bawah.
 
 ### D-037 - Sanitized public product images
 
@@ -982,6 +985,44 @@ Dibandingkan checkpoint akhir Phase 1 `de73337`: 51 file implementasi/test/track
 
 Katalog publik dengan filter kategori/tanggal, detail slug, harga ukuran aktif, foto/alt dan label kemasan tersedia. Kuota berasal dari SUM unreleased item lintas ukuran/status; zero quota ditandai penuh. GET tidak membuat availability; default produk hanya fallback untuk tanggal belum materialized. Kalender Jakarta/D90 dipakai bersama untuk task berikutnya. Tanggal browser kedaluwarsa kembali ke pilihan valid dan pesan validasi; error-session test mempertahankan cookie browser. Blade escaping dan record nonaktif/archive diuji. Chrome tidak terhubung; HTTP/Blade/build terbukti, runtime JS/visual belum diverifikasi. Tidak ada checkout baru atau klaim full DBT-04/17.
 
+### Penutupan Phase 3 - 23 Oktober 2026
+
+- P3-01 katalog/kalender/availability, P3-02 produk/ukuran/harga/archive, P3-03 foto publik tersanitasi, dan P3-04 default/override kuota selesai satu per satu dengan pengujian terfokus dan checkpoint masing-masing. Phase1/2 tidak diimplementasikan ulang.
+- Final source `ef30142`: allPhase3 focused92passed/517assert; fullMySQL1054passed/2live skipped/3349assertions,duration_ms772139; default90passed/966skipped/210assertions,duration_ms69053. Pint, build frontend, 36 route registrations, tiga live HTTP GET200 dan diff-check lulus. Build memiliki warning optional fontaine/diagnostic Vite yang tidak menggagalkan build.
+- Fresh review0Critical/0Important/1Minor deferred. Rulings dan keterbatasan bukti di bawah tetap berlaku; tidak mengklaim full DBT-04/14/17/18/21, browser visual, production storage, checkout/provider runtime atau deployment.
+- Server QA sementara dihentikan dan port8877 tidak listening sebelum regresi penuh. Pengujian hanya memakai dedicated tbloom_testing; tidak mereset development DB, mengirim notifikasi nyata, atau mengubah dependency. Tidak ada push/merge/PR/deploy.
+- Tidak ada task fitur Phase3 yang masih aktif/blocked. G-CONTENT dan G-RETRY tetap gate terbuka untuk integrasi/acceptance berikutnya. Perubahan pengguna dipertahankan terpisah. Berhenti di akhir fase untuk persetujuan Phase4; P4-01 belum dimulai.
+
+### Final review Phase 3
+
+Fresh independent review oleh `phase3_fresh_review`, baseline `7bdcc86..ef30142`: 0 Critical, 0 Important, 1 Minor. Reviewer membaca source/spec tanpa mengubah file atau menjalankan database/test; regresi dijalankan executor utama.
+
+- Final: minor (deferred): atribut `width`/`height` eksplisit belum ada pada foto catalog index/detail dan staff image form (PRD bagian8.1). CSS rasio4:3 sudah mereservasi kotak, sehingga dampak saat ini terbatas pada kepatuhan presentasi; tidak masuk fix pass.
+- Final: Ruling: browser visual/JavaScript runtime belum dinilai karena Chrome tidak tersedia. HTTP/Blade/build dan feature test tetap bukti yang tersedia; risiko jika salah adalah interaksi/visual browser perlu diperbaiki saat pengujian browser tersedia.
+- Final: Ruling: kesiapan storage produksi tidak disimpulkan dari disk fake lokal. Public storage URL/link dan durable volume tetap verifikasi environment/deployment; risiko jika dilewati adalah foto tidak tersaji atau tidak persisten di environment tersebut.
+- Final: Ruling: race checkout aktual tetap P4-02/P4-05 karena endpoint checkout belum dibuat. Dua koneksi Phase3 hanya membuktikan quota writer dan synthetic allocator dengan protokol lock yang sama; risiko jika diabaikan adalah overselling pada integrasi checkout berikutnya.
+- Final: Ruling: provider dan private-file integration tetap fase domain berikutnya. Phase3 hanya mengolah foto produk publik dan tidak mengirim provider/notifikasi atau membuka file privat; risiko jika gate berikutnya dilewati adalah kontrol akses/delivery domain tersebut belum terbukti.
+- Final: Ruling: retry otomatis deadlock/lock-timeout belum diimplementasikan pada CatalogManager; transaksi rollback utuh dan parameter bounded retry/jitter G-RETRY masih pending TL (Schema7.2/DBT-18/21). Kebijakan retry tidak dinyatakan lulus oleh Phase3 dan tetap gate sebelum acceptance integrasi/release. Risiko saat kontensi: permintaan edit dapat gagal dan perlu diulang pengguna; tidak ada partial quota/audit commit.
+
+### File aktual Phase 3
+
+Dibandingkan checkpoint akhir Phase 2 `7bdcc86`: 35 file implementasi/test/tracker. Empat checkpoint task: `b380f21` (P3-01), `1bfe90d` (P3-02), `d29d3ca` (P3-03), dan `ef30142` (P3-04). Tidak ada dependency atau migration baru. Perubahan pengguna pada `AGENTS.md`, `.env.example`, `public/favicon.PNG`, dan `public/icon.PNG` dipertahankan di luar checkpoint agen.
+
+| Direktori | File aktual |
+|---|---|
+| `root` | `IMPLEMENTATION-PROGRESS.md` |
+| `app` | `BookingCalendar.php`, `CatalogQuery.php`, `CatalogManager.php`, `CatalogImageStorage.php` |
+| `app/Http/Controllers` | `CatalogController.php`, `ProductAdminController.php`, `ProductVariantAdminController.php`, `ProductImageAdminController.php`, `ProductQuotaAdminController.php` |
+| `app/Http/Requests` | `CatalogBrowseRequest.php`, `SaveProductRequest.php`, `SaveProductVariantRequest.php`, `SaveProductImageRequest.php`, `SaveDefaultQuotaRequest.php`, `SaveDailyQuotaRequest.php` |
+| `app/Policies` | `ProductPolicy.php` |
+| `resources/js` | `app.js` |
+| `resources/views/catalog` | `index.blade.php`, `show.blade.php`, `filters.blade.php`, `availability.blade.php`, `variants.blade.php` |
+| `resources/views/components` | `account-layout.blade.php` |
+| `resources/views/staff` | `dashboard.blade.php` |
+| `resources/views/staff/products` | `index.blade.php`, `form.blade.php`, `variant-form.blade.php`, `image-form.blade.php`, `quota.blade.php` |
+| `routes` | `web.php` |
+| `tests/Feature` | `CatalogBrowseTest.php`, `CatalogManagementTest.php`, `CatalogImageTest.php`, `CatalogQuotaTest.php`, `CatalogQuotaConcurrencyTest.php` |
+
 ## J. Next Action
 
-P3-01 sampai P3-04 selesai; Phase3 belum ditutup sebelum full regression dan fresh independent review selesai. Tidak ada implementasi Phase4. Setelah verifikasi akhir, berhenti untuk persetujuan pengguna sebelum P4-01. Batas actual checkout/provider/private-file integration tetap mengikuti fase/gate terkait.
+Phase3 ditutup setelah empat task selesai berurutan, focused92passed/517assert, fullMySQL1054passed/2live skipped/3349assert dan default90passed/966skipped/210assert. Fresh review0Critical/0Important/1Minor deferred; build/Pint/diff-check lulus. Tidak ada implementasi Phase4. Berhenti untuk persetujuan pengguna sebelum **P4-01 calendar/cutoff/allowlist/pickup/personalization**. Gunakan ulang BookingCalendar yang sudah ada; jangan mengulang P3-01. Daftar rasa/filling publik aktual masih G-CONTENT: plumbing sintetis diperbolehkan sesudah persetujuan fase, master bisnis final menunggu sumber. G-RETRY tetap terbuka dan bukan acceptance yang dianggap lulus. Untuk verifikasi tambahan di lingkungan pengguna, jalankan `php artisan test --compact`; pengujian InnoDB memakai `phpunit.mysql.xml`.
