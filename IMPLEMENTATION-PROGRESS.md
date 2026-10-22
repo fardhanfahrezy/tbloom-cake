@@ -9,8 +9,8 @@
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
 | Status keseluruhan | Phase 1 berjalan,11/14 selesai; P1-07 COMPLETED setelah review fix dan MySQL regression |
 | Fase aktif | Phase 1, persetujuan pengguna tetap berlaku; Phase 2 belum dimulai |
-| Task aktif | P1-07 COMPLETED; berikutnya prasyarat G-FILES sebelum P1-10 |
-| Milestone berikutnya | G-FILES local storage/key recovery foundation, lalu P1-10 custom requests |
+| Task aktif | G-FILES foundation COMPLETED; next P1-10.1 custom request parent |
+| Milestone berikutnya | P1-10 parent/attachments satu child pada satu waktu, lalu P1-11 audit/outbox |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
 | Checkpoint source22 Oktober | Branch lokal codex/phase1-database-foundation; commits b13517f (test isolation), 68ac4e1 (users), 48896db (catalog), 518efe3 (testimonials), e82dcd5 (tracker); checkpoint P1-04 terverifikasi pada sesi lanjutan; tidak ada push/PR |
@@ -244,6 +244,10 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
+- **G-FILES foundation COMPLETED:**5source/test/config files+tracker;24initialRED -> storage31passed/81assert; recovery5passed/20assert; combined36passed/101assert,duration_ms33146 setelah Pint. Standards0/Spec0 required. Real local write/reopen, snapshot restore+old encryption key, missing-proof refusal, failed filesystem write, rollback private orphan teruji. Unsigned default local storage route403 di testing sesuai installed ServeFile; signed URL disk lain404 karena root terpisah. Tidak membuat policy/endpoint/purge atau production claim. Next P1-10.1 parent; companion P1-10.2 attachments setelah child1 tested/reviewed.
+
+- **G-FILES prerequisite aktif setelah checkpoint P1-07 fbabe6a.** Scope5files: PrivateUploadStorage,PrivateUploadPurpose,filesystems config,storage/recovery tests. Kontrak: disk lokal privat terpisah dari public dan local served root; throw-on-write, tanpa signed serving. MIME dari bytes (JPEG/PNG/WebP; PDF hanya refund), actual size1..5242880, nama object UUID server tanpa nama asli, readback hash/size sebelum return metadata. Nama asli hanya internal metadata untuk encrypted model cast. Upload helper tidak membuat DBrows/endpoint/transfer. Temp upload menjadi staging; DB rollback meninggalkan orphan privat tanpa purge. Uji storage failures/tampering dan restore bytes+metadata+synthetic keys pada dedicated local test directories/tbloom_testing. Ini prerequisite foundation dalam Phase1 yang sudah disetujui; production volume/policy/DR tetap P6/7/11/12. HMAC outbox memakai dedicated stable identity secret, terpisah dari APP_KEY; proof/helper sebelum DDL P1-11, bukan mengarang keys nyata sekarang.
+
 - **P1-07 COMPLETED foundation pada recovery review:** reviewers Standards1/Spec1 menunjuk satu bypass yang sama;32regressions RED -> GREEN membuktikan scalar/Each/quiet pada persisted/unsaved ditolak. Regresi final setelah Pint600passed/1380assert+2live skipped(total602,duration_ms261401). Phase1 11/14, tidak lagi review-blocked. Next G-FILES sebelum P1-10. Batas domain di J tetap berlaku; tidak semua DBT-06/07/18 lulus.
 
 - **Recovery review P1-07 sesi berikutnya:** dua reviewer kini benar-benar selesai, masing-masing menemukan satu isu yang sama: instance increment/decrement (+quiet/Each) melewati performUpdate. Source Laravel13.35 dikonfirmasi. Regression32cases (8methods x persisted/unsaved x 2models) RED32failed/32assert -> GREEN32passed/96assert. Dua protected arithmetic paths pada kedua models sekarang selalu menolak; tidak ada schema/dependency change. Final regression setelah Pint masih harus lulus sebelum parent COMPLETED. Temuan bukan bulk/raw exemption. Tidak mengulang task selesai atau menambah fitur domain.
@@ -345,7 +349,7 @@ Checkpoint penyelesaian child: P1-09.2 selesai pada9c9998f (61focused/132assert,
 | G-LEDGER | DESIGN REVIEWED untuk fondasi P1-09: kontrak correction append-only/canonical/provenance direview Standards+Spec, temuan lock diperbaiki; keputusan TL D-024 | P1-09.1 boleh mengikuti dictionary. P1-07 wajib TDD corrections+head/FK/projection; operasi runtime/correction/concurrency/identity provider tetap belum terbukti, tidak dibuat endpoint edit/delete facts |
 | G-REVIEW-P1-07 | RESOLVED review availability: Standards1/Spec1, satu isu arithmetic bypass yang sama; RED32 -> GREEN32 | Review benar-benar berjalan pada sesi recovery, bukan inference dari usage error. Fix final regression pending; tidak ada required finding lain. Gate task ditutup setelah regresi final |
 | G-RETRY | K-18 strategi disetujui; angka attempts/backoff/lease/timeout/deadlock jitter belum final | TL menyiapkan proposal angka per proses; jangan menandai retry-boundary AC24/DBT-21 lulus atau memakai jadwal usulan PRD sebagai final |
-| G-FILES | Local private disk tersedia; durability, keys/HMAC recovery/rotation, proof pipeline dan restore belum dibuktikan | Gate file/evidence/outbox privacy dan production storage. Setup minimum diuji dengan fakes, restore nyata pada lingkungan aman |
+| G-FILES | READY untuk foundation P1-10: private disk/helper dan actual local file+metadata+synthetic key recovery tested,36tests/101assert; Standards0/Spec0 | Bukan production durability/DR/policy atau bank proof. P1-11 masih wajib stable dedicated HMAC identity/rotation proof sebelum outbox DDL. Tidak ada real keys/customer files atau purge diaktifkan |
 | G-DATA | Snapshot users kosong, tetapi dapat berubah sebelum migration | Requery counts/anomalies sebelum shrink/backfill; jangan menggunakan snapshot audit sebagai izin asumsi semua DB kosong |
 | G-BANK | CONTRACT READY untuk schema: pengguna mengonfirmasi BCA Mobile/sourcealias/stable reference/unknown SOP dan mengotorisasi skema terkait (D-023) | P1-09 fondasi boleh dilanjutkan; verified destination/mutasi/private evidence/policy dan unknown takeover diuji pada operasi domain kelak. Tidak ada transfer atau resi/mutasi nyata diperiksa agen; unknown tidak otomatis gagal/expire |
 
@@ -530,7 +534,16 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | P1-07 review fix | Instance append-only arithmetic | Direct Pest mysql config two foundation files filter rejects model arithmetic | RED -> GREEN |RED32failed/32assert,duration_ms19390 -> GREEN32passed/96assert,duration_ms15312.8methods x persisted/unsaved x 2models. Dua protected helpers guarded dengan compatible signatures; no DB/schema/dependency change |
 | 2026-10-22 | P1-07 final after fix | Full MySQL regression | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED |600passed/1380assert+2live skipped,total602,duration_ms261401. Source fix diformat sebelum runner; schema hanya tbloom_testing. Review issue resolved dengan regression, bukan klaim reviewers menjalankan test |
 
+| 2026-10-22 | G-FILES storage RED/GREEN | Private storage contract | Direct Pest default PrivateUploadStorageTest | PASSED setelah RED |24initialfailed/errors karena helper/config belum ada ->24passed/66assert; expanded metadata/keycollision31passed/81assert,duration_ms9351. Fileinfo actual bytes,1..5242880,no original filename in keys,no overwrite on collision,readback guards |
+| 2026-10-22 | G-FILES real local recovery | Partial DBT-14/15/19 | Direct Pest mysql config PrivateUploadRecoveryTest | PASSED setelah expectation fix |Awal27/29combinedpassed,2wrong404oracles; ServeFile source menunjukkan403 untuk unsigned pada testing. Oracle diperbaiki, signed unrelated-disk URL404 ditambah ->5passed/20assert,duration_ms50671. Tidak mengubah aplikasi demi status404 |
+| 2026-10-22 | G-FILES final | Focused storage+recovery after Pint | php vendor/bin/pest --compact --configuration phpunit.mysql.xml tests/Feature/PrivateUploadStorageTest.php tests/Feature/PrivateUploadRecoveryTest.php | PASSED |36passed/101assert,duration_ms33146. Dua source reviewers Standards0/Spec0;5source files. Localtest proof saja, no production volume/DR/real keys/policy verification |
+
 ## H. Decision Log dan Plugin Execution Log
+
+### D-027 - G-FILES foundation contract
+
+PrivateUploadPurpose membatasi custom image/refund image-or-PDF. Dedicated private_uploads local disk di storage/app/private_uploads terpisah dari served/public roots,servefalse,throwtrue. Helper memvalidasi MIME/size dari bytes,randomUUIDkey,readbackdigest/size sebelum metadata internal. original_name harus masuk encrypted filename cast; tidak untuk response publik. DB gagal meninggalkan orphan privat,tanpa purge otomatis. Snapshot recovery test memulihkan satu evidence row dan file via independent local backup/restore adapters serta synthetic previous encryption key; ini bukan full DB DR atau production storage proof. Ext fileinfo/openssl/GD tersedia lokal (GD untuk fixture image). Outbox identity HMAC key harus dedicated/stable,tidak ikut rotasi APP_KEY; implementasi/proof sebelum outbox DDL P1-11. Production persistent volume/backup/key governance tetap fase readiness. Keputusan teknis dalam scope Phase1,tidak mengubah batas5MB/jenisfile/K-17/K-20.
+
 
 ### Keputusan teknis sesi
 
@@ -742,10 +755,13 @@ Pada sesi berikutnya tambahkan setiap penggunaan nyata yang memengaruhi kode/con
 - Recovery f3241cc, source tertinggal diperiksa tanpa reimplementasi. Dua reviewer resumed berhasil. Satu isu model-instance arithmetic yang sama pada kedua axes diperbaiki setelah source Laravel13.35 membuktikan jalur bypass.
 -32cases RED32failed -> GREEN32passed/96assert. Formatter fix4files; fullMySQL600passed/1380assert+2live skipped,duration_ms261401. Tidak membuka ulang domain/provider gates. Phase1 menjadi11/14, next G-FILES sebelum P1-10.
 
+### 22 Oktober2026 - G-FILES foundation complete
+
+- Setelah checkpointfbabe6a,5files ditulis/diedit: app/PrivateUploadStorage.php,app/PrivateUploadPurpose.php,config/filesystems.php,PrivateUploadStorageTest.php,PrivateUploadRecoveryTest.php.36focusedpassed/101assert; source reviewers0/0required; format/diffchecked.
+- Rehearsal hanya task-local directories di storage/framework/testing dan tbloom_testing; synthetic encryptionkeys tidak disimpan ke .env. Tidak purge data bisnis atau memeriksa customer files. Gate P1-10 foundation siap. HMAC proof/outbox dan productionDR tidak disimpulkan selesai.
+
 ## J. Next Action
 
-P1-07 COMPLETED foundation setelah independent review dan arithmetic guard fix terverifikasi. Jangan ulang source/foundation yang sudah selesai. Next prasyarat **G-FILES** untuk P1-10/11: konfigurasi disk privat terpisah tanpa serving/public link, validasi content MIME/ukuran, durable write+readback sebelum metadata, uji orphan DB rollback tanpa purge, dan recovery lokal bytes+metadata+encryption keys. HMAC identity contract untuk outbox harus stabil melintasi rotasi APP_KEY; implementasinya P1-11. Tidak mengklaim production storage/DR atau policy endpoint dari proof lokal.
+**P1-10.1 custom_cake_requests parent** mengikuti dictionary4.15; setelah test/review lanjut childP1-10.2 private attachment metadata4.16. Tracer pertama schema/model/factory/test, lalu enum/states/guarded seeder+relations/metadata. G-FILES foundation siap menurut D-027; schema tidak mengklaim aggregate1-3/minimum durable attachments atau H3/H7/D90/business transition sudah diterapkan. Tidak payment/order/quota FK baru.
 
-Setelah G-FILES siap untuk foundation, lanjut satu child P1-10 pada satu waktu; P1-11 setelah P1-10; P1-14 setelah semuanya. Target28tabel. Tetap Phase1 dan berhenti di akhir fase untuk persetujuan Phase2.
-
-Domain correction Owner-active/evidence/previous=head/sequential/cycle/hash/atomic audit-obligation tetap Phase5/6 setelah P1-11. Model guards tidak melindungi bulk/raw SQL. Runtime provider/bank/finality dan production storage/key recovery tetap gates tersendiri.
+P1-07 selesai di fbabe6a; jangan diulang. P1-11 memerlukan P1-10 plus stableHMAC/APP_KEY-rotation/dedup proof sebelum outbox DDL. P1-14 setelah semua fondasi. Phase1 11/14complete; berhenti di akhir fase untuk persetujuan Phase2. G-PAY runtime,production storage/DR dan domain operations tetap gates fase terkait.
