@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Hidden(['snap_token'])]
 class Payment extends Model
@@ -48,5 +49,11 @@ class Payment extends Model
     public function closureEvent(): BelongsTo
     {
         return $this->belongsTo(PaymentEvent::class, 'closure_event_id');
+    }
+
+    /** @return HasOne<RefundLog, $this> */
+    public function refundLog(): HasOne
+    {
+        return $this->hasOne(RefundLog::class);
     }
 }

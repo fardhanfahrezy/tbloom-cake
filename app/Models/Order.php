@@ -62,4 +62,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderRequest::class);
     }
+
+    /** @return HasOne<RefundLog, $this> */
+    public function refundLog(): HasOne
+    {
+        return $this->hasOne(RefundLog::class);
+    }
 }
