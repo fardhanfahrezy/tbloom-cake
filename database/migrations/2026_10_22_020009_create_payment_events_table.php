@@ -41,7 +41,7 @@ return new class extends Migration
 
         DB::statement(<<<'SQL'
             ALTER TABLE payment_events
-                ADD CONSTRAINT payment_events_status_check CHECK (processing_status IN ('pending', 'processing', 'processed', 'review', 'failed')),
+                ADD CONSTRAINT payment_events_status_check CHECK (BINARY processing_status IN ('pending', 'processing', 'processed', 'review', 'failed')),
                 ADD CONSTRAINT payment_events_claim_check CHECK ((claim_token IS NULL AND lease_until IS NULL) OR (claim_token IS NOT NULL AND lease_until IS NOT NULL)),
                 ADD CONSTRAINT payment_events_processed_check CHECK (processing_status <> 'processed' OR (processed_at IS NOT NULL AND payment_id IS NOT NULL AND verified_at IS NOT NULL))
             SQL);

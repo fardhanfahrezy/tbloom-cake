@@ -52,7 +52,7 @@ return new class extends Migration
 
         DB::statement(<<<'SQL'
             ALTER TABLE refund_transfers
-                ADD CONSTRAINT refund_transfers_status_check CHECK (status IN ('prepared', 'unknown', 'succeeded', 'failed_confirmed')),
+                ADD CONSTRAINT refund_transfers_status_check CHECK (BINARY status IN ('prepared', 'unknown', 'succeeded', 'failed_confirmed')),
                 ADD CONSTRAINT refund_transfers_amount_check CHECK (amount BETWEEN 1 AND 9223372036854775807),
                 ADD CONSTRAINT refund_transfers_success_check CHECK (status <> 'succeeded' OR (transfer_reference IS NOT NULL AND transferred_at IS NOT NULL AND verified_by IS NOT NULL AND verified_at IS NOT NULL AND completed_at IS NOT NULL)),
                 ADD CONSTRAINT refund_transfers_failure_check CHECK (status <> 'failed_confirmed' OR (verified_by IS NOT NULL AND verified_at IS NOT NULL AND verification_note IS NOT NULL))

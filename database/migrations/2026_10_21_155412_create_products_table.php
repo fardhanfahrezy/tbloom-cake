@@ -32,7 +32,7 @@ return new class extends Migration
 
         DB::statement(<<<'SQL'
             ALTER TABLE products
-                ADD CONSTRAINT products_category_check CHECK (category IN ('simple', 'cupcake', 'bento')),
+                ADD CONSTRAINT products_category_check CHECK (BINARY category IN ('simple', 'cupcake', 'bento')),
                 ADD CONSTRAINT products_active_check CHECK (is_active IN (0, 1))
             SQL);
     }

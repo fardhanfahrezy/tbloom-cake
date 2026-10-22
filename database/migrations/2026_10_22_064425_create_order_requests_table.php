@@ -43,9 +43,9 @@ return new class extends Migration
 
         DB::statement(<<<'SQL'
             ALTER TABLE order_requests
-                ADD CONSTRAINT order_requests_type_check CHECK (type IN ('cancellation', 'change')),
-                ADD CONSTRAINT order_requests_mode_check CHECK (decision_mode IN ('automatic', 'manual')),
-                ADD CONSTRAINT order_requests_status_check CHECK (status IN ('pending', 'applied', 'rejected')),
+                ADD CONSTRAINT order_requests_type_check CHECK (BINARY type IN ('cancellation', 'change')),
+                ADD CONSTRAINT order_requests_mode_check CHECK (BINARY decision_mode IN ('automatic', 'manual')),
+                ADD CONSTRAINT order_requests_status_check CHECK (BINARY status IN ('pending', 'applied', 'rejected')),
                 ADD CONSTRAINT order_requests_changes_check CHECK (type <> 'change' OR requested_changes IS NOT NULL),
                 ADD CONSTRAINT order_requests_applied_check CHECK (status <> 'applied' OR (applied_at IS NOT NULL AND reviewed_at IS NOT NULL)),
                 ADD CONSTRAINT order_requests_rejected_check CHECK (status <> 'rejected' OR (reviewed_at IS NOT NULL AND decision_reason IS NOT NULL))

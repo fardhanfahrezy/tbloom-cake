@@ -30,7 +30,7 @@ return new class extends Migration
 
         DB::statement(<<<'SQL'
             ALTER TABLE testimonials
-                ADD CONSTRAINT testimonials_publication_check CHECK (publication_status IN ('draft', 'published', 'archived')),
+                ADD CONSTRAINT testimonials_publication_check CHECK (BINARY publication_status IN ('draft', 'published', 'archived')),
                 ADD CONSTRAINT testimonials_rating_check CHECK (rating IS NULL OR rating BETWEEN 1 AND 5)
             SQL);
     }

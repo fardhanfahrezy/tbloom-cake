@@ -52,8 +52,8 @@ return new class extends Migration
 
         DB::statement(<<<'SQL'
             ALTER TABLE orders
-                ADD CONSTRAINT orders_status_check CHECK (status IN ('pending', 'paid', 'completed', 'expired', 'cancelled')),
-                ADD CONSTRAINT orders_pickup_method_check CHECK (pickup_method IN ('self_pickup', 'online_courier')),
+                ADD CONSTRAINT orders_status_check CHECK (BINARY status IN ('pending', 'paid', 'completed', 'expired', 'cancelled')),
+                ADD CONSTRAINT orders_pickup_method_check CHECK (BINARY pickup_method IN ('self_pickup', 'online_courier')),
                 ADD CONSTRAINT orders_pickup_time_check CHECK (pickup_time BETWEEN '09:00:00' AND '21:00:00' AND SECOND(pickup_time) = 0),
                 ADD CONSTRAINT orders_total_check CHECK (product_total BETWEEN 1 AND 9223372036854775807),
                 ADD CONSTRAINT orders_deadline_check CHECK (payment_expires_at = created_at + INTERVAL 30 MINUTE),

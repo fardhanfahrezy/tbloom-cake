@@ -7,13 +7,13 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase1 berjalan,13/14 selesai; P1-11 audit/outbox foundation verified |
-| Fase aktif | Phase 1, persetujuan pengguna tetap berlaku; Phase 2 belum dimulai |
-| Task aktif | P1-14 integrity, upgrade dan local recovery rehearsal |
-| Milestone berikutnya | P1-11 audit kemudian outbox, lalu P1-14 integrity/upgrade rehearsal |
+| Status keseluruhan | Phase 1 COMPLETED: 14/14 task fondasi terverifikasi; menunggu persetujuan Phase 2 |
+| Fase aktif | Phase 1 selesai; berhenti di batas fase sesuai instruksi pengguna. Phase 2 belum dimulai |
+| Task aktif | Tidak ada task berjalan; checkpoint akhir Phase 1 |
+| Milestone berikutnya | P2-01 registrasi pelanggan, setelah persetujuan Phase 2 |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
-| Checkpoint source22 Oktober | Branch lokal codex/phase1-database-foundation; commits b13517f (test isolation), 68ac4e1 (users), 48896db (catalog), 518efe3 (testimonials), e82dcd5 (tracker); checkpoint P1-04 terverifikasi pada sesi lanjutan; tidak ada push/PR |
+| Checkpoint source akhir Phase 1 | Branch lokal codex/phase1-database-foundation; checkpoint fbabe6a (ledger), 352a725 (private storage), 9a80568/d9892ae (custom), 7ca58c1/0a7699e/7b8a09e (identity/audit/outbox), diikuti checkpoint P1-14; tidak ada merge/push/PR |
 | Batas eksekusi | Phase 1 disetujui; schema tbloom_testing boleh dipakai test sintetis. Tidak mereset development DB, deploy, transfer bank, atau mengirim notifikasi nyata |
 
 Sumber yang sudah dibaca seluruhnya: PRD-TBloom-Cake-v2.1.md, Architecture-Document.md, Database-Schema.md, Laravel-Structure-Document.md, Acceptance-Criteria.md, Test-Cases.md, Traceability-Matrix.md. Dokumen sumber tetap merupakan spesifikasi, bukan bukti implementasi. Instruksi master prompt lampiran dan AGENTS.md berlaku. `.ai/rules` tidak ditemukan pada audit ini.
@@ -46,7 +46,7 @@ Tracker ini menjadi satu tempat roadmap, checklist, keputusan, hasil test, dan p
 | Aset/desain | Tidak ada tautan Figma pada tujuh dokumen; public hanya aset scaffold | Sumber desain Figma/brand/foto aktual belum diberikan; tidak mengarang desain Figma |
 | Perubahan pihak lain | .env.example berubah 1 baris selama audit, sebelum agen menulis tracker | Dipertahankan; bukan perubahan agen. Jangan memasukkannya ke commit otomatis |
 
-Tidak ada bukti build frontend, sandbox payment, email/WhatsApp delivery, backup/restore, concurrency, atau deployment dari sesi ini.
+Pada audit awal belum ada bukti build frontend, sandbox payment, email/WhatsApp delivery, backup/restore, concurrency, atau deployment. Bukti pengujian fondasi dan rehearsal lokal yang ditambahkan sesudah audit dicatat terpisah pada bagian D/G/I; bukan bukti acceptance runtime atau deployment.
 
 ## B. Progress Dashboard
 
@@ -55,7 +55,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | Phase | Total Tasks | Completed | In Progress | Blocked | Not Started |
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
-| 1 — Database foundation | 14 | 13 | 1 | 0 | 0 |
+| 1 — Database foundation | 14 | 14 | 0 | 0 | 0 |
 | 2 — Authentication & authorization | 5 | 0 | 0 | 0 | 5 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
@@ -67,9 +67,9 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **18** | **1** | **0** | **51** |
+| **Total** | **70** | **19** | **0** | **0** | **51** |
 
-Progres audit/roadmap: Phase0 5/5; Phase1 13/14completed. P1-11 selesai foundation94tests/218assert; P1-14 integrity/upgrade/recovery aktif. Tidak seluruh acceptance bisnis dianggap lulus.
+Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Tidak seluruh acceptance bisnis dianggap lulus.
 
 ## C. Detailed Implementation Checklist
 
@@ -106,7 +106,7 @@ Gate G-APPROVAL wajib sebelum seluruh task fase ini. Models/enums/factories diba
 | [x] P1-11 | DDL audit/outbox; F-010,BR-21,K-19 | Stable dedup,HMAC/encryption,claim lease fields,redacted data; DBT-01/03/13/14 partial | P1-05/P1-10 complete; G-FILES storage dan HMAC identity ready | Child0 identity keyring then child1audit then child2outbox | COMPLETED foundation: HMAC16/22,audit45/121,outbox33/75; combined94passed/218assert afterPint,duration_ms19654. Standards0/Spec0 eachchild. Encryptedrecipient/historykeylookup/dedup/CHECK/rollback tested; runtimeemission/fencing/send/retry Phase4/9 |
 | [x] P1-12 | DDL testimonials; F-008 Should Have | Publication/rating CHECK; DBT-01/03 bagian schema, bukan UI F008-AC1 | P1-02 | migration180529; Testimonial model/enum/factory/test seeder; TestimonialFoundationTest | 11 MySQL tests passed/22 assertions; source Review Standards0/Spec0 required; CHECK enforced; konten sintetis hanya test, UI tetap Phase10 |
 | [x] P1-13 | Verifikasi infra dan indexes framework | Dictionary delapan tabel infra kompatibel driver, EXPLAIN sebelum index queue; DBT-01/19 sebagian | P1-01 | Tracker; tanpa migration/index baru | Metadata kolom/null/default/index8 tabel cocok; InnoDB/unicode_ci; EXPLAIN query pop memakai jobs_queue_index pada DB kosong. Bukan load/production plan proof |
-| [~] P1-14 | Schema/model/factory integrity dan upgrade rehearsal | Target28tabel (27baseline+correction D-024), semua enum casts/relasi/factory tersedia; data invalid ditolak; DBT-01/02/03/15/19 | P1-02–13, semua gate terkait | tests integrity; perbaikan minimum files terkait | IN PROGRESS; child1globalintegrity,child2scaffoldupgrade/DDLfailure-resume,child3localDB/files/synthetickeysrestore; focusedfoundationnegativeconstraints retained,productionDR/realisticvolumeEXPLAIN deferred |
+| [x] P1-14 | Schema/model/factory integrity dan upgrade rehearsal | Target28tabel (27baseline+correction D-024), semua enum casts/relasi/factory tersedia; data invalid ditolak; DBT-01/02/03/15/19 | P1-02–13, semua gate terkait | tests/Feature/SchemaIntegrityTest.php, SchemaUpgradeTest.php, SchemaRecoveryTest.php, EnumIntegrityTest.php; 10 migration enum D-029 | COMPLETED: integrity/upgrade/partial-DDL/reverse-down/local restore dan enum exactness teruji; final MySQL840passed/2215assert+2live skipped. Spec gap reverse rehearsal ditutup; fresh review P2 enum ditutup RED16 -> GREEN21. Standards0/Spec0/fresh0 remaining. ProductionDR/realistic-volume EXPLAIN/runtime acceptance tetap fase terkait |
 
 Urutan DDL normatif: users/catalog → availability/orders/custom → items/payments tanpa closure FK → events → requests/refund_logs → transfers → evidence/movements → audit/outbox; closure FK belakangan. P1-07 menunggu P1-09 karena FK ke transfers. Tidak ada siklus dependency task.
 
@@ -244,6 +244,26 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
+**Checkpoint akhir: Phase 1 COMPLETED (14/14).** P1-07, prasyarat G-FILES, P1-10, P1-11 dan P1-14 selesai sesuai dependency. Seluruh suite MySQL sesudah perbaikan enum dan Pint: **842 total, 840 passed, 2 opt-in live skipped, 2215 assertions**, duration_ms452278. Suite default: **90 passed, 752 skipped, 210 assertions**, duration_ms35244. Pint dan git diff --check lulus. Independent Standards, Spec, serta fresh whole-branch review mencatat **nol temuan wajib tersisa** setelah perbaikan.
+
+Tidak menjalankan DDL pada database development, mengirim pesan, mentransfer uang, melakukan push/PR, atau deploy. Bukti recovery hanya rehearsal lokal sintetis, bukan full DBT-19/production DR. Gate runtime payment/retry/notification/retention tetap berlaku pada fase terkait. **Berhenti di batas fase; P2-01 belum dimulai dan menunggu persetujuan Phase 2.**
+
+Catatan di bawah adalah histori checkpoint; status terbaru diringkas di atas.
+
+- **P1-14 child5 GREEN:**serialpaddedregression21passed/66assert,duration_ms28730 (20enumfields+legacyrolepreflight); RED5passed/16failed. Freshwholebranchre-review0remaining required findings. Tenmigration changes are literalBINARYchecks+rolepreflight only,existingvaliddomain unchanged. Formatter/fullMySQLsuite restarted afterfix; interruptedrun is not evidence.
+
+- **P1-14 child5 enum integrity fix active:**freshwholebranchreview1P2: earlyascii_bin PADSPACE enumCHECKs accepted paddedVARCHAR values incompatible with PHP backedEnum::from. SerialRED21cases5passed/16failed,48assert,duration_ms25271 (15enumguards+legacyrolepreflight). Earlier interruptedfullrun and firstoverlappingprobe discarded; orphanownPestprocess explicitlyidentified/stopped,then onlyoneMySQLrunner verified. Ten local-only migrations use byte-exact enum membership,preflightrole alsoBINARY; no shared/deployedmigration rewritten (onlytbloom_testing). Guards for current5alreadyexact domains retained. RelevantGREEN/finalfullregression and freshre-review pending; no Phase1completionclaim.
+
+- **P1-14 reverse-order gap resolved:**new SchemaUpgradeTest rollback/rebuild1passed/9assert,duration_ms46025 afterPint; all down methods exercised including closure/correctionFK ordering. Spec re-review0remaining. Prior combined8/285afterPint plus new1/9,fullMySQLregression now running before phasegate.
+
+- **P1-14 combined afterPint:**8passed/285assert,duration_ms151871. Standards0; Spec1 required coveragegap: D-019 promised full empty reverse-orderdown rehearsal,fresh bypassesdown. Added child4 fullrollback/rebuild test before finalgate; no applicationdefect claimed orproductionrollbackpermission inferred. Re-review/finalregression pending.
+
+- **P1-14 child3 verified local rehearsal:**SchemaRecoveryTest1passed/78assert,duration_ms44510. All28tables populated/snapshotted/restored byte-exact rawrows withFKson,generatedcolumns recomputed,paymentclosure restoredafterevents; realtwo privateimageobjects and encryptedmetadata regained via separatelocalbackupadapter. Withoutoldkeydecryptfails; recoveredprevioussynthetickey decryptsbank/Snap/filenames/recipient; HMACpreviouskeyrecovershistoryidentity. No realkey/PII/providercalls or developmentDDL. PendingPintcombined8tests/finalfullregression+reviews beforePhase1complete. ProductionDR/backupautomation/realisticEXPLAIN remain deferred.
+
+- **P1-14 child2 verified:**SchemaUpgradeTest2passed/22assert,duration_ms60413. Real three-scaffold+expand migration path with syntheticlegacyuser; missingbackfill refused without rewriting; verifiedbackfill upgrades28tables preservingUTC/password/contactidentity. Syntheticemptytable collision fails after contractcommit,then explicit removal of emptytestcollision and migrate resumes without replaying contract. Cleanup fullschema/resetRefreshDatabaseState; no developmentDDL. Next child3localrecovery.
+
+- **P1-14 child1 verified:**SchemaIntegrityTest5passed/185assert,duration_ms12538. Exact28InnoDB/unicode tables,20model/factory mappings,requiredDT0 creation/businessdateprecision,no floating money,allCHECKenforced,RESTRICTFKs,three storedunique slots. Sourcefoundation unchanged. Next child2 upgrade.
+
 - **P1-11 COMPLETED foundation:**checkpoint audit0a7699e; outbox33passed/75assert; combined94passed/218assert afterPint. Standards0/Spec0 bothchildren,HMACproof16/22. No send/claim worker/runtime routing claims. **P1-14 IN PROGRESS:**child1 architecture/integrity inventory28tables/20businessmodels; child2 real scaffold upgrade+preflight/partialDDL resume; child3 complete local synthetic DB snapshot+privatebytes+independentkeys restore. Eachchild verified before next. No sourcebehavior added unless an actual regression requires it; verificationtests may pass existing foundation on first run. No productionDR/DBT19fullclaim.
 
 - **P1-11 child1 audit verified:**11 dictionary columns,actor enum/user FK+CHECK,threequeryindexes,CT-only immutable cast; append-only instance save/delete/scalar/Each/quiet guards (raw/bulk excluded). RED39failed+6errors scaffold -> GREEN45passed/121assert,duration_ms56607; test corrected to permit initial save on unsaved model. Standards0/Spec0. Redaction/allowlist/atomicdomainwrite/DBrights deferred; synthetic seeder only isolatedMySQL. Child2 outbox next after formatter rerun/checkpoint.
@@ -364,7 +384,7 @@ Checkpoint penyelesaian child: P1-09.2 selesai pada9c9998f (61focused/132assert,
 
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
-| G-LEDGER | DESIGN REVIEWED untuk fondasi P1-09: kontrak correction append-only/canonical/provenance direview Standards+Spec, temuan lock diperbaiki; keputusan TL D-024 | P1-09.1 boleh mengikuti dictionary. P1-07 wajib TDD corrections+head/FK/projection; operasi runtime/correction/concurrency/identity provider tetap belum terbukti, tidak dibuat endpoint edit/delete facts |
+| G-LEDGER | FOUNDATION VERIFIED: P1-07 canonical movements/correction chain/head/provenance selesai; final regresi dan review lulus | Operasi domain, otorisasi, audit atomik, reconciliation dan provider identity tetap Phase 5/6; tidak mengklaim runtime keuangan selesai |
 | G-REVIEW-P1-07 | RESOLVED review availability: Standards1/Spec1, satu isu arithmetic bypass yang sama; RED32 -> GREEN32 | Review benar-benar berjalan pada sesi recovery, bukan inference dari usage error. CLOSED: final MySQL600passed/1380assert+2live skipped setelahfix; tidak ada required finding lain |
 | G-RETRY | K-18 strategi disetujui; angka attempts/backoff/lease/timeout/deadlock jitter belum final | TL menyiapkan proposal angka per proses; jangan menandai retry-boundary AC24/DBT-21 lulus atau memakai jadwal usulan PRD sebagai final |
 | G-FILES | READY untuk foundation P1-10: private disk/helper dan actual local file+metadata+synthetic key recovery tested,36tests/101assert; Standards0/Spec0 | Bukan production durability/DR/policy atau bank proof. P1-11 dedicatedHMACidentity/keyring proof complete16/22; storedhistorycandidate lookup complete pada outboxtest. Tidak ada real keys/customer files atau purge diaktifkan |
@@ -561,11 +581,31 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | P1-10.2 attachment | Partial DBT-01/02/03/14/15 | Direct Pest mysql config attachment foundation | PASSED setelah RED |Initial29failed/errors ->29passed/49assert,duration_ms36368; expanded33tests30passed+3seederfailed/errors ->GREEN33passed/65assert.9kolom/MIME/size/FKs/privacy/unique/rollback/seeders/helper integration tested |
 | 2026-10-22 | P1-10 final | Combined custom foundation afterPint | php vendor/bin/pest --compact --configuration phpunit.mysql.xml tests/Feature/CustomCakeRequestFoundationTest.php tests/Feature/CustomCakeRequestAttachmentFoundationTest.php | PASSED |80passed/156assert,duration_ms48875; Standards0/Spec0 bothchildren. Bukan business/minimum1-3/policy/leadtime runtime proof. Phase1 menjadi12/14 |
 
+| 2026-10-22 | P1-11 child0 | HMAC prerequisite | NotificationRecipientIdentityTest | PASSED after RED |16passed/22assert afterPint; APP_KEY independent,HMACcurrent/previous candidates,failclosedinvalidkeyring; Standards0/Spec0 |
+| 2026-10-22 | P1-11 child1 | Audit foundation | AuditLogFoundationTest | PASSED after RED |RED39failed+6errors ->45passed/121assert; formatterrerun45/121,duration_ms54092; Standards0/Spec0 |
+| 2026-10-22 | P1-11 child2 | Outbox foundation | NotificationDeliveryFoundationTest | PASSED after RED |RED24failed+9errors ->33passed/75assert,duration_ms21482; ciphertext,dedup/claim/CHECK,historyidentitylookup and transactionrollback tested; Standards0/Spec0 |
+| 2026-10-22 | P1-11 parent | Combined afterPint | Audit+Delivery+Identity threefiles,phpunit.mysql.xml | PASSED |94passed/218assert,duration_ms19654; runtime emitter/fencing/retry/send notimplemented |
+| 2026-10-22 | P1-14 child1 | Global integrity | SchemaIntegrityTest | PASSED |5passed/185assert,duration_ms12538;28tables,20models/factories,InnoDB/RESTRICT/DT0/enforcedCHECK/generatedslots |
+| 2026-10-22 | P1-14 child2 | Scaffold upgrade/partialDDL | SchemaUpgradeTest initialtwo cases | PASSED |2passed/22assert,duration_ms60413; explicitbackfill,historypreservation,emptycollisionforwardresume |
+| 2026-10-22 | P1-14 child3 | Local DB/files/keys recovery | SchemaRecoveryTest | PASSED |1passed/78assert,duration_ms44510;28nonemptytables byteexactrawrestore,realprivatebytes,previoussyntheticencryption/HMACkeys; no productionDRclaim |
+| 2026-10-22 | P1-14 combined | AfterPint | ThreeP1-14files initial8cases | PASSED |8passed/285assert,duration_ms151871; Spec1missingD019reverseordercoverage,Standards0 |
+| 2026-10-22 | P1-14 child4 | Empty reverse down/rebuild | SchemaUpgradeTest filter reverses all empty migrations | PASSED |1passed/9assert,duration_ms46025 afterPint; onlyempty migrationstable afterrollback,28tablesrebuild,samemigrationcount; Spec re-review0remaining |
+
+| 2026-10-22 | P1-14 final gate | Whole MySQL regression before enum fix | Direct Pest full mysql suite | INTERRUPTED / NOT EVIDENCE |Freshreview found enumPADSPACEgap. Shell interrupt left ownPestchild alive; commandline verified then onlythatprocess stopped. Firstoverlappingprobe discarded; connectionlist confirmed no otherMySQLrunner before serialRED |
+| 2026-10-22 | P1-14 child5 | Exact enum regression | EnumIntegrityTest+SchemaUpgradeTest --filter=padded,phpunit.mysql.xml | RED -> GREEN |SerialRED21cases5passed/16failed,48assert,duration_ms25271 ->GREEN21passed/66assert,duration_ms28730.15CHECKdomains+legacyrolepreflight fixed; all20enumfields guarded. Tenlocal-onlymigrations; no devDDL/dependency changes. Freshreview+Standards re-review0remaining |
+
+| 2026-10-22 | Phase1 final | Complete MySQL regression after enum fix and Pint | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED |842total,840passed,2opt-inlive skipped,2215assert,duration_ms452278. Seluruh P1-14 cases termasuk reverseDDL dan exactenum tercakup; actual metadata akhir28tables/28InnoDB |
+| 2026-10-22 | Phase1 final | Default regression and formatting | php vendor/bin/pest --compact; php vendor/bin/pint --dirty --format agent; git diff --check | PASSED |842total,90passed,752skipped,210assert,duration_ms35244. Default skips MySQL proof intentionally; Pint passed; whitespacecheck exit0 |
+
 ## H. Decision Log dan Plugin Execution Log
+
+### D-029 - Exact enum storage integrity
+
+MySQLascii_bin PADSPACE can accept paddedVARCHAR values that PHP backed enums cannot hydrate. P1-14 freshreview found15 affectedfields plus legacyrolepreflight; serial21caseRED5passed/16failed ->GREEN21passed/66assert. Ten local-only migrations now use BINARY at enum membership/equality guard and userpreflight. These migrations have only run on disposabletbloom_testing,notshared/production; no deployedmigration rewritten. New regression protects all20enum-backedfields,including5alreadyexact. Validenumvalues unchanged; existing conditionalchecks remain valid after exactmembership.
 
 ### D-028 - Notification recipient identity and key rotation
 
-Dedicated32byte base64 HMAC key,immutable recipient:v1 length-framed channel+canonical recipient bytes,HMAC-SHA25664lowerhex; no APP_KEY fallback or silent normalization. Current+previous keys form lookup candidates for the same event/template. Future domain insertion must check all candidates under parent locks. Rotation requires quiescing writers/draining workers, deploying the entire keyring to every writer, then resuming; retain old keys while history/replay remains relevant. Mixed old-only writers are unsupported. Encryption rotation is independent. Helper16tests/22assert and independent reviews0/0 prove identity/keyring behavior; DB history lookup follows outbox DDL; concurrent dedup/fencing remains Phase4/9.
+Dedicated32byte base64 HMAC key,immutable recipient:v1 length-framed channel+canonical recipient bytes,HMAC-SHA25664lowerhex; no APP_KEY fallback or silent normalization. Current+previous keys form lookup candidates for the same event/template. Future domain insertion must check all candidates under parent locks. Rotation requires quiescing writers/draining workers, deploying the entire keyring to every writer, then resuming; retain old keys while history/replay remains relevant. Mixed old-only writers are unsupported. Encryption rotation is independent. Helper16tests/22assert and independent reviews0/0 prove identity/keyring behavior; Persisted old-key history lookup sudah teruji pada outbox dan local recovery; concurrent dedup/fencing remains Phase4/9.
 
 ### D-027 - G-FILES foundation contract
 
@@ -607,6 +647,8 @@ PrivateUploadPurpose membatasi custom image/refund image-or-PDF. Dedicated priva
 | D-025 / 2026-10-22 | Referensi bank VARCHAR128 memakai utf8mb4_0900_bin NO PAD, bukan ASCII PAD SPACE | Review menemukan equality yang mengabaikan trailing spaces; reproduksi MySQL gagal sebelum fix lalu lulus. Tidak mengambil regex dari contoh bank atau melakukan normalisasi/truncation. Alias sumber tetap identifier ASCII teknis. Migration hanya pernah pada disposable tbloom_testing, belum shared/deployed |
 
 ### Plugin yang benar-benar dijalankan
+
+Checkpoint akhir Phase 1 menggunakan skill Laravel/testing untuk source dan test, eksekusi rencana berurutan, serta review dua sumbu dan fresh whole-branch review. Reviewer hanya membaca source. Spec menemukan satu gap rehearsal rollback (ditambah dan lulus); fresh review menemukan enum PAD SPACE (direproduksi serial RED lalu diperbaiki GREEN). Semua re-review mencatat nol temuan wajib tersisa. Hasil source review tidak dianggap hasil pengujian. Tidak ada PR, push, deployment, atau pengiriman notifikasi.
 
 | Plugin/workflow checkpoint tambahan | Eksekusi aktual | Dampak |
 |---|---|---|
@@ -792,8 +834,34 @@ Pada sesi berikutnya tambahkan setiap penggunaan nyata yang memengaruhi kode/con
 - Child1checkpoint9a80568,47tests/91assert. Child2 schema+privacy+fixtures selesai33tests/65assert. Combined80/156sesudahformat. Dua reviewers perchild0/0required,tidak ada runtime business claim. Sourcefiles/metadata di C/D/G.
 - Next HMAC identity/rotation prerequisite,kemudian P1-11 audit/outbox. Tidak melewati gate atau meminta ulang approval Phase1. Fullregression berikutnya pada finalPhase1 setelah P1-14 agar mencakup seluruh28tabel.
 
+
+### Penutupan Phase 1, 22 Oktober 2026
+
+- P1-07 ditutup setelah perbaikan arithmetic bypass append-only; G-FILES private storage/recovery selesai sebelum custom dan outbox. P1-10 parent dan attachments, P1-11 HMAC/audit/outbox, lalu P1-14 integrity/upgrade/recovery diselesaikan berurutan.
+- Review P1-14 meminta reverse-order down rehearsal; test rollback kosong dan rebuild lulus. Fresh whole-branch review menemukan PAD SPACE pada enum lama; serial RED 16 gagal menjadi GREEN 21 lulus setelah sepuluh migration lokal dan user preflight diperbaiki. Semua temuan wajib sudah ditutup.
+- Regresi MySQL akhir 840 passed/2215 assertions + 2 live skipped; default 90 passed/210 assertions + 752 skipped. Pint dan whitespace check lulus. Metadata aktual akhir: 28 tabel, seluruhnya InnoDB.
+- Batas bukti: fondasi skema/model/factory/private helper dan rehearsal lokal. Production backup/restore, realistic-volume EXPLAIN, payment provider finality, domain locking/fencing, retry numbers, routing/policies dan purge tetap task/gate mendatang. Tidak ada dependency ditambah atau deployment dilakukan.
+- Branch lokal `codex/phase1-database-foundation` dipertahankan untuk kelanjutan; tidak merge/push/PR. Existing `AGENTS.md` tidak ditimpa. `.env.example` milik pengguna tidak dimodifikasi atau masuk checkpoint agen.
+- Sesuai instruksi pengguna, berhenti di akhir Phase 1. Next task **P2-01 registrasi pelanggan** setelah persetujuan Phase 2.
+
+### File aktual sesi lanjutan Phase 1
+
+Perubahan sejak checkpoint `f3241cc`: 66 file task (termasuk tracker), berdasarkan Git diff dan file baru. Sepuluh migration lama hanya diperbaiki untuk integritas enum D-029; tidak mengulang implementasi task yang sudah selesai. `.env.example` milik pengguna dan `AGENTS.md` existing dikecualikan.
+
+| Direktori | File aktual |
+|---|---|
+| `root` | `IMPLEMENTATION-PROGRESS.md` |
+| `app/Models` | `AuditActorType.php`, `AuditLog.php`, `CustomCakeRequest.php`, `CustomCakeRequestAttachment.php`, `CustomCakeRequestStatus.php`, `NotificationDelivery.php`, `NotificationDeliveryStatus.php`, `Payment.php`, `PaymentEvent.php`, `PaymentMovement.php`, `PaymentMovementCorrection.php`, `PaymentMovementKind.php`, `PaymentMovementSource.php`, `RefundTransfer.php`, `User.php` |
+| `app` | `NotificationChannel.php`, `NotificationRecipientIdentity.php`, `PaymentMovementKey.php`, `PrivateUploadPurpose.php`, `PrivateUploadStorage.php` |
+| `config` | `filesystems.php`, `notifications.php` |
+| `database/factories` | `AuditLogFactory.php`, `CustomCakeRequestAttachmentFactory.php`, `CustomCakeRequestFactory.php`, `NotificationDeliveryFactory.php`, `PaymentMovementCorrectionFactory.php`, `PaymentMovementFactory.php` |
+| `database/migrations` | `2026_10_21_154507_enforce_r1_user_contract.php`, `2026_10_21_155412_create_products_table.php`, `2026_10_21_180529_create_testimonials_table.php`, `2026_10_21_194129_create_orders_table.php`, `2026_10_21_194533_create_order_items_table.php`, `2026_10_22_015752_create_payments_table.php`, `2026_10_22_020009_create_payment_events_table.php`, `2026_10_22_064425_create_order_requests_table.php`, `2026_10_22_071728_create_refund_logs_table.php`, `2026_10_22_073644_create_refund_transfers_table.php`, `2026_10_22_082202_create_payment_movements_table.php`, `2026_10_22_084014_create_payment_movement_corrections_table.php`, `2026_10_22_093653_create_custom_cake_requests_table.php`, `2026_10_22_094808_create_custom_cake_request_attachments_table.php`, `2026_10_22_101156_create_audit_logs_table.php`, `2026_10_22_101800_create_notification_deliveries_table.php` |
+| `database/seeders` | `AuditLogTestSeeder.php`, `CustomCakeRequestAttachmentTestSeeder.php`, `CustomCakeRequestTestSeeder.php`, `NotificationDeliveryTestSeeder.php`, `PaymentMovementCorrectionTestSeeder.php`, `PaymentMovementTestSeeder.php` |
+| `tests/Feature` | `AuditLogFoundationTest.php`, `CustomCakeRequestAttachmentFoundationTest.php`, `CustomCakeRequestFoundationTest.php`, `EnumIntegrityTest.php`, `NotificationDeliveryFoundationTest.php`, `NotificationRecipientIdentityTest.php`, `PaymentMovementCorrectionConcurrencyTest.php`, `PaymentMovementCorrectionFoundationTest.php`, `PaymentMovementFoundationTest.php`, `PrivateUploadRecoveryTest.php`, `PrivateUploadStorageTest.php`, `SchemaIntegrityTest.php`, `SchemaRecoveryTest.php`, `SchemaUpgradeTest.php` |
+| `tests/Unit` | `PaymentMovementKeyTest.php` |
+
 ## J. Next Action
 
-**P1-14 child1 global integrity** (28tables,20businessmodels/factories,InnoDB/FK/timestamp/generatedslot/constraint metadata). Kemudian child2 upgrade dari scaffold berisi syntheticdata,preflightrefusal/partialDDLresume; child3 local DB+privateobjects+synthetickey recovery. Final wholeMySQLregression dan independentreview sebelum menutupfase. Tidak mengulang focusedfoundationtasks yang selesai.
+**Menunggu persetujuan Phase 2.** Phase 1 selesai14/14, tidak ada task aktif/blocked dalam fase ini. P2-01 belum dimulai: registrasi pelanggan aktif dengan role publik customer, kontak canonical unik, password minimum12 karakter, serta test T-01/T-02. Sesudah persetujuan, baca ulang tracker/keadaan Git dan implementasikan satu task per langkah sesuai dependency.
 
-Phase1 13/14complete; berhenti pada akhirfase untuk persetujuan Phase2. .env.example perubahanpengguna tetap dipertahankan; AGENTS.md existing tidak ditimpa.
+Tidak melanjutkan Phase 2, merge/push/PR, deployment, atau integrasi live dari checkpoint ini. Gate runtime G-PAY/G-RETRY/G-NOTIFY dan kebijakan retensi tetap terbuka untuk fase terkait; bukan bukti fitur bisnis sudah diterima. Untuk verifikasi tambahan pengguna, jalankan `php artisan test --compact`; proof skema MySQL menggunakan `php vendor/bin/pest --compact --configuration phpunit.mysql.xml`.

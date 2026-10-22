@@ -48,7 +48,7 @@ return new class extends Migration
                 ADD CONSTRAINT order_items_quantity_check CHECK (quantity > 0),
                 ADD CONSTRAINT order_items_unit_price_check CHECK (unit_price BETWEEN 1 AND 9223372036854775807),
                 ADD CONSTRAINT order_items_total_check CHECK (line_total BETWEEN 1 AND 9223372036854775807 AND line_total = CAST(unit_price AS DECIMAL(65, 0)) * quantity),
-                ADD CONSTRAINT order_items_release_check CHECK ((quota_released_at IS NULL AND quota_release_reason IS NULL) OR (quota_released_at IS NOT NULL AND quota_release_reason IS NOT NULL AND quota_release_reason IN ('expired', 'cancelled')))
+                ADD CONSTRAINT order_items_release_check CHECK ((quota_released_at IS NULL AND quota_release_reason IS NULL) OR (quota_released_at IS NOT NULL AND quota_release_reason IS NOT NULL AND BINARY quota_release_reason IN ('expired', 'cancelled')))
             SQL);
     }
 

@@ -49,9 +49,9 @@ return new class extends Migration
             ALTER TABLE payments
                 ADD CONSTRAINT payments_amount_check CHECK (expected_amount BETWEEN 1 AND 9223372036854775807),
                 ADD CONSTRAINT payments_currency_check CHECK (currency = 'IDR'),
-                ADD CONSTRAINT payments_status_check CHECK (status IN ('pending', 'paid', 'failed', 'expired', 'cancelled', 'partially_refunded', 'refunded')),
+                ADD CONSTRAINT payments_status_check CHECK (BINARY status IN ('pending', 'paid', 'failed', 'expired', 'cancelled', 'partially_refunded', 'refunded')),
                 ADD CONSTRAINT payments_late_check CHECK (is_late IS NULL OR is_late IN (0, 1)),
-                ADD CONSTRAINT payments_closure_check CHECK ((closure_result IS NULL AND closure_verified_at IS NULL AND closure_event_id IS NULL) OR (closure_result IS NOT NULL AND closure_verified_at IS NOT NULL AND closure_event_id IS NOT NULL AND closure_result = 'unpaid_closed'))
+                ADD CONSTRAINT payments_closure_check CHECK ((closure_result IS NULL AND closure_verified_at IS NULL AND closure_event_id IS NULL) OR (closure_result IS NOT NULL AND closure_verified_at IS NOT NULL AND closure_event_id IS NOT NULL AND BINARY closure_result = 'unpaid_closed'))
             SQL);
     }
 

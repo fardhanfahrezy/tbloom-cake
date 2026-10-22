@@ -13,7 +13,7 @@ return new class extends Migration
         $invalid = DB::table('users')
             ->whereNull('whatsapp_number')->orWhereNull('role')->orWhereNull('is_active')
             ->orWhereNull('created_at')->orWhereNull('updated_at')
-            ->orWhereNotIn('role', ['customer', 'admin', 'owner'])
+            ->orWhereRaw("BINARY role NOT IN ('customer', 'admin', 'owner')")
             ->orWhereNotIn('is_active', [0, 1])
             ->orWhereRaw('CHAR_LENGTH(name) > 100 OR CHAR_LENGTH(email) > 254')
             ->orWhereRaw('BINARY email <> BINARY LOWER(TRIM(email))')
@@ -42,7 +42,7 @@ return new class extends Migration
                 MODIFY updated_at DATETIME NOT NULL,
                 ADD UNIQUE INDEX users_whatsapp_number_unique (whatsapp_number),
                 ADD INDEX users_role_active_id_index (role, is_active, id),
-                ADD CONSTRAINT users_role_check CHECK (role IN ('customer', 'admin', 'owner')),
+                ADD CONSTRAINT users_role_check CHECK (BINARY role IN ('customer', 'admin', 'owner')),
                 ADD CONSTRAINT users_active_check CHECK (is_active IN (0, 1))
             SQL);
         } finally {
