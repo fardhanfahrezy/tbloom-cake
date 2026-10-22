@@ -9,7 +9,7 @@
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
 | Status keseluruhan | Phase 1 selesai14/14; Phase 2 disetujui melalui instruksi lanjut pengguna; P2-01 aktif |
 | Fase aktif | Phase 2 authentication/authorization; berhenti lagi pada akhir fase untuk persetujuan Phase 3 |
-| Task aktif | P2-04 profil, re-auth dan own-resource policies |
+| Task aktif | P2-05 Owner/staff boundary, Admin management dan last-Owner lock |
 | Milestone berikutnya | P2-01 ->P2-02 ->P2-03 ->P2-04 ->P2-05 sesuai dependency; tanpa Phase3 |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -56,7 +56,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
 | 1 — Database foundation | 14 | 14 | 0 | 0 | 0 |
-| 2 — Authentication & authorization | 5 | 3 | 1 | 0 | 1 |
+| 2 — Authentication & authorization | 5 | 4 | 1 | 0 | 0 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
 | 5 — Payment | 7 | 0 | 0 | 0 | 7 |
@@ -67,7 +67,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **22** | **1** | **0** | **47** |
+| **Total** | **70** | **23** | **1** | **0** | **46** |
 
 Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Tidak seluruh acceptance bisnis dianggap lulus.
 
@@ -119,8 +119,8 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | [x] P2-01 | Register customer aktif; F-002, K-17 | Public role spoof diabaikan, normalized contacts unik, password≥12, unverified tidak dihalangi; T-01/02 | Phase 1 gate, P1-02 | RegistrationController, RegisterCustomerRequest, CanonicalContact, AccountPassword, provider/routes, 3Bladeviews, RegistrationTest | COMPLETED34passed/182assert afterPint,duration_ms25687; RED32/32. UI realChrome GET/screenshot verified; npm build passed. DBunique race/role spoof/privacy/normalization/boundaries/5-per-minute throttle tested. T-02 covered; T-01 actualcheckout/custom endpoints tetap Phase4/7 |
 | [x] P2-02 | Login/logout dan active-account boundary | Session regenerate/invalidate, throttling, inactive ditolak | P2-01 | AuthenticatedSessionController,AccountController,LoginRequest,EnsureActiveAccount,provider/routes,login/accountviews,AuthenticationTest | COMPLETED16focused/95assert; combined50passed/277assert,duration_ms32159; RED16failed/16assert,duration_ms25120. Canonical login/activefresh/rolefresh/sessionlogout/remember/throttle covered; ChromeGETlogin verified |
 | [x] P2-03 | Email password reset | Token terbatas/hash, anti-enumeration, mail fake, no real send | P2-02 | PasswordResetLinkController,NewPasswordController,2requests,2views,provider/bootstrap/routes,PasswordResetTest,brandCSS | COMPLETED17cases/85assert; combined67passed/362assert afterPint,duration_ms35083. RED16initial+1Hostcase. Brokerhash/expiry/singleuse/genericresponse/inactive/secretflash/trusted-origin/oldsession tested; emailNotificationfake,realSMTP pending |
-| [~] P2-04 | Profile + own-resource policies; F-002/010 | Re-auth contact changes; snapshot historis tetap; cross-customer403/404; R1-AC19, DBT-14 | P2-02 | profile controller/request/policies/views/test | NOT RUN |
-| [ ] P2-05 | Owner kelola Admin, role middleware | Customer dashboard staf ditolak; last active Owner dilindungi dengan lock | P2-04 | staff controller/policy/middleware/views/test | NOT RUN; tidak seeder akun produksi tanpa persetujuan |
+| [x] P2-04 | Profile + own-resource policies; F-002/010 | Re-auth contact changes; snapshot historis tetap; cross-customer403/404; R1-AC19, DBT-14 | P2-02 | ProfileController,UpdateProfileRequest,profileview,OwnedResourceAccess,8policies,routes,ProfileTest/ResourcePolicyTest | COMPLETED30cases/119assert; withAuthentication46passed/214assert afterPint,duration_ms31409. Selfboundprofile/reauthunderlock/canonicalunique/race/privacy/snapshotpreservation;8policyownershipmappings+active-rolematrix/404deny; futuredomainHTTP/fileintegration remainsPhase4/6/7 |
+| [~] P2-05 | Owner kelola Admin, role middleware | Customer dashboard staf ditolak; last active Owner dilindungi dengan lock | P2-04 | staff controller/policy/middleware/views/test | NOT RUN; tidak seeder akun produksi tanpa persetujuan |
 
 ### Phase 3 — Product Catalog & Availability
 
@@ -243,6 +243,8 @@ flowchart TD
 Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update tracker. Sesudah setiap fase: laporkan bukti aktual dan tunggu persetujuan fase berikutnya sesuai master prompt. Domain outbox producer/audit ditulis pada fase domain yang bersangkutan; transport dan recovery lengkap di Phase 9. Status order paid/cancelled/expired dan alokasi tidak diubah sementara untuk mengejar urutan roadmap.
 
 ## D. Current Task
+
+**P2-04 COMPLETED:**30cases/119assert; withP2-02 46passed/214assert afterPint,duration_ms31409. Profileboundedtoauthenticateduser,privileged/foreign/password fieldsignored; contactchanges requirecurrentpassword bothvalidation andunderuserlock; normalization/unique/race handled; oldOrder/Custom snapshots unchanged. Eight policies autodiscoveredviaGate,activeowncustomer/activeAdminOwner view allowed,foreigncustomer404; financialgenericupdate/delete remainclosed. InitialRED19failed+9errors; twoinvalidrefundfixtures fixed processingstate,properRED policy9failed/7missingmethoderrors; firstGREEN27/28,before-snapshot fixture refreshedDBdefaults,thenGREEN. Policies testedasauthorizationcontracts; no fakeproductioncheckout/downloadroute or fullDBT14claim. NextP2-05,lasttaskPhase2.
 
 **P2-03 COMPLETED:**17cases/85assert; combined67passed/362assert,duration_ms35083 afterPint. Brokerreset withuserlock,hashedtoken,60minexpiry,oneuse,rememberrotation; noautologin. Genericforgotfeedback existing/missing/inactive/recent,5/minidentity+10/minIP; token/password notflashed. ResetURL usesconfiguredorigin notHostheader. OldsessionRED200 diagnosed middlewarepriority interface target (`AuthenticatesSessions`),fixedrefresh-before-auth.session; GREEN. PalettePRD8.1 now6namedTailwindcolors,buildpassed; noassetsinvented. Chrome connection lostafterlogincheck,forgotvisualattemptunavailable; HTTP/Blade tests/buildpassed,finalbrowserretry planned. P2-04 next.
 
@@ -619,7 +621,13 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | P2-03 | Password broker/session security | PasswordResetTest+AuthenticationTest+RegistrationTest,phpunit.mysql.xml | PASSED |InitialRED16failed/17assert+HostRED1; GREEN32passed/1sessionfailed; middlewarepriority diagnostic identified interface-based order; final67passed/362assert,duration_ms35083 afterPint. No realSMTP |
 | 2026-10-22 | P2-03 | Brand CSS/build | npm run build | PASSED |Sixpalettevalues fromPRD8.1 viaTailwind4theme; optionalfontainewarning unchanged. Chromeconnectionlostonforgotattempt; no falselyclaimedvisualpass |
 
+| 2026-10-22 | P2-04 | Profile/policy contracts | ProfileTest+ResourcePolicyTest+AuthenticationTest,phpunit.mysql.xml | PASSED |Final46passed/214assert,duration_ms31409 afterPint; P2-04subset30/119. EarlierRED andfixturecorrections notedD. Current-password racewindow/uniqueracefeedback/snapshotretention/8Gatepolicies tested; futuredomainHTTPintegration deferred |
+
 ## H. Decision Log dan Plugin Execution Log
+
+### D-032 - Profile and owned-resource authorization
+
+Profile uses authenticatedidentity,notuser-suppliedID; allowlistname/email/WAonly. Contactchanges reauthenticate password underlockedcurrentuser afterFormRequestprecheck; emailchange clearsverification,normalizationonly doesnot. No transactionalhistorysnapshotrewrite. Shared OwnedResourceAccess allowsactiveownCustomer oractiveAdmin/Owner view andhidesforeign/inactive with404. Eight explicitLaravelPolicies coverOrder,Payment,OrderRequest,CustomCakeRequest,CustomAttachment,RefundLog,Transfer,Evidence; noOwnerbefore-bypass forfinancialmutations. Policyfoundation andselfprofileHTTPdone; domainread/downloadcontrollers mustinvokeGatewhenintroduced atPhase4/6/7. No completeDBT14/T01businessclaim.
 
 ### D-031 - Password recovery and session invalidation
 
@@ -892,4 +900,4 @@ Perubahan sejak checkpoint `f3241cc`: 66 file task (termasuk tracker), berdasark
 
 ## J. Next Action
 
-P2-04 aktif: selfprofile contactreauth/passwordverify/canonicalunique/snapshotpreservation,thenown-resourcepolicies andprivatefileauthorizationboundary. Domaincheckout/custom/refund runtime remainslaterphases. P2-05 nextafterP2-04. Phase2 3/5; finalregression/freshreview thenstopforPhase3approval.
+P2-05 aktif: Owner-onlyAdmincreation/staffactivation,roleboundary,redactedaudit,lastactiveOwner underorderedcandidateOwnerlocks. NoOwnercreation/promotion,customerstaffaccessdenied. SyntheticMySQLconcurrencyproof. Phase2 4/5complete; finalfullsuite/build/freshreview thenstopforPhase3approval.
