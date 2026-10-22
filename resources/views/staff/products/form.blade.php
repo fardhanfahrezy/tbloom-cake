@@ -31,6 +31,7 @@
         <button class="rounded-lg bg-brand-burgundy px-5 py-3 font-semibold text-white dark:bg-brand-beige dark:text-brand-dark">Simpan produk</button>
     </form>
     @if ($product->exists)
+        <a href="{{ route('staff.products.quota.edit', $product) }}" class="mt-8 inline-block underline underline-offset-4">Kelola kuota default dan tanggal</a>
         <section class="mt-10 border-t border-brand-beige pt-8" aria-labelledby="sizes-title">
             <h2 id="sizes-title" class="text-xl font-semibold">Ukuran dan harga</h2>
             <a href="{{ route('staff.products.variants.create', $product) }}" class="mt-4 inline-block underline underline-offset-4">Tambah ukuran</a>

@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Models\AuditLog;
+use App\Models\DailyAvailability;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
@@ -12,10 +14,11 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class CatalogManager
 {
-    /** @param array<string, mixed> $data */
+    /** @param array{name: string, slug: string, category: string, description?: ?string, sales_unit_label: string, is_active: bool|int|string, archived: bool|int|string} $data */
     public function saveProduct(User $actor, array $data, ?Product $product = null): Product
     {
         return DB::transaction(function () use ($actor, $data, $product): Product {
@@ -40,7 +43,7 @@ class CatalogManager
         });
     }
 
-    /** @param array<string, mixed> $data */
+    /** @param array{size_label: string, price: int|string, is_active: bool|int|string} $data */
     public function saveVariant(User $actor, Product $product, array $data, ?ProductVariant $variant = null): ProductVariant
     {
         return DB::transaction(function () use ($actor, $product, $data, $variant): ProductVariant {
@@ -62,7 +65,7 @@ class CatalogManager
     }
 
     /**
-     * @param  array{alt_text: string, sort_order: int, path?: string}  $data  Verified path from CatalogImageStorage only.
+     * @param  array{alt_text: string, sort_order: int|string, path?: string}  $data  Verified path from CatalogImageStorage only.
      * @return array{image: ProductImage, replaced_path: ?string}
      */
     public function saveImage(User $actor, Product $product, array $data, ?ProductImage $image = null): array
@@ -96,6 +99,48 @@ class CatalogManager
             $current->delete();
 
             return $path;
+        });
+    }
+
+    public function setDefaultQuota(User $actor, Product $product, int $quota, string $reason): Product
+    {
+        return DB::transaction(function () use ($actor, $product, $quota, $reason): Product {
+            $currentActor = $this->lockStaff($actor);
+            $current = Product::query()->whereKey($product->id)->lockForUpdate()->firstOrFail();
+            if ($current->default_daily_quota === $quota) {
+                return $current;
+            }
+            $before = ['default_daily_quota' => $current->default_daily_quota];
+            $current->update(['default_daily_quota' => $quota]);
+            $this->audit($currentActor, 'product', $current->id, 'catalog.default_quota_updated', $before, ['default_daily_quota' => $quota], $reason);
+
+            return $current;
+        });
+    }
+
+    public function setDailyQuota(User $actor, Product $product, string $date, int $quota, string $reason): DailyAvailability
+    {
+        return DB::transaction(function () use ($actor, $product, $date, $quota, $reason): DailyAvailability {
+            $currentActor = $this->lockStaff($actor);
+            $currentProduct = Product::query()->whereKey($product->id)->lockForUpdate()->firstOrFail();
+            $current = DailyAvailability::query()->where('product_id', $currentProduct->id)->where('availability_date', $date)->lockForUpdate()->first();
+            $created = $current === null;
+            if (! $current) {
+                $current = DailyAvailability::create(['product_id' => $currentProduct->id, 'availability_date' => $date, 'quota_limit' => $currentProduct->default_daily_quota, 'updated_by' => $currentActor->id]);
+            }
+            $allocated = (int) OrderItem::query()->where('daily_availability_id', $current->id)->whereNull('quota_released_at')->sum('quantity');
+            if ($quota < $allocated) {
+                throw ValidationException::withMessages(['quota_limit' => "Kapasitas tidak boleh kurang dari {$allocated} unit yang dialokasikan."]);
+            }
+            if (! $created && $current->quota_limit === $quota) {
+                return $current;
+            }
+            $before = $created ? null : ['quota_limit' => $current->quota_limit];
+            $current->update(['quota_limit' => $quota, 'updated_by' => $currentActor->id]);
+            $this->audit($currentActor, 'daily_availability', $current->id, 'catalog.daily_quota_updated', $before,
+                ['availability_date' => $date, 'quota_limit' => $quota, 'allocated_units' => $allocated], $reason);
+
+            return $current;
         });
     }
 

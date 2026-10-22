@@ -7,6 +7,7 @@ use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\ProductAdminController;
 use App\Http\Controllers\ProductImageAdminController;
+use App\Http\Controllers\ProductQuotaAdminController;
 use App\Http\Controllers\ProductVariantAdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
@@ -32,6 +33,9 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware(['auth', EnsureActiveAccount::class, 'auth.session'])->group(function (): void {
     Route::middleware(EnsureRole::class.':admin,owner')->prefix('staff')->name('staff.')->group(function (): void {
+        Route::get('products/{product}/quota', [ProductQuotaAdminController::class, 'edit'])->name('products.quota.edit');
+        Route::patch('products/{product}/default-quota', [ProductQuotaAdminController::class, 'updateDefault'])->name('products.quota.default');
+        Route::put('products/{product}/availability', [ProductQuotaAdminController::class, 'updateDaily'])->name('products.quota.daily');
         Route::resource('products', ProductAdminController::class)->only(['index', 'create', 'store', 'edit', 'update']);
         Route::resource('products.images', ProductImageAdminController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->scoped();
         Route::resource('products.variants', ProductVariantAdminController::class)->only(['create', 'store', 'edit', 'update'])->scoped();

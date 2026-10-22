@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\DailyAvailability;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -27,6 +28,16 @@ class CatalogQuery
                 'images',
                 'dailyAvailabilities' => fn (HasMany $query) => $query->where('availability_date', $date),
             ])->orderBy('name')->orderBy('id');
+    }
+
+    /** @return array{quota: int, allocated: int, remaining: int} */
+    public function availabilityFor(Product $product, string $date): array
+    {
+        $row = DailyAvailability::query()->where('product_id', $product->id)->where('availability_date', $date)->first();
+        $quota = $row?->quota_limit ?? $product->default_daily_quota;
+        $allocated = $row ? (int) OrderItem::query()->where('daily_availability_id', $row->id)->whereNull('quota_released_at')->sum('quantity') : 0;
+
+        return ['quota' => $quota, 'allocated' => $allocated, 'remaining' => max(0, $quota - $allocated)];
     }
 
     /** @return array{product: Product, quota: int, allocated: int, remaining: int} */

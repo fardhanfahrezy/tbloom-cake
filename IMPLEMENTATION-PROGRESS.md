@@ -6,15 +6,15 @@
 |---|---|
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
-| Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase 1 dan 2 terverifikasi; Phase 3 disetujui melalui instruksi lanjut pengguna; P3-01 aktif |
+| Diperbarui | 23 Oktober 2026, Asia/Jakarta (UTC+07:00) |
+| Status keseluruhan | P3-01 sampai P3-04 selesai; verifikasi penutupan Phase 3 aktif |
 | Fase aktif | Phase 3 katalog dan availability; berhenti pada akhir fase untuk persetujuan Phase 4 |
-| Task aktif | Tidak ada; P3-03 selesai, berikutnya P3-04 |
-| Milestone berikutnya | P3-01 katalog/tanggal/detail/unit sizes, hanya setelah persetujuan Phase 3 |
+| Task aktif | Tidak ada; full regression dan final review Phase 3 |
+| Milestone berikutnya | Final regression/review Phase 3, lalu persetujuan Phase 4 sebelum P4-01 |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
 | Checkpoint source akhir Phase 1 | Branch lokal codex/phase1-database-foundation; checkpoint fbabe6a (ledger), 352a725 (private storage), 9a80568/d9892ae (custom), 7ca58c1/0a7699e/7b8a09e (identity/audit/outbox), diikuti checkpoint P1-14; tidak ada merge/push/PR |
-| Batas eksekusi | Phase 2 disetujui instruksi lanjut pengguna; test sintetis hanya tbloom_testing. Tidak mereset development DB, deploy, transfer bank, atau mengirim notifikasi nyata |
+| Batas eksekusi | Phase 3 disetujui instruksi lanjut pengguna; test sintetis hanya tbloom_testing. Tidak mereset development DB, deploy, transfer bank, atau mengirim notifikasi nyata |
 
 Sumber yang sudah dibaca seluruhnya: PRD-TBloom-Cake-v2.1.md, Architecture-Document.md, Database-Schema.md, Laravel-Structure-Document.md, Acceptance-Criteria.md, Test-Cases.md, Traceability-Matrix.md. Dokumen sumber tetap merupakan spesifikasi, bukan bukti implementasi. Instruksi master prompt lampiran dan AGENTS.md berlaku. `.ai/rules` tidak ditemukan pada audit ini.
 
@@ -57,7 +57,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
 | 1 — Database foundation | 14 | 14 | 0 | 0 | 0 |
 | 2 — Authentication & authorization | 5 | 5 | 0 | 0 | 0 |
-| 3 — Catalog & availability | 4 | 3 | 0 | 0 | 1 |
+| 3 — Catalog & availability | 4 | 4 | 0 | 0 | 0 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
 | 5 — Payment | 7 | 0 | 0 | 0 | 7 |
 | 6 — Cancellation & refund | 7 | 0 | 0 | 0 | 7 |
@@ -67,7 +67,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **27** | **0** | **0** | **43** |
+| **Total** | **70** | **28** | **0** | **0** | **42** |
 
 Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Phase2 5/5 selesai: final MySQL962passed/2832assert+2live skipped (964total,duration_ms569227); default90passed/210assert+874skipped,duration_ms52285. Tidak seluruh acceptance bisnis dianggap lulus.
 
@@ -129,7 +129,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | [x] P3-01 | Katalog/tanggal/detail/unit sizes; F-001 | F001-AC1–3, R1-AC14/15; T-03/05, DBT-04/17 | Phase 2 gate, P1-03/04 | BookingCalendar,CatalogQuery,CatalogBrowseRequest,CatalogController,5catalogviews,accountlayout,app.js,routes,CatalogBrowseTest | COMPLETED22cases/78assert; withAuthentication38passed/173assert afterPint,duration_ms27147. Buildpassed. RED19/21 missingroutes; eagerload HasMany type corrected. StaleURL RED1->GREEN, browser-session cookie preserved in follow-up test. No row materialization; checkout assertions remain P4-02 |
 | [x] P3-02 | Admin produk/harga/archive; F-009 | F009-AC1/2; old snapshot tidak berubah; DBT-03/15 | P3-01 | CatalogManager,ProductPolicy,2controllers,2requests,3staffproductviews,dashboard/routes,CatalogManagementTest,CatalogBrowseTest | COMPLETED26cases; combinedmanagement+browse+staff71passed/350assert,duration_ms18784 afterPint. RED22failed+1fixtureerror; corrected productVariant fixture then properRED404. Currentprice/archive/reactivate/scopedvariants/snapshot/auditrollback/uniqueracefeedback/formescaping tested. Buildpassed |
 | [x] P3-03 | Product image processing/storage; F-001/009 | MIME/content/alt/dimensions, safe public output; DBT-14 | P3-02, G-FILES | CatalogImageStorage,ProductImageAdminController,SaveProductImageRequest,CatalogManager,ProductAdminController,routes,2staffviews,CatalogImageTest | COMPLETED20cases; combinedimage+management+browse69passed/366assert,duration_ms33465 afterPint. RED15/15->GREEN15/103 then expanded20cases. MIME/decode/WebP/resize/alt/scopedauth/rollback/replacement/write-readbackfailure/privatepath safety tested; buildpassed |
-| [ ] P3-04 | Admin quota/default override; F-004/009 | F004-AC1–4/F009-AC3, R1-AC03/15; T-03–05/24, DBT-04 | P3-02, P1-04/05 | quota operation/controller/request/view/test | NOT RUN; direct quota races MySQL; 20 actual checkout proof menunggu P4-05 |
+| [x] P3-04 | Admin quota/default override; F-004/009 | F004-AC1–4/F009-AC3, R1-AC03/15; T-03–05/24, DBT-04 | P3-02, P1-04/05 | CatalogManager,CatalogQuery,ProductQuotaAdminController,2requests,quotaview,productform/routes,CatalogQuotaTest/ConcurrencyTest | COMPLETED23cases; allPhase392passed/517assert,duration_ms135408 afterPint. RED16/16 + concurrency2missingmethod -> GREEN18/120 then expanded92all. TwoindependentMySQLconnections serialize quota writers and synthetic allocator; limit below fresh SUM rejected. Actual20checkout proof remains P4-05 |
 
 ### Phase 4 — Checkout & Order Management
 
@@ -639,7 +639,18 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 
 | 2026-10-22 | P3-03 | Public image pipeline and metadata | CatalogImageTest+CatalogManagementTest+CatalogBrowseTest,phpunit.mysql.xml; Pint; npm run build | PASSED | 69passed/366assert,duration_ms33465; image20cases. RED15failed/15assert,duration_ms20102 -> firstGREEN15/103. Synthetic actual local writes through fakepublic disk, PNG/JPEG/WebP encode/decode, corrupt/spoof/SVG/GIF rejection, replacement/auditrollback/write-readback errors and private-file isolation tested. Chrome unavailable; production storageURL/durability not claimed |
 
+| 2026-10-23 | P3-04 | Default/daily capacity and locking | CatalogBrowseTest+CatalogManagementTest+CatalogImageTest+CatalogQuotaTest+CatalogQuotaConcurrencyTest,phpunit.mysql.xml; Pint; npm run build | PASSED | AllPhase392passed/517assert,duration_ms135408; quota23cases. InitialnormalRED16failed/16assert; concurrencyRED2errors/6assert; firstGREEN18/120,duration_ms66781. Twoindependentconnections and ordered-lock synthetic allocator, no outer test transaction; actual checkout concurrency remainsP4-05 |
+| 2026-10-23 | Phase3 smoke | Live guest HTTP/build/routes | GET catalog/catalog?category=cupcake/login on isolated QA server8877; route:list | PASSED | ThreeHTTP200 with viewport/catalognavigation,36routes,buildpassed optionalfontainewarning. Previous QA process ended when tool session changed; restarted scoped process for these GETs. Chrome unavailable; not a visual/JS-runtime proof |
+
 ## H. Decision Log dan Plugin Execution Log
+
+### D-038 - Default and dated quota management
+
+Quota changes lock fresh active staff user, product and dated availability in that order; missing availability is created under the product lock. Requested limit must cover the current SUM of unreleased item quantities, without inferring release from payment deadline or order status. Same-value edits are idempotent, meaningful edits record actor/reason and redacted before-after in the same transaction. Default updates change only the product template; materialized dates retain their limits even when the new default is zero. Admin dates use the full existing MySQL DATE domain, because customer cutoff/D90 does not govern historical capacity correction; customer catalog remains Jakarta/D90 bounded. Separate default/daily form fields preserve their own validation input. Two independent MySQL connections prove wait1205 and fresh allocation recheck after commit, for another quota writer and a synthetic allocator following the agreed lock protocol. This is not an actual checkout endpoint or full DBT-04/18 proof; those remain Phase4.
+
+### D-039 - Graphify and Boost reconnection on 23 October
+
+Latest user AGENTS instructions add Graphify-before-text-search. Graphify graph_stats confirms a connected promoted graph for repository fardhanfahrezy/tbloom-cake, but snapshot95fab79 contains only183nodes/178edges; graphify_find CatalogManager returns zero matches. Current local Phase1-3 files are unindexed, so their already-located source is inspected directly. No graph reindex/upload or repository memory write was requested. Boost tools became available; application_info reconfirms Laravel13.35/PHP8.4/Pest5.3, search-docs reviewed locking, scoped bindings and storage. Earlier fallback notes remain historical. User-modified AGENTS.md is preserved/excluded along with .env.example and the two PNGs. Full Phase3 focused suite already92passed/517assert; final whole-suite/review still pending at this checkpoint.
 
 ### D-037 - Sanitized public product images
 
@@ -973,4 +984,4 @@ Katalog publik dengan filter kategori/tanggal, detail slug, harga ukuran aktif, 
 
 ## J. Next Action
 
-P3-03 selesai dan terverifikasi, baseline1bfe90d. Next P3-04 admin quota/default override dengan actor/product/availability locks, unreleased SUM, minimum allocated units dan audit atomik. Buktikan dua koneksi MySQL tanpa outer test transaction; actual checkout concurrency tetap P4-05. Akhir Phase3 wajib full regression/build/freshreview lalu berhenti untuk persetujuan Phase4.
+P3-01 sampai P3-04 selesai; Phase3 belum ditutup sebelum full regression dan fresh independent review selesai. Tidak ada implementasi Phase4. Setelah verifikasi akhir, berhenti untuk persetujuan pengguna sebelum P4-01. Batas actual checkout/provider/private-file integration tetap mengikuti fase/gate terkait.
