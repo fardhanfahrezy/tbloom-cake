@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Hidden(['bank_name', 'account_number', 'account_holder'])]
 class RefundLog extends Model
@@ -60,5 +61,11 @@ class RefundLog extends Model
     public function completedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'completed_by');
+    }
+
+    /** @return HasMany<RefundTransfer, $this> */
+    public function transfers(): HasMany
+    {
+        return $this->hasMany(RefundTransfer::class);
     }
 }

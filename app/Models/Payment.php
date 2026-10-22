@@ -56,4 +56,10 @@ class Payment extends Model
     {
         return $this->hasOne(RefundLog::class);
     }
+
+    /** @return HasMany<RefundTransfer, $this> */
+    public function refundTransfers(): HasMany
+    {
+        return $this->hasMany(RefundTransfer::class);
+    }
 }
