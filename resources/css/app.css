@@ -4,6 +4,12 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
+    --color-brand-dark: #251306;
+    --color-brand-burgundy: #512323;
+    --color-brand-brown: #442818;
+    --color-brand-taupe: #726251;
+    --color-brand-beige: #C3B59C;
+    --color-brand-pink: #F7E3DF;
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
