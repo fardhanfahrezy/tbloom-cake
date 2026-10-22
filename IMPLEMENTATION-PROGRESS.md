@@ -9,7 +9,7 @@
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
 | Status keseluruhan | Phase 1 selesai14/14; Phase 2 disetujui melalui instruksi lanjut pengguna; P2-01 aktif |
 | Fase aktif | Phase 2 authentication/authorization; berhenti lagi pada akhir fase untuk persetujuan Phase 3 |
-| Task aktif | P2-02 login/logout dan active-account boundary |
+| Task aktif | P2-03 password reset via broker dan email fake |
 | Milestone berikutnya | P2-01 ->P2-02 ->P2-03 ->P2-04 ->P2-05 sesuai dependency; tanpa Phase3 |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -56,7 +56,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
 | 1 — Database foundation | 14 | 14 | 0 | 0 | 0 |
-| 2 — Authentication & authorization | 5 | 1 | 1 | 0 | 3 |
+| 2 — Authentication & authorization | 5 | 2 | 1 | 0 | 2 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
 | 5 — Payment | 7 | 0 | 0 | 0 | 7 |
@@ -67,7 +67,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **20** | **1** | **0** | **49** |
+| **Total** | **70** | **21** | **1** | **0** | **48** |
 
 Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Tidak seluruh acceptance bisnis dianggap lulus.
 
@@ -117,8 +117,8 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
 | [x] P2-01 | Register customer aktif; F-002, K-17 | Public role spoof diabaikan, normalized contacts unik, password≥12, unverified tidak dihalangi; T-01/02 | Phase 1 gate, P1-02 | RegistrationController, RegisterCustomerRequest, CanonicalContact, AccountPassword, provider/routes, 3Bladeviews, RegistrationTest | COMPLETED34passed/182assert afterPint,duration_ms25687; RED32/32. UI realChrome GET/screenshot verified; npm build passed. DBunique race/role spoof/privacy/normalization/boundaries/5-per-minute throttle tested. T-02 covered; T-01 actualcheckout/custom endpoints tetap Phase4/7 |
-| [~] P2-02 | Login/logout dan active-account boundary | Session regenerate/invalidate, throttling, inactive ditolak | P2-01 | auth controller/request/middleware/view/test | NOT RUN; baseline belum memberi ID khusus login/logout |
-| [ ] P2-03 | Email password reset | Token terbatas/hash, anti-enumeration, mail fake, no real send | P2-02 | reset controller/request/notification/view/test | NOT RUN; pengiriman nyata tetap gate email |
+| [x] P2-02 | Login/logout dan active-account boundary | Session regenerate/invalidate, throttling, inactive ditolak | P2-01 | AuthenticatedSessionController,AccountController,LoginRequest,EnsureActiveAccount,provider/routes,login/accountviews,AuthenticationTest | COMPLETED16focused/95assert; combined50passed/277assert,duration_ms32159; RED16failed/16assert,duration_ms25120. Canonical login/activefresh/rolefresh/sessionlogout/remember/throttle covered; ChromeGETlogin verified |
+| [~] P2-03 | Email password reset | Token terbatas/hash, anti-enumeration, mail fake, no real send | P2-02 | reset controller/request/notification/view/test | NOT RUN; pengiriman nyata tetap gate email |
 | [ ] P2-04 | Profile + own-resource policies; F-002/010 | Re-auth contact changes; snapshot historis tetap; cross-customer403/404; R1-AC19, DBT-14 | P2-02 | profile controller/request/policies/views/test | NOT RUN |
 | [ ] P2-05 | Owner kelola Admin, role middleware | Customer dashboard staf ditolak; last active Owner dilindungi dengan lock | P2-04 | staff controller/policy/middleware/views/test | NOT RUN; tidak seeder akun produksi tanpa persetujuan |
 
@@ -243,6 +243,8 @@ flowchart TD
 Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update tracker. Sesudah setiap fase: laporkan bukti aktual dan tunggu persetujuan fase berikutnya sesuai master prompt. Domain outbox producer/audit ditulis pada fase domain yang bersangkutan; transport dan recovery lengkap di Phase 9. Status order paid/cancelled/expired dan alokasi tidak diubah sementara untuk mengejar urutan roadmap.
 
 ## D. Current Task
+
+**P2-02 COMPLETED:**AuthenticationTest16cases/95assert; combinedP2-01/02 50passed/277assert,duration_ms32159 ; finalafterPint16passed/95assert,duration_ms28115. Active middleware re-readsDBuser eachprotectedrequest,setsfreshguarduser; disabledsession logout/invalidate,JSON401; canonicalcredentialgenericerror,session/CSRF rotation,POSTlogout,rememberopt-in. Throttle5/min identity+IP and30/minIP. ChromeGETlogin verified. P2-03 next; no realemail.
 
 **P2-01 COMPLETED**,34passed/182assert setelahPint,duration_ms25687; npmrunbuild passed (optionalfontainewarning,tidakinstall). AwalRED32failed/32assert endpoint404,31/32firstGREEN; email254fixture diperbaiki setelahdiagnosticRFC labeltoolong,oldinputarrayRED500 ->scalar-safecomponentGREEN. Uniqueinsert race feedback terbukti. ChromeGETregister+AX/screenshot verified pada serverlokal8877 DBmysql_testing,sessionfile/mailarray,tanparegistrasiakunmelaluiUI. P2-02 berikutnya; Phase2 1/5.
 
@@ -610,6 +612,8 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | P2-01 | Registration TDD/fixtures | RegistrationTest,phpunit.mysql.xml | PASSED |RED32failed/32assert,duration_ms49330; firstGREEN31passed/1failed; malformedoldinput500reproduced/fixed; insert-race feedbackpassed; final34passed/182assert,duration_ms25687 afterPint |
 | 2026-10-22 | P2-01 | Build/UI | npm run build; Chrome GETregister AX+screenshot | PASSED |Vite8.3.4/Tailwind4.3.3 built; optionalfontainewarning nonblocking. Formlabels/CSRF/focus/dark layout visible; no realaccount creation/send/deployment |
 
+| 2026-10-22 | P2-02 | Authentication | AuthenticationTest + RegistrationTest,phpunit.mysql.xml | PASSED |RED16failed/16assert ->combined50passed/277assert,duration_ms32159; focused16/95. Protectedaccountaccess/activefresh/rolefresh/session/logout/remember/throttle tested. Pint applied,ChromeGETlogin verified |
+
 ## H. Decision Log dan Plugin Execution Log
 
 ### D-030 - Phase 2 account boundaries
@@ -879,4 +883,4 @@ Perubahan sejak checkpoint `f3241cc`: 66 file task (termasuk tracker), berdasark
 
 ## J. Next Action
 
-P2-02 actif: login/logout/session regeneration,throttle,emailcanonical,activeaccountmiddleware. P2-01 checkpoint/tests complete; no repeat. Then P2-03/P2-04/P2-05 perdependency. FinalMySQLregression+freshreview at phaseend; stopforPhase3approval. No externalmail/WA/deployment.
+P2-03 aktif: passwordbroker resetlink/tokenexpiry/singleuse/anti-enumeration,fakeMail. Setelah selesai P2-04 profil/policies laluP2-05 staf sesuai dependency. Phase2 2/5complete. Finalregression+freshreview atphaseend,stopbeforePhase3. No realmail/WA/deployment.
