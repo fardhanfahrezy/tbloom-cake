@@ -7,9 +7,9 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase1 berjalan,12/14 selesai; P1-10 custom foundation verified |
+| Status keseluruhan | Phase1 berjalan,13/14 selesai; P1-11 audit/outbox foundation verified |
 | Fase aktif | Phase 1, persetujuan pengguna tetap berlaku; Phase 2 belum dimulai |
-| Task aktif | P1-11 child1 audit foundation; HMAC prerequisite verified |
+| Task aktif | P1-14 integrity, upgrade dan local recovery rehearsal |
 | Milestone berikutnya | P1-11 audit kemudian outbox, lalu P1-14 integrity/upgrade rehearsal |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -55,7 +55,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | Phase | Total Tasks | Completed | In Progress | Blocked | Not Started |
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
-| 1 — Database foundation | 14 | 12 | 1 | 0 | 1 |
+| 1 — Database foundation | 14 | 13 | 1 | 0 | 0 |
 | 2 — Authentication & authorization | 5 | 0 | 0 | 0 | 5 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
@@ -67,9 +67,9 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **17** | **1** | **0** | **52** |
+| **Total** | **70** | **18** | **1** | **0** | **51** |
 
-Progres audit/roadmap: Phase0 5/5; Phase1 12/14completed. P1-11 audit/outbox menunggu prerequisite HMAC identity/rotation proof; P1-14 menunggu P1-11. Tidak seluruh acceptance bisnis dianggap lulus.
+Progres audit/roadmap: Phase0 5/5; Phase1 13/14completed. P1-11 selesai foundation94tests/218assert; P1-14 integrity/upgrade/recovery aktif. Tidak seluruh acceptance bisnis dianggap lulus.
 
 ## C. Detailed Implementation Checklist
 
@@ -103,10 +103,10 @@ Gate G-APPROVAL wajib sebelum seluruh task fase ini. Models/enums/factories diba
 | [x] P1-08 | DDL order_requests; F-007, C-03/06 | Composite ownership, generated pending slot, state timestamps; DBT-01/02/03 | P1-05 selesai; Phase1 diotorisasi | Migration064425; OrderRequest/3enums/factory/test/guarded seeder; Order.requests; User.orderRequests; tracker | COMPLETED fondasi:43focused/103assert; full MySQL303passed/721assert+2live skipped; Pint dan Standards0/Spec0 required findings. Schema-only; endpoint, eligibility H-2, allowlist/hash comparison, lock dan application/audit/refund atomik tetap Phase6 |
 | [x] P1-09 | DDL refund obligations/transfers/evidence; F-007 | Cross-object FK, one obligation/active attempt, encrypted TEXT, evidence checks; DBT-01/02/03 | P1-06/P1-08 selesai; design ledger/bank reviewed D-023/24 | RefundLog/Transfer/Evidence,3enums/3migrations/3factories/3tests/3guardedseeders, parent relations/config | COMPLETED fondasi:156focused/343assert; full MySQL459passed/1064assert+2live skipped; default38passed/96assert+423skipped; Pint passed; Standards0/Spec0 remaining. Child1/2/3 selesai. Snapshot encryption/FK/active slot/reference byte identity/private metadata teruji; runtime refund/file/provider belum dibuat |
 | [x] P1-10 | DDL custom requests/attachments; F-003 | Private metadata, min attachment via app, tanpa payment/quota FK; DBT-01/03/15 partial | P1-02,G-FILES local foundation352a725 | Dua models/migrations/factories/TestSeeders,statusenum,User/parent relations,dua focusedfiles | COMPLETED foundation: child1 47/91,child2 33/65,combined80passed/156assert afterPint; Standards0/Spec0 bothchildren. Private helper integration tested. Aggregate1-3/minimumdurable/H3/H7/D90/policies/terminal transitions tetap Phase7 |
-| [~] P1-11 | DDL audit/outbox; F-010,BR-21,K-19 | Stable dedup,HMAC/encryption,claim lease fields,redacted data; DBT-01/03/13/14 partial | P1-05/P1-10 complete; G-FILES storage dan HMAC identity ready | Child0 identity keyring then child1audit then child2outbox | IN PROGRESS; child0 HMAC16passed/22assert afterPint,Standards0/Spec0; audit lalu outbox serial; runtime fencing/send/retry tetap Phase9 |
+| [x] P1-11 | DDL audit/outbox; F-010,BR-21,K-19 | Stable dedup,HMAC/encryption,claim lease fields,redacted data; DBT-01/03/13/14 partial | P1-05/P1-10 complete; G-FILES storage dan HMAC identity ready | Child0 identity keyring then child1audit then child2outbox | COMPLETED foundation: HMAC16/22,audit45/121,outbox33/75; combined94passed/218assert afterPint,duration_ms19654. Standards0/Spec0 eachchild. Encryptedrecipient/historykeylookup/dedup/CHECK/rollback tested; runtimeemission/fencing/send/retry Phase4/9 |
 | [x] P1-12 | DDL testimonials; F-008 Should Have | Publication/rating CHECK; DBT-01/03 bagian schema, bukan UI F008-AC1 | P1-02 | migration180529; Testimonial model/enum/factory/test seeder; TestimonialFoundationTest | 11 MySQL tests passed/22 assertions; source Review Standards0/Spec0 required; CHECK enforced; konten sintetis hanya test, UI tetap Phase10 |
 | [x] P1-13 | Verifikasi infra dan indexes framework | Dictionary delapan tabel infra kompatibel driver, EXPLAIN sebelum index queue; DBT-01/19 sebagian | P1-01 | Tracker; tanpa migration/index baru | Metadata kolom/null/default/index8 tabel cocok; InnoDB/unicode_ci; EXPLAIN query pop memakai jobs_queue_index pada DB kosong. Bukan load/production plan proof |
-| [ ] P1-14 | Schema/model/factory integrity dan upgrade rehearsal | Target28tabel (27baseline+correction D-024), semua enum casts/relasi/factory tersedia; data invalid ditolak; DBT-01/02/03/15/19 | P1-02–13, semua gate terkait | tests integrity; perbaikan minimum files terkait | NOT RUN; child tasks model/factory yang belum tercakup wajib dicatat, bukan ditandai selesai massal |
+| [~] P1-14 | Schema/model/factory integrity dan upgrade rehearsal | Target28tabel (27baseline+correction D-024), semua enum casts/relasi/factory tersedia; data invalid ditolak; DBT-01/02/03/15/19 | P1-02–13, semua gate terkait | tests integrity; perbaikan minimum files terkait | IN PROGRESS; child1globalintegrity,child2scaffoldupgrade/DDLfailure-resume,child3localDB/files/synthetickeysrestore; focusedfoundationnegativeconstraints retained,productionDR/realisticvolumeEXPLAIN deferred |
 
 Urutan DDL normatif: users/catalog → availability/orders/custom → items/payments tanpa closure FK → events → requests/refund_logs → transfers → evidence/movements → audit/outbox; closure FK belakangan. P1-07 menunggu P1-09 karena FK ke transfers. Tidak ada siklus dependency task.
 
@@ -244,6 +244,8 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
+- **P1-11 COMPLETED foundation:**checkpoint audit0a7699e; outbox33passed/75assert; combined94passed/218assert afterPint. Standards0/Spec0 bothchildren,HMACproof16/22. No send/claim worker/runtime routing claims. **P1-14 IN PROGRESS:**child1 architecture/integrity inventory28tables/20businessmodels; child2 real scaffold upgrade+preflight/partialDDL resume; child3 complete local synthetic DB snapshot+privatebytes+independentkeys restore. Eachchild verified before next. No sourcebehavior added unless an actual regression requires it; verificationtests may pass existing foundation on first run. No productionDR/DBT19fullclaim.
+
 - **P1-11 child1 audit verified:**11 dictionary columns,actor enum/user FK+CHECK,threequeryindexes,CT-only immutable cast; append-only instance save/delete/scalar/Each/quiet guards (raw/bulk excluded). RED39failed+6errors scaffold -> GREEN45passed/121assert,duration_ms56607; test corrected to permit initial save on unsaved model. Standards0/Spec0. Redaction/allowlist/atomicdomainwrite/DBrights deferred; synthetic seeder only isolatedMySQL. Child2 outbox next after formatter rerun/checkpoint.
 
 - **P1-11 child0 COMPLETED prerequisite:** NotificationRecipientIdentity/NotificationChannel/config notifications/test; RED16failed/errors -> GREEN16passed/22assert,duration_ms3792 setelahPint; Standards0/Spec0 required findings. HMAC keyring independent APP_KEY,stable length-framed identity,candidate history lookup; no secrets generated. Child1 audit next; no runtime dedup/send claim.
@@ -363,9 +365,9 @@ Checkpoint penyelesaian child: P1-09.2 selesai pada9c9998f (61focused/132assert,
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
 | G-LEDGER | DESIGN REVIEWED untuk fondasi P1-09: kontrak correction append-only/canonical/provenance direview Standards+Spec, temuan lock diperbaiki; keputusan TL D-024 | P1-09.1 boleh mengikuti dictionary. P1-07 wajib TDD corrections+head/FK/projection; operasi runtime/correction/concurrency/identity provider tetap belum terbukti, tidak dibuat endpoint edit/delete facts |
-| G-REVIEW-P1-07 | RESOLVED review availability: Standards1/Spec1, satu isu arithmetic bypass yang sama; RED32 -> GREEN32 | Review benar-benar berjalan pada sesi recovery, bukan inference dari usage error. Fix final regression pending; tidak ada required finding lain. Gate task ditutup setelah regresi final |
+| G-REVIEW-P1-07 | RESOLVED review availability: Standards1/Spec1, satu isu arithmetic bypass yang sama; RED32 -> GREEN32 | Review benar-benar berjalan pada sesi recovery, bukan inference dari usage error. CLOSED: final MySQL600passed/1380assert+2live skipped setelahfix; tidak ada required finding lain |
 | G-RETRY | K-18 strategi disetujui; angka attempts/backoff/lease/timeout/deadlock jitter belum final | TL menyiapkan proposal angka per proses; jangan menandai retry-boundary AC24/DBT-21 lulus atau memakai jadwal usulan PRD sebagai final |
-| G-FILES | READY untuk foundation P1-10: private disk/helper dan actual local file+metadata+synthetic key recovery tested,36tests/101assert; Standards0/Spec0 | Bukan production durability/DR/policy atau bank proof. P1-11 masih wajib stable dedicated HMAC identity/rotation proof sebelum outbox DDL. Tidak ada real keys/customer files atau purge diaktifkan |
+| G-FILES | READY untuk foundation P1-10: private disk/helper dan actual local file+metadata+synthetic key recovery tested,36tests/101assert; Standards0/Spec0 | Bukan production durability/DR/policy atau bank proof. P1-11 dedicatedHMACidentity/keyring proof complete16/22; storedhistorycandidate lookup complete pada outboxtest. Tidak ada real keys/customer files atau purge diaktifkan |
 | G-DATA | Snapshot users kosong, tetapi dapat berubah sebelum migration | Requery counts/anomalies sebelum shrink/backfill; jangan menggunakan snapshot audit sebagai izin asumsi semua DB kosong |
 | G-BANK | CONTRACT READY untuk schema: pengguna mengonfirmasi BCA Mobile/sourcealias/stable reference/unknown SOP dan mengotorisasi skema terkait (D-023) | P1-09 fondasi boleh dilanjutkan; verified destination/mutasi/private evidence/policy dan unknown takeover diuji pada operasi domain kelak. Tidak ada transfer atau resi/mutasi nyata diperiksa agen; unknown tidak otomatis gagal/expire |
 
@@ -792,6 +794,6 @@ Pada sesi berikutnya tambahkan setiap penggunaan nyata yang memengaruhi kode/con
 
 ## J. Next Action
 
-**P1-11 child2 outbox foundation**,setelah audit45/121 dan review0/0. Encrypted recipient,dedup/claim fields,syntheticfactory/seeder,lookup stored old-key identity. Runtime domain emission/claim/send/fencing tetap Phase4/9.
+**P1-14 child1 global integrity** (28tables,20businessmodels/factories,InnoDB/FK/timestamp/generatedslot/constraint metadata). Kemudian child2 upgrade dari scaffold berisi syntheticdata,preflightrefusal/partialDDLresume; child3 local DB+privateobjects+synthetickey recovery. Final wholeMySQLregression dan independentreview sebelum menutupfase. Tidak mengulang focusedfoundationtasks yang selesai.
 
-Setelah P1-11,P1-14 integrity/upgrade/recovery rehearsal target28tabel. Phase1 12/14complete; berhenti pada akhirfase untuk persetujuan Phase2. .env.example dan AGENTS.md tidak dimodifikasi oleh agen.
+Phase1 13/14complete; berhenti pada akhirfase untuk persetujuan Phase2. .env.example perubahanpengguna tetap dipertahankan; AGENTS.md existing tidak ditimpa.
