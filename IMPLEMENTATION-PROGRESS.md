@@ -7,10 +7,10 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase 1 berjalan,10/14 selesai; P1-09 fondasi refund terverifikasi pada tbloom_testing |
+| Status keseluruhan | Phase 1 berjalan,11/14 selesai; P1-07 COMPLETED setelah review fix dan MySQL regression |
 | Fase aktif | Phase 1, persetujuan pengguna tetap berlaku; Phase 2 belum dimulai |
-| Task aktif | P1-09 COMPLETED; next runnable P1-07 canonical movements/corrections |
-| Milestone berikutnya | P1-07 movements/corrections, lalu prasyarat G-FILES sebelum P1-10/11 |
+| Task aktif | P1-07 COMPLETED; berikutnya prasyarat G-FILES sebelum P1-10 |
+| Milestone berikutnya | G-FILES local storage/key recovery foundation, lalu P1-10 custom requests |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
 | Checkpoint source22 Oktober | Branch lokal codex/phase1-database-foundation; commits b13517f (test isolation), 68ac4e1 (users), 48896db (catalog), 518efe3 (testimonials), e82dcd5 (tracker); checkpoint P1-04 terverifikasi pada sesi lanjutan; tidak ada push/PR |
@@ -55,7 +55,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | Phase | Total Tasks | Completed | In Progress | Blocked | Not Started |
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
-| 1 — Database foundation | 14 | 10 | 0 | 0 | 4 |
+| 1 — Database foundation | 14 | 11 | 0 | 0 | 3 |
 | 2 — Authentication & authorization | 5 | 0 | 0 | 0 | 5 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
@@ -67,9 +67,9 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **15** | **0** | **0** | **55** |
+| **Total** | **70** | **16** | **0** | **0** | **54** |
 
-Progres audit/roadmap: 5/5 task Phase0. Phase1: sepuluh task selesai termasuk P1-09 fondasi; empat task belum dimulai. Task terkait gate terbuka belum ditandai BLOCKED sebelum dicoba. Tidak menandai G-PAY runtime selesai dari keterangan konfigurasi, discovery atau penerimaan payload Snap.
+Progres audit/roadmap: 5/5 Phase0; Phase1 sebelas selesai termasuk P1-07 setelah review dan perbaikan. Tiga task belum dimulai. G-FILES tetap prerequisite sebelum P1-10/11; runtime G-PAY tidak disimpulkan lulus dari schema.
 
 ## C. Detailed Implementation Checklist
 
@@ -99,7 +99,7 @@ Gate G-APPROVAL wajib sebelum seluruh task fase ini. Models/enums/factories diba
 | [x] P1-04 | DDL daily availability; F-004, BR-12/13 | Unique produk/tanggal, FK/updater, composite parent key, quota tanpa counter kedua; DBT-01/02/03 sebagian | P1-03; instruksi eksplisit pengguna22 Oktober untuk mengerjakan schema dan test tbloom_testing | DailyAvailability model/factory/migration/test; Product relation; CatalogTestSeeder | COMPLETED schema-only:24 test P1-04; bersama katalog35 passed/99 assertions; full MySQL90/210; Review0/0 required findings. D-012; runtime quota/release/concurrency belum dibuat |
 | [x] P1-05 | DDL orders/items + snapshots; F-002/005, C-01/04/07 | One item/order, composite FK, money/deadline/pickup/terms CHECK; DBT-01/02/03 | P1-04; otorisasi eksplisit DDL pengguna22 Oktober (D-015) | Dua migrations/models/factories/tests, tiga enum, User.orders, guarded OrderTestSeeder, tracker | COMPLETED fondasi:77 focused passed/177 assertions; full MySQL191 passed/468 assertions+2 live skipped; Pint passed; Standards0/Spec0 required findings. Runtime/aggregate/at-least-one-item/payment dan request hash comparison tetap fase domain |
 | [x] P1-06 | DDL payments/events dan closure FK terakhir; F-006 | Unique reference/payment, claim/lease, same-payment closure; DBT-01/02/03 | P1-05 selesai; kelanjutan Phase1 yang diotorisasi, batas schema D-018 | Tiga migrations; Payment/PaymentEvent dan tiga enums; dua factories/tests; Order.payment; PaymentTestSeeder | COMPLETED fondasi:69 focused/150assert; full MySQL260passed/618assert+2live skipped; Pint passed; Standards0/Spec1 diperbaiki→0 remaining. Encrypted Snap token, guarded seeder dan rollback refusal teruji; mapping/provider runtime/release belum diimplementasikan |
-| [ ] P1-07 | DDL canonical movements+append-only correction companion; F-006/007, C-05 | Immutable roots, correction head, provenance/dedup; DBT-01/02/06/07+oracle D-024 | P1-06, P1-09, G-LEDGER design reviewed | Dua migrations setelah transfers; models/factories; focused tests | NOT RUN; delta teknis D-024 menambah satu companion table, tanpa edit/delete root. Implementasi correction/FK/head wajib diuji, tidak dianggap lulus dari review kontrak |
+| [x] P1-07 | DDL canonical movements+append-only correction companion; F-006/007, C-05 | Immutable roots, correction head, provenance/dedup; DBT-01/02/06/07 partial+oracle D-024 | P1-06/P1-09 selesai; D-024 reviewed; final review resolved | Dua migrations/models/enums/factories/TestSeeders,key helper,parent relations,4testfiles | COMPLETED foundation: original109tests/220assert + review regression32/96; full MySQL600passed/1380assert+2live skipped. Standards1/Spec1 same arithmetic bypass fixed RED32 -> GREEN32,0remaining. Instance arithmetic/save/delete guarded, raw/bulk excluded; domain authorization/audit/reconciliation tetap Phase5/6 |
 | [x] P1-08 | DDL order_requests; F-007, C-03/06 | Composite ownership, generated pending slot, state timestamps; DBT-01/02/03 | P1-05 selesai; Phase1 diotorisasi | Migration064425; OrderRequest/3enums/factory/test/guarded seeder; Order.requests; User.orderRequests; tracker | COMPLETED fondasi:43focused/103assert; full MySQL303passed/721assert+2live skipped; Pint dan Standards0/Spec0 required findings. Schema-only; endpoint, eligibility H-2, allowlist/hash comparison, lock dan application/audit/refund atomik tetap Phase6 |
 | [x] P1-09 | DDL refund obligations/transfers/evidence; F-007 | Cross-object FK, one obligation/active attempt, encrypted TEXT, evidence checks; DBT-01/02/03 | P1-06/P1-08 selesai; design ledger/bank reviewed D-023/24 | RefundLog/Transfer/Evidence,3enums/3migrations/3factories/3tests/3guardedseeders, parent relations/config | COMPLETED fondasi:156focused/343assert; full MySQL459passed/1064assert+2live skipped; default38passed/96assert+423skipped; Pint passed; Standards0/Spec0 remaining. Child1/2/3 selesai. Snapshot encryption/FK/active slot/reference byte identity/private metadata teruji; runtime refund/file/provider belum dibuat |
 | [ ] P1-10 | DDL custom requests/attachments; F-003 | Private metadata, min attachment via app, tanpa payment/quota FK; DBT-01/03/15 | P1-02, G-FILES | migrations; models/factories/tests per slice | NOT RUN |
@@ -244,6 +244,17 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
+- **P1-07 COMPLETED foundation pada recovery review:** reviewers Standards1/Spec1 menunjuk satu bypass yang sama;32regressions RED -> GREEN membuktikan scalar/Each/quiet pada persisted/unsaved ditolak. Regresi final setelah Pint600passed/1380assert+2live skipped(total602,duration_ms261401). Phase1 11/14, tidak lagi review-blocked. Next G-FILES sebelum P1-10. Batas domain di J tetap berlaku; tidak semua DBT-06/07/18 lulus.
+
+- **Recovery review P1-07 sesi berikutnya:** dua reviewer kini benar-benar selesai, masing-masing menemukan satu isu yang sama: instance increment/decrement (+quiet/Each) melewati performUpdate. Source Laravel13.35 dikonfirmasi. Regression32cases (8methods x persisted/unsaved x 2models) RED32failed/32assert -> GREEN32passed/96assert. Dua protected arithmetic paths pada kedua models sekarang selalu menolak; tidak ada schema/dependency change. Final regression setelah Pint masih harus lulus sebelum parent COMPLETED. Temuan bukan bulk/raw exemption. Tidak mengulang task selesai atau menambah fitur domain.
+
+- **Checkpoint sesi lanjutan: P1-07 BLOCKED pada independent review**, implementasi dan pengujian tersedia, belum COMPLETED. Root/correction migration masing-masing13/16kolom; no updated_at, composite provenance, generated first slot dan unique successor/revision/key. Guards instance menolak save/delete termasuk quiet; bulk/raw SQL bukan jaminan immutable. Projection membaca satu head, bukan SUM root+revisi. Canonical key versioned+length-framed digest tanpa mapping provider spekulatif. Focused109tests/220assert (57child1+52child2), full MySQL568passed/1284assert+2live skipped setelah Pint. Dua subagent review Standards/Spec gagal sebelum menelaah source karena usage limit layanan, bukan hasil review0findings. Tidak commit/push/PR, tidak menjalankan task berikutnya. Existing .env.example dipertahankan.
+- Permintaan tambahan AGENTS.md: file sudah ada di cwd (8931bytes), diperiksa ulang dan git diff --quiet exit0; tidak ditimpa/diubah atau dibuat alternatif karena instruksi pengguna melarang overwrite.
+
+- P1-07.1 roots COMPLETED foundation: 52focused root +5canonical key tests, combined57passed/107assert. RED missing schema/relations/states, lalu guards/seeder RED7failures; final GREEN. Child2 dimulai setelah child1 lulus. Model guards menolak instance save/delete termasuk quiet; raw SQL/bulk builder tidak diklaim immutable oleh guards. P1-07 parent belum selesai.
+
+- **Recovery sesi lanjutan P1-07:** branch codex/phase1-database-foundation, HEAD f3241cc; hanya .env.example pihak lain dirty sebelum perubahan. .ai/rules tidak ada. Composer direct versions sesuai checkpoint. Boost read-only membuktikan empat tabel prerequisite di tbloom_testing InnoDB/MySQL8.4.3. Satu task induk aktif, dua child dikerjakan serial. Dictionary root mengikuti Schema4.10; dictionary companion persis D-024/F (16 kolom termasuk generated initial_movement_id, tanpa updated_at). Domain correction authorization/atomic audit-obligation dan provider identity tetap Phase5/6 setelah audit/outbox P1-11; foundation membuktikan struktur rantai/head/proyeksi, bukan seluruh DBT-06/07 atau operasi Owner.
+
 - **Checkpoint final: P1-09 COMPLETED fondasi**, semua tiga child selesai; Phase1 menjadi10/14.156focused/343assert; full MySQL459passed/1064assert+2live skipped(total461,duration_ms222007); default38passed/96assert+423skipped(total461,duration_ms13040). Pint passed, semua source reviews Standards0/Spec0 remaining. Tidak ada runner atau implementasi parsial P1-09 yang tertinggal. Next P1-07 sesuai dependency; G-FILES tetap sebelum P1-10/11. Scope operasi bank/provider/upload/append-only/fencing tetap fase domain.
 
 Checkpoint intermediate berikut dipertahankan sebagai histori, bukan status terkini.
@@ -310,6 +321,8 @@ Checkpoint terdahulu berikut dipertahankan sebagai histori; status task aktif di
 | 2026-10-22 | P1-09.3 child | RefundEvidence/migration/factory/test/seeder, parent relations/config;9file termasuk tracker |35tests/74assert;combined156/343;Pint/Standards0/Spec0 |
 | 2026-10-22 | P1-09 parent | Ketiga fondasi obligation/attempt/evidence selesai sesuai D-023–26 |156focused/343assert;fullMySQL459passed/1064assert+2live skipped;default38passed/96assert+423skipped;Phase1 menjadi10/14 |
 
+| 2026-10-22 | P1-07 parent | Canonical roots/correction schema+projection+guards dan independent review fix selesai |FullMySQL600/1380+2live skipped; additional32regressionRED->GREEN; Phase1 menjadi11/14 |
+
 ## F. Blockers & Pending Decisions
 
 Status final P1-09: seluruh child dan regresi telah lulus (G); catatan checkpoint intermediate di bawah adalah histori. Prasyarat schema tidak berarti runtime G-PAY, penyimpanan privat, SOP bank, ledger corrections atau concurrency telah terbukti.
@@ -330,6 +343,7 @@ Checkpoint penyelesaian child: P1-09.2 selesai pada9c9998f (61focused/132assert,
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
 | G-LEDGER | DESIGN REVIEWED untuk fondasi P1-09: kontrak correction append-only/canonical/provenance direview Standards+Spec, temuan lock diperbaiki; keputusan TL D-024 | P1-09.1 boleh mengikuti dictionary. P1-07 wajib TDD corrections+head/FK/projection; operasi runtime/correction/concurrency/identity provider tetap belum terbukti, tidak dibuat endpoint edit/delete facts |
+| G-REVIEW-P1-07 | RESOLVED review availability: Standards1/Spec1, satu isu arithmetic bypass yang sama; RED32 -> GREEN32 | Review benar-benar berjalan pada sesi recovery, bukan inference dari usage error. Fix final regression pending; tidak ada required finding lain. Gate task ditutup setelah regresi final |
 | G-RETRY | K-18 strategi disetujui; angka attempts/backoff/lease/timeout/deadlock jitter belum final | TL menyiapkan proposal angka per proses; jangan menandai retry-boundary AC24/DBT-21 lulus atau memakai jadwal usulan PRD sebagai final |
 | G-FILES | Local private disk tersedia; durability, keys/HMAC recovery/rotation, proof pipeline dan restore belum dibuktikan | Gate file/evidence/outbox privacy dan production storage. Setup minimum diuji dengan fakes, restore nyata pada lingkungan aman |
 | G-DATA | Snapshot users kosong, tetapi dapat berubah sebelum migration | Requery counts/anomalies sebelum shrink/backfill; jangan menggunakan snapshot audit sebagai izin asumsi semua DB kosong |
@@ -501,6 +515,20 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | P1-09.2 focused+root regression | Partial DBT-01/02/03 | php vendor/bin/pest --compact --configuration phpunit.mysql.xml tests/Feature/RefundLogFoundationTest.php tests/Feature/RefundTransferFoundationTest.php | PASSED |120passed/263assert,duration_ms18976; transfer60/126 termasuk metadata24kolom/null/default/ASCII/DATETIME0/STOREDslot/indexes. Regresi penuh parent dijadwalkan setelah child3 |
 | 2026-10-22 | P1-09.2 | Formatter | php vendor/bin/pint --dirty --format agent | PASSED setelah format |Dua files ordered_imports diformat,exit0; tidak dependency/vendor berubah |
 | 2026-10-22 | P1-09.2 reference fix | DBT-02/03 partial | Combined obligation+transfer tests | PASSED setelah RED | Boost membuktikan ascii_bin PAD SPACE; RED1error duplicate1062/1assert untuk trailing space. VARCHAR128 kini utf8mb4_0900_bin NO PAD. GREEN121passed/269assert,duration_ms26311; transfer61tests/132assert. Trailing space,case,Unicode composed/decomposed tetap berbeda dan round-trip utuh |
+
+| 2026-10-22 | P1-07.1 roots/key | Partial DBT-01/02/03/06 | Direct Pest mysql config, root Feature+Unit key | PASSED setelah RED | Root awal1error missing relation; expanded44tests gagal schema/states. Factory dependency ordering dan cross-payment fixture diperbaiki. Guards/seeder RED7failures?GREEN57passed/107assert,duration_ms22260. Encoding menjaga case/space/full input dan tuple boundaries; tidak membuktikan provider identity |
+| 2026-10-22 | P1-07.2 corrections | Partial DBT-01/02/03/06/07 | Direct Pest mysql config, correction foundation | PASSED setelah RED | Stub40tests failed/errors?GREEN40passed/78assert,duration_ms40657. Effective100001?90000 dengan return20000 tetap70000, void0 tanpa fake return; bukan authorization/reconciliation runtime |
+| 2026-10-22 | P1-07.2 expanded | Correction/history and two-connection constraint proof | Direct Pest mysql config, correction foundation+concurrency | PASSED |52passed/113assert,duration_ms145367. Dua koneksi berbeda dengan transaksi overlap/read head1, Acommit revision2 lalu B1062/rollback; bukan parallel lock-wait atau operasi domain. Tanpa outer test transaction/sleep; reset hanya dedicated tbloom_testing. Rollback append mempertahankan root/head sebelumnya; bukan audit-obligation crash proof |
+| 2026-10-22 | P1-07 | Formatter | php vendor/bin/pint --dirty --format agent | FIXED exit0 |16PHP files style/imports/line endings diperbaiki; regresi MySQL dijalankan sesudah format |
+| 2026-10-22 | P1-07 final code | MySQL regression | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED |568passed/1284assert+2opt-in live skipped,total570,duration_ms397411. DDL/DML serial hanya tbloom_testing; tidak payment/bank/upload/notification nyata |
+| 2026-10-22 | P1-07 review | Independent Standards+Spec | collaboration ledger_standards_review dan ledger_spec_review | BLOCKED/NOT RUN |Kedua agent gagal karena usage limit layanan sebelum memberi laporan. Tidak menyimpulkan0findings atau task COMPLETED; recovery harus review existing source, bukan mengulang code/tests yang sudah terbukti |
+
+| 2026-10-22 | P1-07 final code | Default regression | php vendor/bin/pest --compact | PASSED |43passed/107assert+527skipped,total570,duration_ms31195.525MySQL-only+2live skipped; ini bukan schema proof dari SQLite |
+| 2026-10-22 | P1-07 final | Formatter and whitespace | php vendor/bin/pint --dirty --format agent; git diff --check | PASSED |Final Pint result passed/exit0; diff check exit0. AGENTS.md git diff --quiet exit0; tidak diubah |
+
+| 2026-10-22 | P1-07 recovery review | Independent source review | Existing ledger_standards_review dan ledger_spec_review resumed | COMPLETED |Keduanya benar-benar membaca source, masing-masing1required finding, isu sama: instance arithmetic bypass. Tidak ada required finding lain atau judgment smells. Usage blocker sebelumnya pulih |
+| 2026-10-22 | P1-07 review fix | Instance append-only arithmetic | Direct Pest mysql config two foundation files filter rejects model arithmetic | RED -> GREEN |RED32failed/32assert,duration_ms19390 -> GREEN32passed/96assert,duration_ms15312.8methods x persisted/unsaved x 2models. Dua protected helpers guarded dengan compatible signatures; no DB/schema/dependency change |
+| 2026-10-22 | P1-07 final after fix | Full MySQL regression | php vendor/bin/pest --compact --configuration phpunit.mysql.xml | PASSED |600passed/1380assert+2live skipped,total602,duration_ms261401. Source fix diformat sebelum runner; schema hanya tbloom_testing. Review issue resolved dengan regression, bukan klaim reviewers menjalankan test |
 
 ## H. Decision Log dan Plugin Execution Log
 
@@ -701,14 +729,23 @@ Pada sesi berikutnya tambahkan setiap penggunaan nyata yang memengaruhi kode/con
 - Tiga file refund156passed/343assert; regresi MySQL461total,459passed/1064assert+2live skipped,duration_ms222007; default461total,38passed/96assert+423skipped,duration_ms13040. Pint passed; Standards0/Spec0 pada masing-masing child. Runner serial, tidak ada runner tertinggal. Parent P1-09 COMPLETED fondasi; Phase1 menjadi10/14, total15/70completed.
 - Tidak ada real bank/file/payment/notifikasi/deployment, dependency baru, migrasi development atau Phase2. Codex Security workflow hanya diperiksa, scan belum dijalankan (P11-02). Perubahan .env.example pihak lain dipertahankan di luar checkpoint. Next P1-07, detail J; G-FILES tetap prasyarat P1-10/11.
 
+### 22 Oktober2026 ? P1-07 implemented/tested, review blocked
+
+- Recovery HEADf3241cc pada branch codex/phase1-database-foundation; tidak ada task lama diulang. Perubahan awal .env.example dipertahankan; .ai/rules tidak ada; Composer direct versions sesuai baseline; Boost membuktikan prerequisite MySQL8.4.3/InnoDB.
+- Scope schema D-024 dibagi child1 roots/canonical encoding dan child2 correction chain/head projection. Red-green bukti di G. Tidak membuat correction endpoint, mutasi Owner, audit/outbox, provider identity mapping atau operasi dana yang memerlukan fase lain. Target28tabel teknis tetap.
+- File task: app/Models/PaymentMovement.php,PaymentMovementCorrection.php,PaymentMovementKind.php,PaymentMovementSource.php; app/PaymentMovementKey.php; tambahan relasi Payment/PaymentEvent/RefundTransfer; dua movement migrations; dua factories; dua guarded TestSeeders; PaymentMovementFoundationTest,PaymentMovementCorrectionFoundationTest,PaymentMovementCorrectionConcurrencyTest,Unit/PaymentMovementKeyTest; tracker ini. Tidak menambah dependency/basefolder atau memigrasikan tbloom development.
+- Tests: child1 57/107, child2 52/113, fullMySQL568/1284+2live skipped; default43/107+527skipped; finalPint passed. Format dijalankan dan diff whitespace checked. Review dua agent dicoba tetapi keduanya usage-limit error; gate final tetap terbuka. Tidak commit/push/PR atas code yang belum direview, dan tidak melewati task blocked.
+- Permintaan terbaru untuk contributor guide: AGENTS.md sudah ada,8931bytes,gitdiff exit0; file dipertahankan sesuai instruksi jangan overwrite. Tidak membuat file pengganti.
+
+### 22 Oktober2026 - P1-07 review recovery complete
+
+- Recovery f3241cc, source tertinggal diperiksa tanpa reimplementasi. Dua reviewer resumed berhasil. Satu isu model-instance arithmetic yang sama pada kedua axes diperbaiki setelah source Laravel13.35 membuktikan jalur bypass.
+-32cases RED32failed -> GREEN32passed/96assert. Formatter fix4files; fullMySQL600passed/1380assert+2live skipped,duration_ms261401. Tidak membuka ulang domain/provider gates. Phase1 menjadi11/14, next G-FILES sebelum P1-10.
+
 ## J. Next Action
 
-Checkpoint child2:10file task/tracker diperiksa untuk commit lokal; .env.example pihak lain tetap tidak di-stage. P1-09.2 selesai dengan61focused/132assert, combined121/269, Pint passed, Standards0/Spec0 remaining. Regresi penuh setelah child3, bukan menggunakan hasil child1 sebagai bukti kode baru.
+P1-07 COMPLETED foundation setelah independent review dan arithmetic guard fix terverifikasi. Jangan ulang source/foundation yang sudah selesai. Next prasyarat **G-FILES** untuk P1-10/11: konfigurasi disk privat terpisah tanpa serving/public link, validasi content MIME/ukuran, durable write+readback sebelum metadata, uji orphan DB rollback tanpa purge, dan recovery lokal bytes+metadata+encryption keys. HMAC identity contract untuk outbox harus stabil melintasi rotasi APP_KEY; implementasinya P1-11. Tidak mengklaim production storage/DR atau policy endpoint dari proof lokal.
 
-**Langkah berikutnya: P1-07 — canonical payment movements dan append-only correction companion.**
+Setelah G-FILES siap untuk foundation, lanjut satu child P1-10 pada satu waktu; P1-11 setelah P1-10; P1-14 setelah semuanya. Target28tabel. Tetap Phase1 dan berhenti di akhir fase untuk persetujuan Phase2.
 
-P1-09 kini selesai dengan156focused/343assert dan regresi final G; child2checkpoint9c9998f. Tidak ada kode refund parsial untuk diulang. P1-07 dapat dimulai setelah recovery: definisikan dictionary correction lengkap mengikuti D-024/F, TDD root provenance/dedup/compositeFK, append-only revisions/head tunggal dan proyeksi efektif. Tidak membuat edit/delete root, receipt/return fiktif, atau provider-time mapping tanpa bukti. Tidak ada upload endpoint/file nyata atau transfer bank pada P1-09.
-
-Dependency P1-07 ke P1-06/P1-09 sudah selesai; target P1-14 tetap28tabel termasuk companion correction D-024 yang belum dibuat. P1-10/11 memerlukan prasyarat G-FILES; P1-14 menunggu seluruh fondasi dan gates terkait. Runtime bank/provider/correction belum terbukti dari schema atau contoh. Phase1 masih aktif,10/14 selesai; Phase2/deployment belum diotorisasi. Berhenti pada akhir Phase1 untuk persetujuan berikutnya.
-
-Pembuktian instrument expiry sejak created_at, timestamp sukses/zona/presisi, final close/settlement race dan recovery ambigu tetap task runtime provider/DBT-16. Transaksi/concurrency checkout menunggu fase domain yang sesuai. Jangan membuka Phase2 sebelum Phase1 selesai dan persetujuan berikutnya diberikan.
+Domain correction Owner-active/evidence/previous=head/sequential/cycle/hash/atomic audit-obligation tetap Phase5/6 setelah P1-11. Model guards tidak melindungi bulk/raw SQL. Runtime provider/bank/finality dan production storage/key recovery tetap gates tersendiri.

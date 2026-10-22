@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Hidden(['bank_name', 'account_number', 'account_holder'])]
 class RefundTransfer extends Model
@@ -62,5 +63,11 @@ class RefundTransfer extends Model
     public function evidence(): HasMany
     {
         return $this->hasMany(RefundEvidence::class);
+    }
+
+    /** @return HasOne<PaymentMovement, $this> */
+    public function movement(): HasOne
+    {
+        return $this->hasOne(PaymentMovement::class);
     }
 }

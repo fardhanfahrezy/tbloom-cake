@@ -62,4 +62,10 @@ class Payment extends Model
     {
         return $this->hasMany(RefundTransfer::class);
     }
+
+    /** @return HasMany<PaymentMovement, $this> */
+    public function movements(): HasMany
+    {
+        return $this->hasMany(PaymentMovement::class);
+    }
 }
