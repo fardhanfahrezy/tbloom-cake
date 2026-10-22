@@ -32,7 +32,7 @@ class ProductAdminController extends Controller
     public function edit(Product $product): View
     {
         Gate::authorize('update', $product);
-        $product->load(['variants' => fn (HasMany $query) => $query->orderBy('id')]);
+        $product->load(['variants' => fn (HasMany $query) => $query->orderBy('id'), 'images']);
 
         return view('staff.products.form', ['product' => $product]);
     }

@@ -40,5 +40,14 @@
                 @endforeach
             </ul>
         </section>
+        <section class="mt-10 border-t border-brand-beige pt-8" aria-labelledby="images-title">
+            <h2 id="images-title" class="text-xl font-semibold">Foto produk</h2>
+            <a href="{{ route('staff.products.images.create', $product) }}" class="mt-4 inline-block underline underline-offset-4">Tambah foto</a>
+            <ul class="mt-5 grid gap-3">
+                @foreach ($product->images as $image)
+                    <li><a class="underline underline-offset-4" href="{{ route('staff.products.images.edit', [$product, $image]) }}">{{ $image->sort_order }} - {{ $image->alt_text }}</a></li>
+                @endforeach
+            </ul>
+        </section>
     @endif
 </x-account-layout>

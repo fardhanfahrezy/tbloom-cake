@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\AuditLog;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\User;
 use App\Models\UserRole;
@@ -57,6 +58,44 @@ class CatalogManager
                 ['price' => $current->price, 'is_active' => $current->is_active], 'Staf memperbarui ukuran dan harga produk.');
 
             return $current;
+        });
+    }
+
+    /**
+     * @param  array{alt_text: string, sort_order: int, path?: string}  $data  Verified path from CatalogImageStorage only.
+     * @return array{image: ProductImage, replaced_path: ?string}
+     */
+    public function saveImage(User $actor, Product $product, array $data, ?ProductImage $image = null): array
+    {
+        return DB::transaction(function () use ($actor, $product, $data, $image): array {
+            $currentActor = $this->lockStaff($actor);
+            $currentProduct = Product::query()->whereKey($product->id)->lockForUpdate()->firstOrFail();
+            $current = $image ? $currentProduct->images()->whereKey($image->id)->lockForUpdate()->firstOrFail() : new ProductImage(['product_id' => $currentProduct->id]);
+            $created = ! $current->exists;
+            $oldPath = $created ? null : $current->path;
+            $current->fill(Arr::only($data, ['path', 'alt_text', 'sort_order']));
+            if (! $current->isDirty()) {
+                return ['image' => $current, 'replaced_path' => null];
+            }
+            $current->save();
+            $this->audit($currentActor, 'product_image', $current->id, $created ? 'catalog.image_created' : 'catalog.image_updated', null,
+                ['sort_order' => $current->sort_order], 'Staf memperbarui foto produk.');
+
+            return ['image' => $current, 'replaced_path' => $oldPath !== $current->path ? $oldPath : null];
+        });
+    }
+
+    public function removeImage(User $actor, Product $product, ProductImage $image): string
+    {
+        return DB::transaction(function () use ($actor, $product, $image): string {
+            $currentActor = $this->lockStaff($actor);
+            $currentProduct = Product::query()->whereKey($product->id)->lockForUpdate()->firstOrFail();
+            $current = $currentProduct->images()->whereKey($image->id)->lockForUpdate()->firstOrFail();
+            $path = $current->path;
+            $this->audit($currentActor, 'product_image', $current->id, 'catalog.image_deleted', ['sort_order' => $current->sort_order], [], 'Staf menghapus foto produk.');
+            $current->delete();
+
+            return $path;
         });
     }
 
