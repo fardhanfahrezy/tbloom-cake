@@ -68,4 +68,10 @@ class RefundLog extends Model
     {
         return $this->hasMany(RefundTransfer::class);
     }
+
+    /** @return HasMany<RefundEvidence, $this> */
+    public function evidence(): HasMany
+    {
+        return $this->hasMany(RefundEvidence::class);
+    }
 }

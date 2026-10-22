@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Hidden(['bank_name', 'account_number', 'account_holder'])]
 class RefundTransfer extends Model
@@ -55,5 +56,11 @@ class RefundTransfer extends Model
     public function verifiedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    /** @return HasMany<RefundEvidence, $this> */
+    public function evidence(): HasMany
+    {
+        return $this->hasMany(RefundEvidence::class);
     }
 }
