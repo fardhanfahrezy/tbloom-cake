@@ -244,6 +244,8 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
+- **P1-11 child1 audit verified:**11 dictionary columns,actor enum/user FK+CHECK,threequeryindexes,CT-only immutable cast; append-only instance save/delete/scalar/Each/quiet guards (raw/bulk excluded). RED39failed+6errors scaffold -> GREEN45passed/121assert,duration_ms56607; test corrected to permit initial save on unsaved model. Standards0/Spec0. Redaction/allowlist/atomicdomainwrite/DBrights deferred; synthetic seeder only isolatedMySQL. Child2 outbox next after formatter rerun/checkpoint.
+
 - **P1-11 child0 COMPLETED prerequisite:** NotificationRecipientIdentity/NotificationChannel/config notifications/test; RED16failed/errors -> GREEN16passed/22assert,duration_ms3792 setelahPint; Standards0/Spec0 required findings. HMAC keyring independent APP_KEY,stable length-framed identity,candidate history lookup; no secrets generated. Child1 audit next; no runtime dedup/send claim.
 
 - **P1-11 child0 HMAC prerequisite aktif**,P1-10checkpointd9892ae. Scope4files: NotificationChannel/NotificationRecipientIdentity/config notifications/featuretest. D-028: recipient_key adalah64lowerhex HMAC-SHA256 atas immutable encoding recipient:v1:+length-framedchannel+canonicalrecipient bytes,tidak normalize/truncate diam-diam. Dedicated32byte base64 secret di config,tidak fallbackAPP_KEY; failclosed keyringinvalid/emptyrecipient. Active+previousHMACkeys menghasilkan candidatekeys untuk lookuphistory yang sama,event/template sama di bawah parentlock sebelum insert. Rotasi: quiescewriters/drainworkers,deploy semua proses dengan active+previous sebelum resume; jangan campur oldwriter dengan writerkeyringbaru atau buang oldkeys saat history/replaymasihrelevan. APP_KEY encryptionrotation terpisah. Tidak realkey dibuat/disimpan atau send. Testcandidateidentity sebelumDDL; testlookuphistory setelah outboxada. Concurrentdomainemit/fencing tetap Phase4/9.
@@ -790,6 +792,6 @@ Pada sesi berikutnya tambahkan setiap penggunaan nyata yang memengaruhi kode/con
 
 ## J. Next Action
 
-**P1-11 child1 audit foundation**, setelah child0 HMAC prerequisite verified16/22,review0/0. Audit append-only instance guards,actor FK/CHECK,JSON redacted columns,indexes,guarded synthetic factory/seeder. Kemudian child2 outbox encrypted recipient/dedup/claim fields dan lookup stored old-key identity. Runtime domain emission/claim/send/fencing tetap Phase4/9.
+**P1-11 child2 outbox foundation**,setelah audit45/121 dan review0/0. Encrypted recipient,dedup/claim fields,syntheticfactory/seeder,lookup stored old-key identity. Runtime domain emission/claim/send/fencing tetap Phase4/9.
 
 Setelah P1-11,P1-14 integrity/upgrade/recovery rehearsal target28tabel. Phase1 12/14complete; berhenti pada akhirfase untuk persetujuan Phase2. .env.example dan AGENTS.md tidak dimodifikasi oleh agen.
