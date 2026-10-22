@@ -44,4 +44,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(OrderRequest::class);
     }
+
+    /** @return HasMany<CustomCakeRequest, $this> */
+    public function customCakeRequests(): HasMany
+    {
+        return $this->hasMany(CustomCakeRequest::class);
+    }
 }

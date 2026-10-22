@@ -9,7 +9,7 @@
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
 | Status keseluruhan | Phase 1 berjalan,11/14 selesai; P1-07 COMPLETED setelah review fix dan MySQL regression |
 | Fase aktif | Phase 1, persetujuan pengguna tetap berlaku; Phase 2 belum dimulai |
-| Task aktif | G-FILES foundation COMPLETED; next P1-10.1 custom request parent |
+| Task aktif | P1-10 IN PROGRESS, child1 custom_cake_requests; G-FILES checkpoint352a725 |
 | Milestone berikutnya | P1-10 parent/attachments satu child pada satu waktu, lalu P1-11 audit/outbox |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -55,7 +55,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | Phase | Total Tasks | Completed | In Progress | Blocked | Not Started |
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
-| 1 — Database foundation | 14 | 11 | 0 | 0 | 3 |
+| 1 — Database foundation | 14 | 11 | 1 | 0 | 2 |
 | 2 — Authentication & authorization | 5 | 0 | 0 | 0 | 5 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
@@ -67,7 +67,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **16** | **0** | **0** | **54** |
+| **Total** | **70** | **16** | **1** | **0** | **53** |
 
 Progres audit/roadmap: 5/5 Phase0; Phase1 sebelas selesai termasuk P1-07 setelah review dan perbaikan. Tiga task belum dimulai. G-FILES tetap prerequisite sebelum P1-10/11; runtime G-PAY tidak disimpulkan lulus dari schema.
 
@@ -102,7 +102,7 @@ Gate G-APPROVAL wajib sebelum seluruh task fase ini. Models/enums/factories diba
 | [x] P1-07 | DDL canonical movements+append-only correction companion; F-006/007, C-05 | Immutable roots, correction head, provenance/dedup; DBT-01/02/06/07 partial+oracle D-024 | P1-06/P1-09 selesai; D-024 reviewed; final review resolved | Dua migrations/models/enums/factories/TestSeeders,key helper,parent relations,4testfiles | COMPLETED foundation: original109tests/220assert + review regression32/96; full MySQL600passed/1380assert+2live skipped. Standards1/Spec1 same arithmetic bypass fixed RED32 -> GREEN32,0remaining. Instance arithmetic/save/delete guarded, raw/bulk excluded; domain authorization/audit/reconciliation tetap Phase5/6 |
 | [x] P1-08 | DDL order_requests; F-007, C-03/06 | Composite ownership, generated pending slot, state timestamps; DBT-01/02/03 | P1-05 selesai; Phase1 diotorisasi | Migration064425; OrderRequest/3enums/factory/test/guarded seeder; Order.requests; User.orderRequests; tracker | COMPLETED fondasi:43focused/103assert; full MySQL303passed/721assert+2live skipped; Pint dan Standards0/Spec0 required findings. Schema-only; endpoint, eligibility H-2, allowlist/hash comparison, lock dan application/audit/refund atomik tetap Phase6 |
 | [x] P1-09 | DDL refund obligations/transfers/evidence; F-007 | Cross-object FK, one obligation/active attempt, encrypted TEXT, evidence checks; DBT-01/02/03 | P1-06/P1-08 selesai; design ledger/bank reviewed D-023/24 | RefundLog/Transfer/Evidence,3enums/3migrations/3factories/3tests/3guardedseeders, parent relations/config | COMPLETED fondasi:156focused/343assert; full MySQL459passed/1064assert+2live skipped; default38passed/96assert+423skipped; Pint passed; Standards0/Spec0 remaining. Child1/2/3 selesai. Snapshot encryption/FK/active slot/reference byte identity/private metadata teruji; runtime refund/file/provider belum dibuat |
-| [ ] P1-10 | DDL custom requests/attachments; F-003 | Private metadata, min attachment via app, tanpa payment/quota FK; DBT-01/03/15 | P1-02, G-FILES | migrations; models/factories/tests per slice | NOT RUN |
+| [~] P1-10 | DDL custom requests/attachments; F-003 | Private metadata, min attachment via app, tanpa payment/quota FK; DBT-01/03/15 partial | P1-02,G-FILES local foundation352a725 | Child1 parent schema/model/factory/test lalu enum/states/seeder/relations; child2 attachments setelah child1 lulus | IN PROGRESS; tidak mengklaim endpoint/H3/H7/D90 atau aggregate1-3 attachments dari schema |
 | [ ] P1-11 | DDL audit/outbox; F-010, BR-21, K-19 | Stable dedup, HMAC/encryption, fenced leases, redacted data; DBT-01/03/13/14 | P1-05, P1-10, G-FILES | migrations; models/factories; focused tests | NOT RUN; tabel boleh dirancang tanpa mengarang retry final |
 | [x] P1-12 | DDL testimonials; F-008 Should Have | Publication/rating CHECK; DBT-01/03 bagian schema, bukan UI F008-AC1 | P1-02 | migration180529; Testimonial model/enum/factory/test seeder; TestimonialFoundationTest | 11 MySQL tests passed/22 assertions; source Review Standards0/Spec0 required; CHECK enforced; konten sintetis hanya test, UI tetap Phase10 |
 | [x] P1-13 | Verifikasi infra dan indexes framework | Dictionary delapan tabel infra kompatibel driver, EXPLAIN sebelum index queue; DBT-01/19 sebagian | P1-01 | Tracker; tanpa migration/index baru | Metadata kolom/null/default/index8 tabel cocok; InnoDB/unicode_ci; EXPLAIN query pop memakai jobs_queue_index pada DB kosong. Bukan load/production plan proof |
@@ -243,6 +243,10 @@ flowchart TD
 Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update tracker. Sesudah setiap fase: laporkan bukti aktual dan tunggu persetujuan fase berikutnya sesuai master prompt. Domain outbox producer/audit ditulis pada fase domain yang bersangkutan; transport dan recovery lengkap di Phase 9. Status order paid/cancelled/expired dan alokasi tidak diubah sementara untuk mengejar urutan roadmap.
 
 ## D. Current Task
+
+- **P1-10.1 parent COMPLETED foundation:**47passed/91assert,duration_ms53109 setelahPint; reviewers Standards0/Spec0. InitialRED43 -> GREEN43/74; seeder3RED -> expanded47/91.23kolom/5CHECK/duaFKusers,customer snapshots,statuses komunikasi dan guarded fixtures. Tidak membuat invoice/payment/quota atau runtimecustom. ParentP1-10 masihINPROGRESS; nextchild2attachments.
+
+- **P1-10 aktif, child1 parent:** G-FILES selesai di352a725; Boost schema query tidak menemukan custom tables. Scope dictionary23kolom,dua FKusers,4listindexes,2unique keys. Tracer schema/model/factory/test kemudian enum/states/seeder/relations; child2 attachment metadata belum dimulai. Tidak ada payment/quota/order link atau actual upload endpoint.
 
 - **G-FILES foundation COMPLETED:**5source/test/config files+tracker;24initialRED -> storage31passed/81assert; recovery5passed/20assert; combined36passed/101assert,duration_ms33146 setelah Pint. Standards0/Spec0 required. Real local write/reopen, snapshot restore+old encryption key, missing-proof refusal, failed filesystem write, rollback private orphan teruji. Unsigned default local storage route403 di testing sesuai installed ServeFile; signed URL disk lain404 karena root terpisah. Tidak membuat policy/endpoint/purge atau production claim. Next P1-10.1 parent; companion P1-10.2 attachments setelah child1 tested/reviewed.
 
@@ -537,6 +541,8 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-22 | G-FILES storage RED/GREEN | Private storage contract | Direct Pest default PrivateUploadStorageTest | PASSED setelah RED |24initialfailed/errors karena helper/config belum ada ->24passed/66assert; expanded metadata/keycollision31passed/81assert,duration_ms9351. Fileinfo actual bytes,1..5242880,no original filename in keys,no overwrite on collision,readback guards |
 | 2026-10-22 | G-FILES real local recovery | Partial DBT-14/15/19 | Direct Pest mysql config PrivateUploadRecoveryTest | PASSED setelah expectation fix |Awal27/29combinedpassed,2wrong404oracles; ServeFile source menunjukkan403 untuk unsigned pada testing. Oracle diperbaiki, signed unrelated-disk URL404 ditambah ->5passed/20assert,duration_ms50671. Tidak mengubah aplikasi demi status404 |
 | 2026-10-22 | G-FILES final | Focused storage+recovery after Pint | php vendor/bin/pest --compact --configuration phpunit.mysql.xml tests/Feature/PrivateUploadStorageTest.php tests/Feature/PrivateUploadRecoveryTest.php | PASSED |36passed/101assert,duration_ms33146. Dua source reviewers Standards0/Spec0;5source files. Localtest proof saja, no production volume/DR/real keys/policy verification |
+
+| 2026-10-22 | P1-10.1 parent | Partial DBT-01/02/03/15 | Direct Pest mysql config CustomCakeRequestFoundationTest | PASSED setelah RED |Initial43failed/errors ->43passed/74assert,duration_ms26335; seeder expanded44passed+3failed/errors ->47passed/91assert,duration_ms53109 setelahPint. Metadata23kolom,FKs/limits/states/snapshots/identity/RESTRICT/rollback tested. ReviewStandards0/Spec0 |
 
 ## H. Decision Log dan Plugin Execution Log
 
