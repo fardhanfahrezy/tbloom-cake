@@ -9,8 +9,8 @@
 | Diperbarui | 22 Oktober 2026, Asia/Jakarta (UTC+07:00) |
 | Status keseluruhan | Phase1 berjalan,12/14 selesai; P1-10 custom foundation verified |
 | Fase aktif | Phase 1, persetujuan pengguna tetap berlaku; Phase 2 belum dimulai |
-| Task aktif | P1-10 COMPLETED; next G-FILES HMAC prerequisite lalu P1-11 audit/outbox |
-| Milestone berikutnya | P1-10 parent/attachments satu child pada satu waktu, lalu P1-11 audit/outbox |
+| Task aktif | P1-11 child1 audit foundation; HMAC prerequisite verified |
+| Milestone berikutnya | P1-11 audit kemudian outbox, lalu P1-14 integrity/upgrade rehearsal |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
 | Checkpoint source22 Oktober | Branch lokal codex/phase1-database-foundation; commits b13517f (test isolation), 68ac4e1 (users), 48896db (catalog), 518efe3 (testimonials), e82dcd5 (tracker); checkpoint P1-04 terverifikasi pada sesi lanjutan; tidak ada push/PR |
@@ -55,7 +55,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | Phase | Total Tasks | Completed | In Progress | Blocked | Not Started |
 |---|---:|---:|---:|---:|---:|
 | 0 — Audit & environment | 5 | 5 | 0 | 0 | 0 |
-| 1 — Database foundation | 14 | 12 | 0 | 0 | 2 |
+| 1 — Database foundation | 14 | 12 | 1 | 0 | 1 |
 | 2 — Authentication & authorization | 5 | 0 | 0 | 0 | 5 |
 | 3 — Catalog & availability | 4 | 0 | 0 | 0 | 4 |
 | 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
@@ -67,7 +67,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **17** | **0** | **0** | **53** |
+| **Total** | **70** | **17** | **1** | **0** | **52** |
 
 Progres audit/roadmap: Phase0 5/5; Phase1 12/14completed. P1-11 audit/outbox menunggu prerequisite HMAC identity/rotation proof; P1-14 menunggu P1-11. Tidak seluruh acceptance bisnis dianggap lulus.
 
@@ -103,7 +103,7 @@ Gate G-APPROVAL wajib sebelum seluruh task fase ini. Models/enums/factories diba
 | [x] P1-08 | DDL order_requests; F-007, C-03/06 | Composite ownership, generated pending slot, state timestamps; DBT-01/02/03 | P1-05 selesai; Phase1 diotorisasi | Migration064425; OrderRequest/3enums/factory/test/guarded seeder; Order.requests; User.orderRequests; tracker | COMPLETED fondasi:43focused/103assert; full MySQL303passed/721assert+2live skipped; Pint dan Standards0/Spec0 required findings. Schema-only; endpoint, eligibility H-2, allowlist/hash comparison, lock dan application/audit/refund atomik tetap Phase6 |
 | [x] P1-09 | DDL refund obligations/transfers/evidence; F-007 | Cross-object FK, one obligation/active attempt, encrypted TEXT, evidence checks; DBT-01/02/03 | P1-06/P1-08 selesai; design ledger/bank reviewed D-023/24 | RefundLog/Transfer/Evidence,3enums/3migrations/3factories/3tests/3guardedseeders, parent relations/config | COMPLETED fondasi:156focused/343assert; full MySQL459passed/1064assert+2live skipped; default38passed/96assert+423skipped; Pint passed; Standards0/Spec0 remaining. Child1/2/3 selesai. Snapshot encryption/FK/active slot/reference byte identity/private metadata teruji; runtime refund/file/provider belum dibuat |
 | [x] P1-10 | DDL custom requests/attachments; F-003 | Private metadata, min attachment via app, tanpa payment/quota FK; DBT-01/03/15 partial | P1-02,G-FILES local foundation352a725 | Dua models/migrations/factories/TestSeeders,statusenum,User/parent relations,dua focusedfiles | COMPLETED foundation: child1 47/91,child2 33/65,combined80passed/156assert afterPint; Standards0/Spec0 bothchildren. Private helper integration tested. Aggregate1-3/minimumdurable/H3/H7/D90/policies/terminal transitions tetap Phase7 |
-| [ ] P1-11 | DDL audit/outbox; F-010, BR-21, K-19 | Stable dedup, HMAC/encryption, fenced leases, redacted data; DBT-01/03/13/14 | P1-05, P1-10, G-FILES | migrations; models/factories; focused tests | NOT RUN; tabel boleh dirancang tanpa mengarang retry final |
+| [~] P1-11 | DDL audit/outbox; F-010,BR-21,K-19 | Stable dedup,HMAC/encryption,claim lease fields,redacted data; DBT-01/03/13/14 partial | P1-05/P1-10 complete; G-FILES storage dan HMAC identity ready | Child0 identity keyring then child1audit then child2outbox | IN PROGRESS; child0 HMAC16passed/22assert afterPint,Standards0/Spec0; audit lalu outbox serial; runtime fencing/send/retry tetap Phase9 |
 | [x] P1-12 | DDL testimonials; F-008 Should Have | Publication/rating CHECK; DBT-01/03 bagian schema, bukan UI F008-AC1 | P1-02 | migration180529; Testimonial model/enum/factory/test seeder; TestimonialFoundationTest | 11 MySQL tests passed/22 assertions; source Review Standards0/Spec0 required; CHECK enforced; konten sintetis hanya test, UI tetap Phase10 |
 | [x] P1-13 | Verifikasi infra dan indexes framework | Dictionary delapan tabel infra kompatibel driver, EXPLAIN sebelum index queue; DBT-01/19 sebagian | P1-01 | Tracker; tanpa migration/index baru | Metadata kolom/null/default/index8 tabel cocok; InnoDB/unicode_ci; EXPLAIN query pop memakai jobs_queue_index pada DB kosong. Bukan load/production plan proof |
 | [ ] P1-14 | Schema/model/factory integrity dan upgrade rehearsal | Target28tabel (27baseline+correction D-024), semua enum casts/relasi/factory tersedia; data invalid ditolak; DBT-01/02/03/15/19 | P1-02–13, semua gate terkait | tests integrity; perbaikan minimum files terkait | NOT RUN; child tasks model/factory yang belum tercakup wajib dicatat, bukan ditandai selesai massal |
@@ -243,6 +243,10 @@ flowchart TD
 Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update tracker. Sesudah setiap fase: laporkan bukti aktual dan tunggu persetujuan fase berikutnya sesuai master prompt. Domain outbox producer/audit ditulis pada fase domain yang bersangkutan; transport dan recovery lengkap di Phase 9. Status order paid/cancelled/expired dan alokasi tidak diubah sementara untuk mengejar urutan roadmap.
 
 ## D. Current Task
+
+- **P1-11 child0 COMPLETED prerequisite:** NotificationRecipientIdentity/NotificationChannel/config notifications/test; RED16failed/errors -> GREEN16passed/22assert,duration_ms3792 setelahPint; Standards0/Spec0 required findings. HMAC keyring independent APP_KEY,stable length-framed identity,candidate history lookup; no secrets generated. Child1 audit next; no runtime dedup/send claim.
+
+- **P1-11 child0 HMAC prerequisite aktif**,P1-10checkpointd9892ae. Scope4files: NotificationChannel/NotificationRecipientIdentity/config notifications/featuretest. D-028: recipient_key adalah64lowerhex HMAC-SHA256 atas immutable encoding recipient:v1:+length-framedchannel+canonicalrecipient bytes,tidak normalize/truncate diam-diam. Dedicated32byte base64 secret di config,tidak fallbackAPP_KEY; failclosed keyringinvalid/emptyrecipient. Active+previousHMACkeys menghasilkan candidatekeys untuk lookuphistory yang sama,event/template sama di bawah parentlock sebelum insert. Rotasi: quiescewriters/drainworkers,deploy semua proses dengan active+previous sebelum resume; jangan campur oldwriter dengan writerkeyringbaru atau buang oldkeys saat history/replaymasihrelevan. APP_KEY encryptionrotation terpisah. Tidak realkey dibuat/disimpan atau send. Testcandidateidentity sebelumDDL; testlookuphistory setelah outboxada. Concurrentdomainemit/fencing tetap Phase4/9.
 
 - **P1-10 parent COMPLETED foundation:**child1checkpoint9a80568; child2 33passed/65assert; combined80passed/156assert,duration_ms48875 sesudahPint. ReviewStandards0/Spec0 kedua children.9kolom CT-only attachment,separate actorFK,private pathunique,encryptedhidden filename,MIME/size dan helper integration tested. Next prerequisiteHMAC lalu P1-11; Phase1 12/14.
 
@@ -555,6 +559,10 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 
 ## H. Decision Log dan Plugin Execution Log
 
+### D-028 - Notification recipient identity and key rotation
+
+Dedicated32byte base64 HMAC key,immutable recipient:v1 length-framed channel+canonical recipient bytes,HMAC-SHA25664lowerhex; no APP_KEY fallback or silent normalization. Current+previous keys form lookup candidates for the same event/template. Future domain insertion must check all candidates under parent locks. Rotation requires quiescing writers/draining workers, deploying the entire keyring to every writer, then resuming; retain old keys while history/replay remains relevant. Mixed old-only writers are unsupported. Encryption rotation is independent. Helper16tests/22assert and independent reviews0/0 prove identity/keyring behavior; DB history lookup follows outbox DDL; concurrent dedup/fencing remains Phase4/9.
+
 ### D-027 - G-FILES foundation contract
 
 PrivateUploadPurpose membatasi custom image/refund image-or-PDF. Dedicated private_uploads local disk di storage/app/private_uploads terpisah dari served/public roots,servefalse,throwtrue. Helper memvalidasi MIME/size dari bytes,randomUUIDkey,readbackdigest/size sebelum metadata internal. original_name harus masuk encrypted filename cast; tidak untuk response publik. DB gagal meninggalkan orphan privat,tanpa purge otomatis. Snapshot recovery test memulihkan satu evidence row dan file via independent local backup/restore adapters serta synthetic previous encryption key; ini bukan full DB DR atau production storage proof. Ext fileinfo/openssl/GD tersedia lokal (GD untuk fixture image). Outbox identity HMAC key harus dedicated/stable,tidak ikut rotasi APP_KEY; implementasi/proof sebelum outbox DDL P1-11. Production persistent volume/backup/key governance tetap fase readiness. Keputusan teknis dalam scope Phase1,tidak mengubah batas5MB/jenisfile/K-17/K-20.
@@ -782,6 +790,6 @@ Pada sesi berikutnya tambahkan setiap penggunaan nyata yang memengaruhi kode/con
 
 ## J. Next Action
 
-**P1-11 prerequisite HMAC identity/rotation proof terlebih dahulu**,sebelum DDL audit/outbox. Dedicated stable HMAC key terpisahAPP_KEY,encodingchannel+canonicalrecipient,digest64hex; active+previous HMAC key candidates untuk lookup history saat rotasi. Quiescewriters/drainworkers/installwholekeyring sebelum resume; key lama tidak dibuang saat masih ada history/replay. Tidak mengarang real secrets. Tests syntheticconfig/keyrotation,tidak send. Catat kontrak D-028 dan review sebelum outbox DDL.
+**P1-11 child1 audit foundation**, setelah child0 HMAC prerequisite verified16/22,review0/0. Audit append-only instance guards,actor FK/CHECK,JSON redacted columns,indexes,guarded synthetic factory/seeder. Kemudian child2 outbox encrypted recipient/dedup/claim fields dan lookup stored old-key identity. Runtime domain emission/claim/send/fencing tetap Phase4/9.
 
-Setelah prerequisite siap,P1-11 childaudit lalu outbox serial; seluruh dictionary4.17/4.18 dan crypto/dedup/claim fields. Runtime domain emit/claim/send/fencing tetap Phase4/9. P1-14 integrity/upgrade/recovery rehearsal terakhir,target28tabel. Phase1 12/14complete; berhenti di akhirfase untuk approval Phase2.
+Setelah P1-11,P1-14 integrity/upgrade/recovery rehearsal target28tabel. Phase1 12/14complete; berhenti pada akhirfase untuk persetujuan Phase2. .env.example dan AGENTS.md tidak dimodifikasi oleh agen.
