@@ -7,10 +7,10 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 23 Oktober 2026, Asia/Jakarta (UTC+07:00) |
-| Status keseluruhan | Phase 3 selesai; Phase 4 diotorisasi, persiapan P4-01 aktif |
+| Status keseluruhan | Phase 3 selesai; Phase 4 diotorisasi, P4-01 blocked oleh G-CONTENT |
 | Fase aktif | Phase 4; tidak melewati gate konten atau akhir fase tanpa persetujuan |
-| Task aktif | Tambahan logo/favicon, lalu P4-01; data rasa/filling ditanyakan ke pengguna |
-| Milestone berikutnya | P4-01 dengan gate konten rasa/filling aktual; push branch setelah verifikasi |
+| Task aktif | P4-01 foundation validasi teruji; menunggu data resmi rasa/filling |
+| Milestone berikutnya | Tutup G-CONTENT dan selesaikan P4-01 sebelum P4-02; push checkpoint teruji |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
 | Checkpoint source akhir Phase 1 | Branch lokal codex/phase1-database-foundation; checkpoint fbabe6a (ledger), 352a725 (private storage), 9a80568/d9892ae (custom), 7ca58c1/0a7699e/7b8a09e (identity/audit/outbox), diikuti checkpoint P1-14; tidak ada merge/push/PR |
@@ -58,7 +58,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 1 — Database foundation | 14 | 14 | 0 | 0 | 0 |
 | 2 — Authentication & authorization | 5 | 5 | 0 | 0 | 0 |
 | 3 — Catalog & availability | 4 | 4 | 0 | 0 | 0 |
-| 4 — Checkout & order | 5 | 0 | 0 | 0 | 5 |
+| 4 — Checkout & order | 5 | 0 | 0 | 1 | 4 |
 | 5 — Payment | 7 | 0 | 0 | 0 | 7 |
 | 6 — Cancellation & refund | 7 | 0 | 0 | 0 | 7 |
 | 7 — Custom requests | 3 | 0 | 0 | 0 | 3 |
@@ -67,7 +67,7 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
 | 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
 | 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **28** | **0** | **0** | **42** |
+| **Total** | **70** | **28** | **0** | **1** | **41** |
 
 Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Phase2 5/5 selesai: final MySQL962passed/2832assert+2live skipped (964total,duration_ms569227); default90passed/210assert+874skipped,duration_ms52285. Phase3 4/4 selesai: final MySQL1054passed/3349assert+2live skipped (1056total,duration_ms772139); default90passed/210assert+966skipped,duration_ms69053. Tidak seluruh acceptance bisnis dianggap lulus.
 
@@ -135,7 +135,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
-| [ ] P4-01 | Calendar/cutoff/allowlist/pickup/personalization; F-002/005, BR-01–11 | F002-AC2–4, R1-AC14/16; T-06/07/08/26, DBT-17 | Phase 3 gate, P2-04 | config domain; request; calendar operation; focused tests | NOT RUN; event UTC tetap, evaluasi bisnis Jakarta; pilihan rasa/filling nyata G-CONTENT |
+| [!] P4-01 | Calendar/cutoff/allowlist/pickup/personalization; F-002/005, BR-01–11 | F002-AC2–4, R1-AC14/16; T-06/07/08/26, DBT-17 | Phase 3 gate, P2-04, G-CONTENT | CheckoutDetails; CheckoutRequest; config/checkout.php; CheckoutDetailsTest; BookingCalendar dipakai ulang | BLOCKED master rasa/filling resmi belum diberikan. ChildP4-01.1 technical validation teruji53cases; combinedMySQL79passed/241assert,duration_ms14279; default56passed/161assert,duration_ms4628. ChildP4-01.2 allowlist bisnis pending. Tidak ada checkout/reservasi/payment baru; P4-02 belum dimulai |
 | [ ] P4-02 | Atomic checkout/capacity/max3; F-002/004 | R1-AC03/13/15/17; T-03–05/07/10, DBT-03/04/18 | P4-01, P3-04, P1-05/06/11 | checkout operation/controller/request/test | NOT RUN; one clock setelah locks; audit/outbox row satu commit sejak awal |
 | [ ] P4-03 | Idempotency dan immutable snapshots; F-002 | F002-AC5, R1-AC02/17; T-09/10/26, DBT-02/03 | P4-02 | checkout operation/request; focused test | NOT RUN; satu payment reference; hash payload berbeda ditolak |
 | [ ] P4-04 | Order detail/checkout UI/countdown/terms; F-002/005/006 | F002-AC6/F005-AC1/2/F006-AC6; T-08/26/32 | P4-03 | order controller/policy/views/js/test | NOT RUN; UI paid hanya dari server, terms unselected default |
@@ -437,7 +437,7 @@ Oracle tambahan untuk P1-07/Phase5/6: receipt100.001 dikoreksi90.000→effective
 |---|---|---|
 | G-PAY | User-reported dashboard:page30min dan default expiry seluruh metode; pengguna mengotorisasi DDL P1-05 (D-015). Agen sebelumnya membuktikan22 enabled IDs dan2 session payload probes; effective instrument expiry/success timing/final-close race belum diuji | P1-05 DDL hanya tbloom_testing kini diimplementasikan sesuai otorisasi. Runtime pembayaran dan slice payment terkait tetap memerlukan mapping per kanal/DBT-16; jangan menganggap settlement_time universal sebagai waktu aksi sukses atau row lock lokal menjamin finalitas bank. Tidak menonaktifkan kanal pengguna atau mengubah K-01 |
 | G-NOTIFY | Fonnte token tidak ada; mail driver log; recipient configuration/device/provider idempotency/status belum dibuktikan | Automated tests fake saja; real sandbox/internal-recipient test hanya dengan izin. Jangan kirim customer nyata |
-| G-CONTENT | Logo/foto/alamat toko/contact/allowlist rasa/filling/harga/unit kemasan dan desain Figma aktual belum tersedia dalam scope audit | Jangan mengarang master bisnis. Plumbing/factory sintetis boleh setelah fase disetujui; data publik final menunggu sumber |
+| G-CONTENT | Logo icon.PNG dan favicon.PNG diberikan/dipakai23Oktober. Daftar rasa/filling resmi belum tersedia dan kini memblokir penutupan P4-01; foto produk/alamat/contact/master publik lain/Figma tetap menunggu sumber sesuai fitur | Pertanyaan daftar resmi rasa/filling dan perbedaan per produk/ukuran sudah dikirim. config/checkout.php kosong/fail-closed; label sintetis hanya override dalam test. Jangan lanjut P4-02 sebelum P4-01 selesai |
 | G-ARCHITECT | Tool/skill bernama AI Software Architect tidak ditemukan dalam katalog sesi | Fallback review teknis standar berdasarkan dokumen; tidak mengaku plugin architect dijalankan. Skill lokal improve-codebase-architecture diperiksa: fokus refactor scaffold, tidak sesuai tugas audit ini |
 
 ### Environment dan test blockers
@@ -645,7 +645,28 @@ Log ini mencatat hasil aktual, termasuk invocation/environment errors. Test ID `
 | 2026-10-23 | Phase3 final review | Fresh read-only review 7bdcc86..ef30142 | phase3_fresh_review | COMPLETE | 0Critical/0Important/1Minor deferred (explicit image width/height); declined-to-judge diputuskan di bagian final review. Tidak ada fix pass PHP tambahan |
 | 2026-10-23 | Phase3 smoke | Live guest HTTP/build/routes | GET catalog/catalog?category=cupcake/login on isolated QA server8877; route:list | PASSED | ThreeHTTP200 with viewport/catalognavigation,36routes,buildpassed optionalfontainewarning. Previous QA process ended when tool session changed; restarted scoped process for these GETs. Chrome unavailable; not a visual/JS-runtime proof |
 
+| 2026-10-23 | Branding tambahan | Logo/favicon dan halaman awal | BrandAssetsTest+ExampleTest; Pint; npm run build; HTTP smoke | PASSED | RED2failed/4assert -> GREEN3passed/13assert,duration_ms610; build3.88s, tigaHTTP200. Checkpoint7c4aa23; sumber PNG tidak diedit |
+| 2026-10-23 | P4-01.1 | Foundation input checkout, tanpa persistence | CheckoutDetailsTest+BrandAssetsTest+ExampleTest+CatalogBrowseTest,phpunit.mysql.xml; Pint | PASSED technical child | 79passed/241assert,duration_ms14279; defaultthreefiles56passed/161assert,duration_ms4628. ParentP4-01 tetapBLOCKED G-CONTENT, P4-02 belum dimulai |
+| 2026-10-23 | P4-01 partial review | Fresh read-only source/spec review | phase4_input_review | COMPLETE | 0Critical/0Important/0Minor; actual checkout domain dan produksi tidak dinyatakan lulus |
+
+| 2026-10-23 | Pre-push full default | Seluruh suite konfigurasi default | php vendor/bin/pest --compact | PASSED | 1111total/145passed/966skipped/370assert,duration_ms69191. MySQL-dependent cases skipped; focusedMySQL79/241 terpisah. Tidak mengklaim fullMySQL pada perubahan P4-01 |
+
 ## H. Decision Log dan Plugin Execution Log
+
+### D-041 - P4-01 technical validation and unresolved content gate
+
+ChildP4-01.1 membangun kontrak validasi tanpa menulis order/availability/payment: CheckoutRequest untuk Customer aktif, CheckoutDetails untuk validasi ulang menggunakan instant keputusan eksplisit, dan config/checkout.php statis. BookingCalendar existing dipakai ulang, termasuk detik17:00:00/midnight/D90. Input identitas/harga/status/snapshot dari browser diabaikan; ID/quantity hanya divalidasi bentuk/range, lookup/status/kapasitas/total dan fresh actor lock tetap P4-02. Persetujuan kurir memakai teks PRD dan versi servercourier-v1; accepted_at berasal instant UTC, bukan input. Tulisan wajib pilihan text/none, whitespace Unicode dinormalisasi, maksimal10kata/150karakter, none menyimpan string kosong. Jam09:00..21:00 menit, handover note255. Tidak ada public checkout probe route: route probe hanya didaftarkan dalam test.
+
+RED awal48cases:3passed (deny paths),4failed/41errors/7assert karena method belum tersedia; GREEN48passed/127assert,duration_ms1586; diperluas53inputcases. Final focusedMySQL(CheckoutDetails+BrandAssets+Example+CatalogBrowse)79passed/241assert,duration_ms14279; default(CheckoutDetails+BrandAssets+Example)56passed/161assert,duration_ms4628; Pint lulus. Full default1111total/145passed/966skipped/370assert,duration_ms69191 lulus sebelum push. Full MySQL belum diulang untuk fase yang blocked; fullPhase3 sebelumnya tetap hasil historis pada sourceef30142.
+
+Ruling: G-CONTENT merupakan prasyarat penutupan P4-01, bukan alasan memakai pilihan toko buatan. ChildP4-01.2 menunggu daftar rasa/filling resmi dan cakupannya; config produksi kosong menolak semua pilihan. Risiko jika dibiarkan adalah checkout belum bisa dipakai; status blocked dinyatakan terang dan P4-02 tidak dimulai. Pertanyaan data tetap menunggu jawaban, elapsed time bukan persetujuan atau data bisnis.
+
+Ruling: FormRequest hanyalah precheck; P4-02 wajib memanggil CheckoutDetails dengan satu clock yang ditangkap setelah semua lock relevan sebelum keputusan/write. Risiko jika hanya mengandalkan precheck adalah order lolos melewati cutoff saat menunggu lock; belum ada write endpoint yang mengekspos celah ini pada checkpoint ini.
+
+Review independen `phase4_input_review` untuk branding dan foundation P4-01:0Critical/0Important/0Minor. Reviewer read-only, tidak menjalankan test/DDL. Batas bukti: visual browser belum diuji; relasi produk-varian/kapasitas/harga/persistensi idempotensi dan single after-lock clock tetap tugas P4-02 yang belum dimulai. Tidak ada klaim full acceptance checkout. Live smoke pada server QA sementara: GET /, /icon.PNG dan /favicon.PNG semuanyaHTTP200; halaman awal merujuk kedua aset. Server QA dihentikan setelah smoke; tidak mengganggu server pengguna.
+
+File sesi sejak7b8d201: public/icon.PNG, public/favicon.PNG, resources/views/components/account-layout.blade.php, resources/views/welcome.blade.php, tests/Feature/BrandAssetsTest.php, app/CheckoutDetails.php, app/Http/Requests/CheckoutRequest.php, config/checkout.php, tests/Feature/CheckoutDetailsTest.php dan IMPLEMENTATION-PROGRESS.md (10file unik). Tiga file pengguna .env.example/AGENTS.md/.gitignore serta isi aset sumber dipertahankan; dua PNG kini diikutkan karena diminta eksplisit.
+
 
 ### D-040 - Phase 4 authorization, brand assets and GitHub push
 
@@ -1034,4 +1055,4 @@ Dibandingkan checkpoint akhir Phase 2 `7bdcc86`: 35 file implementasi/test/track
 
 ## J. Next Action
 
-Phase3 ditutup setelah empat task selesai berurutan, focused92passed/517assert, fullMySQL1054passed/2live skipped/3349assert dan default90passed/966skipped/210assert. Fresh review0Critical/0Important/1Minor deferred; build/Pint/diff-check lulus. Tidak ada implementasi Phase4. Berhenti untuk persetujuan pengguna sebelum **P4-01 calendar/cutoff/allowlist/pickup/personalization**. Gunakan ulang BookingCalendar yang sudah ada; jangan mengulang P3-01. Daftar rasa/filling publik aktual masih G-CONTENT: plumbing sintetis diperbolehkan sesudah persetujuan fase, master bisnis final menunggu sumber. G-RETRY tetap terbuka dan bukan acceptance yang dianggap lulus. Untuk verifikasi tambahan di lingkungan pengguna, jalankan `php artisan test --compact`; pengujian InnoDB memakai `phpunit.mysql.xml`.
+Phase4 diotorisasi23Oktober setelah penutupan Phase3; tambahan logo/favicon selesai pada7c4aa23. **P4-01 masih BLOCKED G-CONTENT**, bukan completed: technical child53cases teruji, tetapi master rasa/filling resmi belum diberikan. Tunggu jawaban pertanyaan yang sudah dikirim; isi konfigurasi dengan kode/label bisnis sah, uji pilihan nyata, lalu tutup P4-01 sebelum P4-02 atomic checkout. Jangan melewati dependency atau mengarang allowlist. Phase4 belum selesai sehingga belum meminta persetujuan Phase5. Push branch kerja telah diotorisasi pengguna; hasil aktual remote dicatat setelah verifikasi. Perubahan pengguna .env.example/AGENTS.md/.gitignore tetap dikecualikan. G-RETRY dan gate domain berikutnya tetap berlaku. Untuk verifikasi tambahan di lingkungan pengguna, jalankan `php artisan test --compact`.
