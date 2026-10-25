@@ -3,7 +3,9 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\NewPasswordController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PasswordResetLinkController;
 use App\Http\Controllers\ProductAdminController;
 use App\Http\Controllers\ProductImageAdminController;
@@ -11,6 +13,7 @@ use App\Http\Controllers\ProductQuotaAdminController;
 use App\Http\Controllers\ProductVariantAdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\SnapSessionController;
 use App\Http\Controllers\StaffAccountController;
 use App\Http\Middleware\EnsureActiveAccount;
 use App\Http\Middleware\EnsureRole;
@@ -32,6 +35,10 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware(['auth', EnsureActiveAccount::class, 'auth.session'])->group(function (): void {
+    Route::get('/checkout/{product:slug}', [CheckoutController::class, 'create'])->name('checkout.create');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/payment-session', [SnapSessionController::class, 'store'])->middleware('throttle:6,1')->name('orders.payment-session.store');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->middleware('throttle:10,1')->name('checkout.store');
     Route::middleware(EnsureRole::class.':admin,owner')->prefix('staff')->name('staff.')->group(function (): void {
         Route::get('products/{product}/quota', [ProductQuotaAdminController::class, 'edit'])->name('products.quota.edit');
         Route::patch('products/{product}/default-quota', [ProductQuotaAdminController::class, 'updateDefault'])->name('products.quota.default');

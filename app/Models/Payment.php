@@ -16,13 +16,14 @@ class Payment extends Model
     /** @use HasFactory<PaymentFactory> */
     use HasFactory;
 
-    /** @return array{status: class-string<PaymentStatus>, closure_result: class-string<PaymentClosureResult>, snap_token: string, expected_amount: string, is_late: string, reconciliation_attempts: string, provider_paid_at: string, verified_at: string, next_reconcile_at: string, closure_verified_at: string} */
+    /** @return array{status: class-string<PaymentStatus>, closure_result: class-string<PaymentClosureResult>, snap_token: string, snap_requested_at: string, expected_amount: string, is_late: string, reconciliation_attempts: string, provider_paid_at: string, verified_at: string, next_reconcile_at: string, closure_verified_at: string} */
     protected function casts(): array
     {
         return [
             'status' => PaymentStatus::class,
             'closure_result' => PaymentClosureResult::class,
             'snap_token' => 'encrypted',
+            'snap_requested_at' => 'immutable_datetime',
             'expected_amount' => 'integer',
             'is_late' => 'boolean',
             'reconciliation_attempts' => 'integer',

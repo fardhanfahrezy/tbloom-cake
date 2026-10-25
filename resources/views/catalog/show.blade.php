@@ -9,6 +9,9 @@
             <p class="whitespace-pre-line">{{ $card['product']->description }}</p>
             @include('catalog.availability', ['card' => $card])
             @include('catalog.variants', ['product' => $card['product']])
+            @if ($card['remaining'] > 0 && $card['product']->variants->isNotEmpty())
+                <a href="{{ route('checkout.create', ['product' => $card['product']->slug, 'pickup_date' => $date]) }}" class="rounded-lg bg-brand-burgundy px-5 py-3 text-center font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-burgundy dark:bg-brand-beige dark:text-brand-dark">Pesan cake ini</a>
+            @endif
             <p class="text-sm text-brand-taupe dark:text-brand-pink">Semua ukuran berbagi kuota produk pada tanggal yang sama. Ketersediaan diperiksa kembali saat pemesanan.</p>
         </div>
     </div>
