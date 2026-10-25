@@ -83,6 +83,31 @@ test('accepts exactly five MiB of actual bytes and rejects one byte more', funct
     expect(Storage::disk('private_uploads')->allFiles())->toBe([$stored['private_path']]);
 });
 
+test('rejects truncated image content before writing any private object', function (string $extension, PrivateUploadPurpose $purpose) {
+    Storage::fake('private_uploads');
+    $valid = UploadedFile::fake()->image('reference.'.$extension, 2, 2);
+    $bytes = file_get_contents($valid->getRealPath());
+    $length = match ($extension) {
+        'png' => 33,
+        'jpeg' => strpos($bytes, "\xff\xda") + 10,
+        'webp' => 30,
+    };
+    $upload = UploadedFile::fake()->createWithContent('reference.'.$extension, substr($bytes, 0, $length));
+
+    expect(fn () => app(PrivateUploadStorage::class)->store($upload, $purpose))->toThrow(ValidationException::class);
+
+    Storage::disk('private_uploads')->assertDirectoryEmpty('');
+})->with(['png', 'jpeg', 'webp'])->with([PrivateUploadPurpose::CustomReference, PrivateUploadPurpose::RefundEvidence]);
+
+test('rejects image dimensions beyond the decoder resource limits', function (int $width, int $height) {
+    Storage::fake('private_uploads');
+    $upload = UploadedFile::fake()->image('reference.png', $width, $height);
+
+    expect(fn () => app(PrivateUploadStorage::class)->store($upload, PrivateUploadPurpose::CustomReference))->toThrow(ValidationException::class);
+
+    Storage::disk('private_uploads')->assertDirectoryEmpty('');
+})->with([[4097, 1], [1, 4097], [4000, 3001]]);
+
 test('never reuses original names as object keys', function () {
     Storage::fake('private_uploads');
     $upload = UploadedFile::fake()->image('same-name.png', 2, 2);
