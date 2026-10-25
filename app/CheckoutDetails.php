@@ -25,16 +25,16 @@ class CheckoutDetails
     }
 
     /** @return array<string, list<mixed>> */
-    public static function rules(CarbonImmutable $instant): array
+    public static function rules(?CarbonImmutable $instant = null): array
     {
-        $window = BookingCalendar::simpleWindow($instant);
+        $window = $instant ? BookingCalendar::simpleWindow($instant) : null;
 
         return [
             'product_id' => ['bail', 'required', 'integer', 'min:1', 'max:'.PHP_INT_MAX],
             'product_variant_id' => ['bail', 'required', 'integer', 'min:1', 'max:'.PHP_INT_MAX],
             'quantity' => ['bail', 'required', 'integer', 'min:1', 'max:2147483647'],
-            'flavor_code' => ['bail', 'required', 'string', 'max:64', Rule::in(array_keys(config('checkout.flavors', [])))],
-            'filling_code' => ['bail', 'required', 'string', 'max:64', Rule::in(array_keys(config('checkout.fillings', [])))],
+            'flavor_code' => ['bail', 'required', 'string', 'max:64', ...($instant ? [Rule::in(array_keys(config('checkout.flavors', [])))] : [])],
+            'filling_code' => ['bail', 'required', 'string', 'max:64', ...($instant ? [Rule::in(array_keys(config('checkout.fillings', [])))] : [])],
             'cover_color' => ['bail', 'required', 'string', 'max:100'],
             'inscription_choice' => ['bail', 'required', Rule::in(['text', 'none'])],
             'inscription' => ['bail', 'nullable', 'string', 'required_if:inscription_choice,text', 'prohibited_if:inscription_choice,none', 'max:150',
@@ -44,7 +44,7 @@ class CheckoutDetails
                         $fail('Tulisan maksimal sepuluh kata dengan teks yang valid.');
                     }
                 }],
-            'pickup_date' => ['bail', 'required', 'string', 'date_format:Y-m-d', 'after_or_equal:'.$window['earliest']->toDateString(), 'before_or_equal:'.$window['latest']->toDateString()],
+            'pickup_date' => ['bail', 'required', 'string', 'date_format:Y-m-d', ...($window ? ['after_or_equal:'.$window['earliest']->toDateString(), 'before_or_equal:'.$window['latest']->toDateString()] : [])],
             'pickup_time' => ['bail', 'required', 'string', 'date_format:H:i',
                 function (string $attribute, mixed $value, Closure $fail): void {
                     if ($value < '09:00' || $value > '21:00') {
@@ -56,6 +56,21 @@ class CheckoutDetails
             'courier_terms_accepted' => ['exclude_unless:pickup_method,online_courier', 'accepted'],
             'idempotency_key' => ['bail', 'required', 'string', 'max:128', 'regex:/^[A-Za-z0-9][A-Za-z0-9._:-]*$/D'],
         ];
+    }
+
+    /** @param array<string, mixed> $input @return array<string, mixed> */
+    public function canonicalInput(array $input): array
+    {
+        $data = Validator::make(self::normalize($input), self::rules(), self::messages())->validate();
+        foreach (['product_id', 'product_variant_id', 'quantity'] as $field) {
+            $data[$field] = (int) $data[$field];
+        }
+        $data['inscription'] = $data['inscription_choice'] === 'none' ? '' : $data['inscription'];
+        $data['handover_note'] = $data['handover_note'] ?? null;
+        $data['courier_terms_accepted'] = $data['pickup_method'] === PickupMethod::OnlineCourier->value;
+        ksort($data);
+
+        return $data;
     }
 
     /** @return array<string, string> */
