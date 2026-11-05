@@ -10,6 +10,12 @@ use Illuminate\Auth\Access\Response;
 
 class OrderPolicy
 {
+    public function handover(User $user, Order $resource): Response
+    {
+        return $user->is_active && in_array($user->role, [UserRole::Admin, UserRole::Owner], true)
+            ? Response::allow() : Response::denyAsNotFound();
+    }
+
     public function create(User $user): bool
     {
         return $user->is_active && $user->role === UserRole::Customer;
@@ -25,5 +31,15 @@ class OrderPolicy
         return $user->is_active && $user->role === UserRole::Customer && $user->id === $resource->user_id
             ? Response::allow()
             : Response::denyAsNotFound();
+    }
+
+    public function cancel(User $user, Order $resource): Response
+    {
+        return $this->pay($user, $resource);
+    }
+
+    public function change(User $user, Order $resource): Response
+    {
+        return $this->pay($user, $resource);
     }
 }

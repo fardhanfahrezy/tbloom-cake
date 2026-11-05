@@ -2,6 +2,7 @@
     <a href="{{ route('catalog.show', ['product' => $card['product']->slug, 'pickup_date' => $date]) }}" class="underline underline-offset-4">Kembali ke produk</a>
     <h2 class="mt-6 text-xl font-semibold">{{ $card['product']->name }}</h2>
     <p class="mt-2 text-sm">Semua ukuran berbagi kuota. Produksi 09.00–17.00 WIB, pengambilan 09.00–21.00 WIB.</p>
+    @include('pickup-information')
     <form method="GET" action="{{ route('checkout.create', $card['product']->slug) }}" class="my-6 grid gap-3 sm:grid-cols-2 sm:items-end">
         <x-form-field name="pickup_date" label="Tanggal pengambilan" type="date" :value="$date" :min="$window['earliest']->toDateString()" :max="$window['latest']->toDateString()" required />
         <button class="rounded-lg border border-brand-taupe px-4 py-3 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2">Periksa tanggal</button>

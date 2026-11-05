@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'enabled' => (bool) env('NOTIFICATION_DELIVERY_ENABLED', false),
+
     'recipient_hmac_key' => env('NOTIFICATION_RECIPIENT_HMAC_KEY'),
 
     'previous_recipient_hmac_keys' => array_values(array_filter(

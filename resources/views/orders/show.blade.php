@@ -12,6 +12,9 @@
 @endphp
 <x-account-layout eyebrow="Detail pesanan" :title="$order->order_number">
     <p class="rounded-lg border border-brand-beige p-4 font-semibold" role="status">{{ $status }}</p>
+    @if ($order->status === \App\Models\OrderStatus::Completed)
+        <p class="mt-3 text-sm">Dicatat pada <time datetime="{{ $order->completed_at->toIso8601String() }}">{{ $order->completed_at->setTimezone('Asia/Jakarta')->format('d-m-Y H:i:s') }} WIB</time>.</p>
+    @endif
     <dl class="mt-6 grid gap-4 text-sm sm:grid-cols-2">
         <div><dt class="font-semibold">Pembeli</dt><dd class="mt-1 break-words">{{ $order->customer_name_snapshot }}<br>{{ $order->email_snapshot }}<br>{{ $order->whatsapp_snapshot }}</dd></div>
         <div><dt class="font-semibold">Pengambilan di toko</dt><dd class="mt-1">{{ $order->pickup_date->format('d-m-Y') }}, {{ substr($order->pickup_time, 0, 5) }} WIB<br>{{ $order->pickup_method === \App\Models\PickupMethod::OnlineCourier ? 'Kurir online' : 'Ambil sendiri' }}</dd></div>
@@ -20,6 +23,8 @@
         <div><dt class="font-semibold">Personalisasi</dt><dd class="mt-1 break-words">Cover: {{ $order->item->cover_color }}<br>Tulisan: {{ $order->item->inscription === '' ? 'Tanpa tulisan' : $order->item->inscription }}</dd></div>
         <div><dt class="font-semibold">Catatan penyerahan</dt><dd class="mt-1 break-words">{{ $order->handover_note ?? 'Tidak ada catatan' }}</dd></div>
     </dl>
+    @include('pickup-information')
+    @can('handover', $order)<a href="{{ route('staff.orders.handover.show', $order) }}" class="my-5 inline-block underline underline-offset-4">Periksa penyerahan</a>@endcan
     <p class="mt-6 border-t border-brand-beige pt-5 text-2xl font-semibold">Total produk Rp{{ number_format($order->product_total, 0, ',', '.') }}</p>
     <p class="mt-2 text-sm">Tidak termasuk ongkir kurir; tidak ada tambahan MDR.</p>
     @include('checkout.cancellation-terms', ['pickupDate' => $order->pickup_date->toDateString(), 'instant' => $instant])

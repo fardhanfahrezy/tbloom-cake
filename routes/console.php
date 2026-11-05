@@ -1,12 +1,56 @@
 <?php
 
+use App\DispatchNotificationDeliveries;
+use App\DispatchPaymentEvents;
 use App\MidtransSandboxProbe;
+use App\ReconcilePayments;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
+Artisan::command('notifications:dispatch {--limit=100}', function (DispatchNotificationDeliveries $dispatcher): int {
+    $limit = $this->option('limit');
+    if (! is_string($limit) || ! preg_match('/\A(?:[1-9][0-9]?|100)\z/', $limit)) {
+        $this->error('Limit must be an integer between 1 and 100.');
+
+        return 1;
+    }
+    $this->line('Queued notification deliveries: '.$dispatcher->dispatch((int) $limit));
+
+    return 0;
+})->purpose('Recover due durable notification outbox rows without sending from the scanner');
+
+Artisan::command('payments:dispatch-events {--limit=100}', function (DispatchPaymentEvents $dispatcher): int {
+    $limit = $this->option('limit');
+    if (! is_string($limit) || ! preg_match('/\A(?:[1-9][0-9]?|100)\z/', $limit)) {
+        $this->error('Limit must be an integer between 1 and 100.');
+
+        return 1;
+    }
+    $this->line('Queued payment events: '.$dispatcher->dispatch((int) $limit));
+
+    return 0;
+})->purpose('Recover due durable payment inbox events without provider calls in the scanner');
+
+Schedule::command('payments:dispatch-events')->everyMinute()->withoutOverlapping(5)->onOneServer();
+
+Artisan::command('payments:reconcile {--limit=100}', function (ReconcilePayments $reconciler): int {
+    $limit = $this->option('limit');
+    if (! is_string($limit) || ! preg_match('/\A(?:[1-9][0-9]?|100)\z/', $limit)) {
+        $this->error('Limit must be an integer between 1 and 100.');
+
+        return 1;
+    }
+    $this->line('Queued payment reconciliations: '.$reconciler->dispatch((int) $limit));
+
+    return 0;
+})->purpose('Recover missing payment observations and verify unpaid deadlines without releasing ambiguous funds');
+
+Schedule::command('payments:reconcile')->everyMinute()->withoutOverlapping(5)->onOneServer();
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());

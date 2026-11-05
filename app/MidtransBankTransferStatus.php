@@ -22,7 +22,18 @@ final readonly class MidtransBankTransferStatus
         ?string $expectedTransactionId = null,
         ?string $expectedChannel = MidtransPaymentChannels::BCA_VA,
     ): BankTransferObservation {
-        if (! preg_match('/\A[A-Za-z0-9][A-Za-z0-9_-]{0,99}\z/', $expectedReference) || $expectedAmount < 1
+        return $this->read($expectedReference, $expectedAmount, $deadline, $expectedTransactionId, $expectedChannel);
+    }
+
+    /** Actual provider amount is evidence, not permission to fulfill a mismatched invoice. */
+    public function observeActual(string $reference, DateTimeImmutable $deadline, ?string $transactionId = null): BankTransferObservation
+    {
+        return $this->read($reference, null, $deadline, $transactionId, MidtransPaymentChannels::BCA_VA);
+    }
+
+    private function read(string $expectedReference, ?int $expectedAmount, DateTimeImmutable $deadline, ?string $expectedTransactionId, ?string $expectedChannel): BankTransferObservation
+    {
+        if (! preg_match('/\A[A-Za-z0-9][A-Za-z0-9_-]{0,99}\z/', $expectedReference) || ($expectedAmount !== null && $expectedAmount < 1)
             || $deadline->format('u') !== '000000'
             || ($expectedTransactionId !== null && ! Str::isUuid($expectedTransactionId))) {
             throw new InvalidArgumentException('Invalid expected payment context.');
@@ -55,6 +66,21 @@ final readonly class MidtransBankTransferStatus
             }
         }
 
-        return $this->verifier->verify($response->status(), $payload, $expectedReference, $expectedAmount, $deadline, $expectedTransactionId);
+        if ($expectedAmount === null && $response->status() === 200) {
+            $raw = is_array($payload) ? ($payload['gross_amount'] ?? null) : null;
+            if (! is_string($raw) || preg_match('/\A[1-9][0-9]{0,18}(?:\.00)?\z/', $raw) !== 1) {
+                return new BankTransferObservation(BankTransferOutcome::Unknown, 'malformed_actual_amount');
+            }
+            $integer = str_ends_with($raw, '.00') ? substr($raw, 0, -3) : $raw;
+            if (strlen($integer) > strlen((string) PHP_INT_MAX) || (strlen($integer) === strlen((string) PHP_INT_MAX) && strcmp($integer, (string) PHP_INT_MAX) > 0)) {
+                return new BankTransferObservation(BankTransferOutcome::Unknown, 'malformed_actual_amount');
+            }
+            if (isset($payload['fraud_status']) && $payload['fraud_status'] !== 'accept') {
+                return new BankTransferObservation(BankTransferOutcome::Unknown, 'fraud_context_unverified');
+            }
+            $expectedAmount = (int) $integer;
+        }
+
+        return $this->verifier->verify($response->status(), $payload, $expectedReference, $expectedAmount ?? 1, $deadline, $expectedTransactionId);
     }
 }
