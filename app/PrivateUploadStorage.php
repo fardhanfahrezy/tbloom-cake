@@ -34,7 +34,7 @@ class PrivateUploadStorage
         $size = strlen($bytes);
         $mime = (new finfo(FILEINFO_MIME_TYPE))->buffer($bytes);
         if ($size < 1 || $size > self::MAX_SIZE_BYTES || ! in_array($mime, $purpose->mimeTypes(), true)
-            || (str_starts_with($mime, 'image/') && @getimagesizefromstring($bytes) === false)) {
+            || (str_starts_with($mime, 'image/') && ! $this->isDecodableImage($bytes))) {
             throw ValidationException::withMessages(['upload' => 'The upload must contain an approved file type and be at most 5 MB.']);
         }
 
@@ -54,6 +54,21 @@ class PrivateUploadStorage
         $this->assertReadable($metadata);
 
         return $metadata;
+    }
+
+    private function isDecodableImage(string $bytes): bool
+    {
+        $dimensions = @getimagesizefromstring($bytes);
+        if ($dimensions === false || min($dimensions[0], $dimensions[1]) < 1
+            || max($dimensions[0], $dimensions[1]) > 4096 || $dimensions[0] * $dimensions[1] > 12000000) {
+            return false;
+        }
+
+        $image = @imagecreatefromstring($bytes);
+        $decoded = $image !== false;
+        unset($image);
+
+        return $decoded;
     }
 
     /** @param array{private_path: string, size_bytes: int, sha256: string} $metadata */

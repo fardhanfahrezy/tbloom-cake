@@ -89,6 +89,7 @@ test('rejects invalid payment bill and closure fields in MySQL', function (array
     'missing order' => [['order_id' => 0], 1452],
     'null creation time' => [['created_at' => null], 1048],
     'null update time' => [['updated_at' => null], 1048],
+    'session request predates payment' => [['snap_requested_at' => '2026-10-31 23:59:59'], 3819],
     'only closure result' => [['closure_result' => 'unpaid_closed'], 3819],
     'only closure verification time' => [['closure_verified_at' => '2026-11-01 00:31:00'], 3819],
     'only closure event' => [['closure_event_id' => 1], 3819],
@@ -208,7 +209,7 @@ test('matches the payment dictionary types defaults precision and indexes', func
             'provider_paid_at' => 'datetime', 'verified_at' => 'datetime', 'is_late' => 'tinyint unsigned', 'review_reason' => 'varchar(64)',
             'reconciliation_attempts' => 'int unsigned', 'next_reconcile_at' => 'datetime', 'closure_result' => 'varchar(32)',
             'closure_verified_at' => 'datetime', 'closure_event_id' => 'bigint unsigned', 'snap_token' => 'text',
-            'created_at' => 'datetime', 'updated_at' => 'datetime',
+            'created_at' => 'datetime', 'updated_at' => 'datetime', 'snap_requested_at' => 'datetime',
         ],
         'payment_events' => [
             'id' => 'bigint unsigned', 'payment_id' => 'bigint unsigned', 'provider' => 'varchar(32)', 'provider_reference' => 'varchar(128)',
@@ -218,7 +219,7 @@ test('matches the payment dictionary types defaults precision and indexes', func
         ],
     ];
     $nullableColumns = [
-        'payments' => ['provider_transaction_id', 'provider_status', 'fraud_status', 'provider_paid_at', 'verified_at', 'is_late', 'review_reason', 'next_reconcile_at', 'closure_result', 'closure_verified_at', 'closure_event_id', 'snap_token'],
+        'payments' => ['provider_transaction_id', 'provider_status', 'fraud_status', 'provider_paid_at', 'verified_at', 'is_late', 'review_reason', 'next_reconcile_at', 'closure_result', 'closure_verified_at', 'closure_event_id', 'snap_token', 'snap_requested_at'],
         'payment_events' => ['payment_id', 'verified_at', 'next_attempt_at', 'claim_token', 'lease_until', 'processed_at', 'error'],
     ];
     $technicalColumns = [

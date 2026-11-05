@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\CheckoutDetails;
 use App\Models\UserRole;
-use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CheckoutRequest extends FormRequest
@@ -22,7 +21,7 @@ class CheckoutRequest extends FormRequest
     /** @return array<string, list<mixed>> */
     public function rules(): array
     {
-        return CheckoutDetails::rules(CarbonImmutable::now());
+        return CheckoutDetails::rules();
     }
 
     /** @return array<string, string> */

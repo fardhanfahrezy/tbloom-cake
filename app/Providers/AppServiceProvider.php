@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\CanonicalContact;
+use App\DisabledNotificationTransport;
 use App\Models\User;
+use App\NotificationTransport;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(NotificationTransport::class, DisabledNotificationTransport::class);
     }
 
     /**

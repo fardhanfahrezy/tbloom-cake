@@ -17,9 +17,14 @@
             </a>
             <div class="flex flex-wrap items-center gap-5 text-sm">
                 <a href="{{ route('catalog.index') }}" class="underline underline-offset-4">Katalog</a>
+                <a href="{{ route('pickup.show') }}" class="underline underline-offset-4">Pengambilan</a>
                 @auth
+                    @if (auth()->user()->role === \App\Models\UserRole::Customer && Route::has('custom-requests.create'))
+                        <a href="{{ route('custom-requests.create') }}" class="underline underline-offset-4">Custom Cake</a>
+                    @endif
                     @if (in_array(auth()->user()->role, [\App\Models\UserRole::Admin, \App\Models\UserRole::Owner], true))
                         <a href="{{ route('staff.dashboard') }}" class="underline underline-offset-4">Area staf</a>
+                        @if (Route::has('staff.custom-requests.index'))<a href="{{ route('staff.custom-requests.index') }}" class="underline underline-offset-4">Request custom</a>@endif
                     @endif
                     @if (Route::has('profile.edit'))
                         <a href="{{ route('profile.edit') }}" class="underline underline-offset-4">Profil saya</a>
