@@ -2,6 +2,7 @@
 
 use App\DispatchNotificationDeliveries;
 use App\DispatchPaymentEvents;
+use App\InternalNotificationProbe;
 use App\MidtransSandboxProbe;
 use App\ReconcilePayments;
 use Illuminate\Foundation\Inspiring;
@@ -11,6 +12,31 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
+Artisan::command('notifications:internal-probe {--send-approved : Send the single internal WhatsApp probe only after explicit approval}', function (InternalNotificationProbe $probe): int {
+    try {
+        if ($this->option('send-approved')) {
+            $result = $probe->send(true);
+            $this->line('Reference: '.$result['reference']);
+            $this->line('Provider result: '.$result['result'].'; delivery is not verified.');
+
+            return $result['result'] === 'sent' ? 0 : 1;
+        }
+        $preview = $probe->preview();
+        $this->line('Mode: dry-run; no messages sent.');
+        $this->line('Reference: '.$preview['reference']);
+        $this->line('Message: '.$preview['message']);
+        $this->line('WhatsApp configuration ready: '.($preview['whatsapp_ready'] ? 'yes' : 'no'));
+        $this->line('Approval slot reserved: '.($preview['slot_reserved'] ? 'yes' : 'no'));
+        $this->line('Email live verification: pending');
+
+        return 0;
+    } catch (Throwable) {
+        $this->error('Probe refused or outcome uncertain; inspect the private slot and never resend.');
+
+        return 1;
+    }
+})->purpose('Preview one redacted internal WhatsApp probe; sending requires explicit approval and consumes one durable slot');
 
 Artisan::command('notifications:dispatch {--limit=100}', function (DispatchNotificationDeliveries $dispatcher): int {
     $limit = $this->option('limit');
