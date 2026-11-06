@@ -1,6 +1,6 @@
 # IMPLEMENTATION PROGRESS — TBloom Cake
 
-> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AV: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AV outbox, adapter, probe WhatsApp dan persiapan Gmail TLS. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
+> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AW: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AW outbox, adapter, probe WhatsApp dan Gmail TLS. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
 
 ## A. Project Overview
 
@@ -9,9 +9,9 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 6 November 2026, Asia/Bangkok (UTC+07:00) |
-| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. Persiapan Gmail TLS + regresi final180passed/637assertions (AV). WA uji diterima menurut pengguna (AU); API tetap unknown. Closure P9-02 masih BLOCKED pada pengisian kredensial/target, izin send dan verifikasi email nyata |
+| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. Bukti kode terakhir180passed/637assertions (AV). Pengisian Gmail dilaporkan pengguna, tetapi .env invalid; App Password perlu dicabut/diganti setelah tampil pada error parser (AW). Belum ada SMTP/email; closure P9-02 BLOCKED |
 | Fase aktif | Phase9 — Notifications & Background Processing, diotorisasi instruksi lanjut 5 November; berhenti sebelum Phase10 |
-| Task aktif | P9-02e Gmail SMTP dipilih pengguna; profil probe STARTTLS587 terisolasi sudah disiapkan/diuji. Dry-run belum ready, tiga variabel Gmail belum terisi pada pemeriksaan terakhir; menunggu pengisian manual. Belum ada izin atau pengiriman email nyata; default mailer tetap |
+| Task aktif | P9-02e: menunggu penggantian App Password dan perbaikan format .env setelah error parser menampilkan nilai sensitif. Pemeriksaan format teredaksi gagal; dry-run aplikasi dihentikan. Slot email belum dipakai dan belum ada izin send; default mailer/source tidak berubah |
 | Milestone berikutnya | Selesaikan G-NOTIFY → implementasi/verifikasi P9-02 → P9-03/04 → approval Phase10; tidak menutup fase berdasarkan fake saja |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -189,7 +189,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies / gate | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
 | [x] P9-01 | Outbox scanner/fencing/enqueue recovery; BR-21 | R1-AC18; T-23, DBT-13 pada scope orchestration | Phase8/P1-11 selesai; G-RETRY teknis AP | 11file kode/test + tracker, daftar aktual AP | COMPLETED: final75passed/215assertions/exit0 setelah Pint; expired pre-send reclaim, stale-token fencing, unknown tanpa auto-resend, enqueue failure recovery teruji. Adapters/live/scheduler tetap task berikutnya |
-| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; WA diterima AU; Gmail SMTP dipilih AV, email live belum lulus | Adapter/template AQ + probe WA AR–AU + profil/probe Gmail/tes/instruksi AV | PARTIAL/BLOCKED: final180passed/637assertions/exit0 sesudah Pint. Gmail TLS wajib dan self-recipient, default/smtp produksi tetap; slot email belum terpakai. Dry-run belum ready karena tiga variabel lokal belum terisi; belum ada izin send/email nyata. P9-03/04 belum dimulai |
+| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; WA diterima AU; Gmail TLS AV; format/credential prerequisite AW belum selesai | Adapter/probe AQ–AV + catatan konfigurasi AW | PARTIAL/BLOCKED: bukti kode terakhir180passed/637assertions/exit0. Pengguna melaporkan isian Gmail, tetapi .env invalid dan nilai sensitif tampil pada parser awal. Diminta cabut/ganti App Password serta format16karakter tanpa spasi, quoted. Belum ada SMTP/email/izin send; slot tidak dipakai. P9-03/04 belum dimulai |
 | [ ] P9-03 | Scheduler/worker config/reclaim/backoff | R1-AC18/24; T-16/23, DBT-12/13/21 | P9-02, P5-06, G-RETRY | routes/console.php; jobs/commands/tests | NOT RUN; queue timeout/lease/retry_after konsisten; stale worker fenced |
 | [ ] P9-04 | Unknown send/obsolete suppression/recovery | R1-AC18/22/24; DBT-13/21 | P9-03 | dispatcher/templates; focused tests | NOT RUN; no external exactly-once claim; purge nonaktif |
 
@@ -247,7 +247,7 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
-**Current 6 November 2026: Phase9 1/4 COMPLETED (AP–AV).** Roadmap54completed/0inprogress/1blocked/15notstarted. Final180passed/637assertions/exit0 sesudah Pint (AV). Gmail probe STARTTLS terisolasi siap secara kode; dry-run belum ready, kredensial/target menunggu pengisian manual dan izin send terpisah. Default mailer tetap, slot email belum dipakai. WA diterima menurut pengguna, API/manifest tetap unknown; Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
+**Current 6 November 2026: Phase9 1/4 COMPLETED (AP–AW).** Roadmap54completed/0inprogress/1blocked/15notstarted. Bukti kode terakhir180passed/637assertions/exit0 (AV), tidak diulang ketika .env invalid. Menunggu penggantian App Password dan format lokal yang valid setelah error parser awal (AW). Tidak ada SMTP/email, slot belum dipakai dan izin send belum diberikan. WA diterima menurut pengguna, API unknown tetap; Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
 
 **Update sesudah run final P6-01: COMPLETED, 223 passed/1106 assertions/exit0; Phase 6 1/7, roadmap 41 completed/0 in progress/0 blocked/29 not started.** Next P6-02; tidak meminta approval antar-task dalam fase yang sudah diotorisasi. Catatan status sebelumnya di bawah/AB adalah histori berurutan.
 
@@ -455,7 +455,7 @@ Oracle tambahan untuk P1-07/Phase5/6: receipt100.001 dikoreksi90.000→effective
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
 | G-PAY | READY untuk kontrak/session BCA VA Opsi B; P5-01/P5-02 COMPLETED di S/T. Bukti provider tetap A/B BCA; acceptance runtime canonical Phase5 tetap terbuka. Tidak menuntut hardexpiry universal atau mengklaim22kanal verified | Session/recovery/absolute deadline aplikasi lulus offline/MySQL; T-32 live tidak diulang karena izin transaksi sudah terpakai. Timing tanpa provenance tetap review/hold; expired_observed bukan release. Webhookdedup/receipt/ledger/closure/reconciliation/race tetap wajib P5-03–07. Kartu/21kanal lain deferred; dashboard tidak diubah |
-| G-NOTIFY | WA diterima menurut pengguna AU; API unknown/slot terpakai tetap dipertahankan. Gmail SMTP dipilih AV: profil gmail_probe terpisah, smtp.gmail.com587/STARTTLS wajib/verify_peertrue, self-recipient. Final180/637 lulus, dry-run belum ready dan slot email belum terpakai | Menunggu tiga variabel .env manual: NOTIFICATION_TEST_SMTP_USERNAME, NOTIFICATION_TEST_SMTP_PASSWORD, NOTIFICATION_TEST_EMAIL. Tidak meminta nilai di chat; instruksi App Password/2-Step diberikan. Setelah konfigurasi ready perlu izin satu email terpisah dan bukti penerimaan; belum ada email nyata. Default/smtp/from produksi tidak diubah. Tidak melompati P9-02 ke P9-03/04 |
+| G-NOTIFY | WA diterima menurut pengguna AU; API unknown/slot terpakai tetap. Gmail TLS probe AV teruji180/637; pengisian dilaporkan AW tetapi .env invalid. Parser awal menampilkan nilai sensitif; diminta cabut/ganti App Password. Pemeriksaan format aman kini hanya mengeluarkan status invalid, tanpa nilai | Menunggu pengguna mengganti App Password dan memperbaiki quoted .env, lalu pemeriksaan teredaksi dan dry-run ulang. Tidak meminta nilai di chat atau mengirim SMTP/email. Slot email belum dipakai; setelah ready masih perlu izin satu email dan bukti penerimaan. Default/smtp/from produksi tetap. Tidak melompati P9-02 ke P9-03/04 |
 | G-CONTENT | RESOLVED checkout23Oktober (3rasa/3filling); RESOLVED pickup5November: pengguna memberikan Jalan Mayor Sastra Atmaja No.2, Margadadi Indramayu, 081395439751, kurir Gojek/Grab dipesan customer | Alamat/kontak pickup boleh ditampilkan sesuai jawaban eksplisit. Foto produk/konten publik lain/Figma tetap sesuai gate fiturnya; bukan persetujuan konten yang belum diberikan |
 | G-ARCHITECT | Tool/skill bernama AI Software Architect tidak ditemukan dalam katalog sesi | Fallback review teknis standar berdasarkan dokumen; tidak mengaku plugin architect dijalankan. Skill lokal improve-codebase-architecture diperiksa: fokus refactor scaffold, tidak sesuai tugas audit ini |
 
@@ -1084,7 +1084,7 @@ Dibandingkan checkpoint akhir Phase 2 `7bdcc86`: 35 file implementasi/test/track
 
 ## J. Next Action
 
-**Current 6 November: Phase9 1/4 COMPLETED (AP–AV).** Roadmap54/70; final180/637 lulus (AV), closure P9-02 tetap BLOCKED. WA diterima menurut pengguna, API unknown tidak dipalsukan atau diulang. Gmail TLS probe terisolasi sudah disiapkan; dry-run belum ready, pengisian manual/izin send/email receipt masih menunggu. Default mailer tetap. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan di bawah adalah histori.
+**Current 6 November: Phase9 1/4 COMPLETED (AP–AW).** Roadmap54/70; kode terakhir180/637 lulus (AV), closure P9-02 tetap BLOCKED. WA diterima, API unknown tidak diubah/diulang. Isian Gmail dilaporkan tetapi .env invalid; App Password perlu dicabut/diganti setelah error parser awal. Menunggu format valid, dry-run, izin send dan email receipt; belum ada SMTP/email. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan di bawah adalah histori.
 
 **Update: P6-01 terverifikasi selesai (AB). Next P6-02 Approve/store cancel+release+gross obligation.**
 
@@ -2376,3 +2376,17 @@ Dry-run aktual exit0: no email sent, **Email configuration ready:no**, approval 
 Scope aktual **7file kode/test + tracker (8total)**: app/InternalEmailProbe.php, app/OperationalNotificationMail.php, config/mail.php, config/notifications.php, phpunit.xml, routes/console.php, tests/Feature/InternalEmailProbeTest.php, IMPLEMENTATION-PROGRESS.md. Tidak mengubah dependency, production resource, privacy permissions, atau ketiga file checkout pihak lain. Commit hanya scope ini setelah staged diff/secret check; .env dan manifest privat tetap di luar Git.
 
 **P9-02e persiapan terimplementasi dan teruji; P9-02 keseluruhan tetap PARTIAL/BLOCKED.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: tunggu pengisian manual tiga variabel, ulangi konfigurasi/dry-run, minta persetujuan eksplisit tepat satu email, jalankan hanya jika diizinkan, lalu verifikasi penerimaan. Tidak menganggap pilihan Gmail atau pengisian kredensial sebagai izin send. P9-03/04 dan Phase10 belum dimulai. Tidak ada email/WA nyata pada sesi ini, provider status call, bank/Sandbox transaction, DB kerja DML, deployment atau subagent.
+
+## AW. P9-02e — format .env invalid dan penggantian App Password diperlukan, 6 November 2026
+
+Pengguna melaporkan tiga variabel Gmail sudah diisi. Repository diverifikasi pada codex/phase9-internal-probe/305984b; tiga perubahan checkout pihak lain tetap dipertahankan. Tidak ada persetujuan pengiriman email nyata.
+
+Percobaan dry-run `php artisan notifications:email-probe` terhenti saat bootstrap karena dotenv menemukan whitespace pada nilai tanpa quoting yang sesuai. **Error parser awal menampilkan nilai App Password pada output perintah.** Nilai tersebut tidak disalin ke tracker/source/commit ini dan tidak akan diulang. Agen mengakui kejadian ini kepada pengguna dan meminta App Password dicabut serta diganti sebelum melanjutkan. Tidak mengklaim output yang sudah muncul dapat dihapus, atau bahwa credential lama aman dipakai. Tidak ada koneksi SMTP, AUTH atau email, karena command probe belum sempat dijalankan.
+
+Pemeriksaan berikutnya dilakukan langsung memakai parser Dotenv sebelum bootstrap aplikasi, dengan exception ditangkap tanpa mencetak pesan/detail: hanya **Environment format: invalid; details withheld**, exit1. .env tetap ignored dan tidak diubah oleh agen. Slot nyata `storage/app/private_uploads/notification-probes/p9-02-email-01.json` tidak ada, sehingga tidak ada upaya email yang mengonsumsi slot. Tidak mengulang Artisan atau automated tests saat format invalid untuk menghindari keluaran sensitif yang sama.
+
+Pengguna diminta mencabut App Password yang sempat tampil, membuat yang baru, lalu memasukkan NOTIFICATION_TEST_SMTP_PASSWORD pada .env lokal dengan16karakter tanpa spasi dan diapit tanda kutip; balasan yang diminta hanya “sudah diganti”, tanpa nilai. SMTP production/default/from tidak disentuh. Sebelum Artisan berikutnya, wajib pemeriksaan parser teredaksi; keluaran command probe berikutnya juga harus ditangkap dan hanya baris publik yang dikenali diteruskan ke output, sehingga error bootstrap tidak dicetak mentah. Jangan membuat file log berisi keluaran mentah.
+
+Perubahan sesi hanya IMPLEMENTATION-PROGRESS.md; source PHP, .env dan manifest privat tidak diubah. Bukti kode terakhir tetap180passed/637assertions (AV), bukan run baru. Pemeriksaan diff/secret scan tracker dilakukan sebelum commit; ketiga perubahan checkout tidak disertakan.
+
+**P9-02 tetap PARTIAL/BLOCKED.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: tunggu penggantian credential dan format valid, ulangi pemeriksaan teredaksi/dry-run, baru minta izin email nyata. Pengisian credential bukan izin send. Tidak ada email/WA baru, provider status call, bank/Sandbox transaction, DB kerja DML, dependency change, deployment atau subagent; P9-03/04 dan Phase10 tidak dimulai.
