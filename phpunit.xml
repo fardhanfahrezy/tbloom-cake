@@ -30,6 +30,9 @@
         <env name="NOTIFICATION_DELIVERY_ENABLED" value="false" force="true"/>
         <env name="FONNTE_TOKEN" value="" force="true"/>
         <env name="FONNTE_TEST_TARGET" value="" force="true"/>
+        <env name="NOTIFICATION_TEST_EMAIL" value="" force="true"/>
+        <env name="NOTIFICATION_TEST_SMTP_USERNAME" value="" force="true"/>
+        <env name="NOTIFICATION_TEST_SMTP_PASSWORD" value="" force="true"/>
         <env name="QUEUE_CONNECTION" value="sync" force="true"/>
         <env name="SESSION_DRIVER" value="array" force="true"/>
         <env name="PULSE_ENABLED" value="false" force="true"/>

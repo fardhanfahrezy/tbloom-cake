@@ -37,6 +37,19 @@ return [
 
     'mailers' => [
 
+        'gmail_probe' => [
+            'transport' => 'smtp',
+            'scheme' => 'smtp',
+            'host' => 'smtp.gmail.com',
+            'port' => 587,
+            'username' => env('NOTIFICATION_TEST_SMTP_USERNAME'),
+            'password' => env('NOTIFICATION_TEST_SMTP_PASSWORD'),
+            'timeout' => 15,
+            'auto_tls' => true,
+            'require_tls' => true,
+            'verify_peer' => true,
+        ],
+
         'smtp' => [
             'transport' => 'smtp',
             'scheme' => env('MAIL_SCHEME'),

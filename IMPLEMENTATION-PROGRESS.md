@@ -1,6 +1,6 @@
 # IMPLEMENTATION PROGRESS — TBloom Cake
 
-> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AU: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AU outbox, adapter, key identitas, probe dan konfirmasi penerimaan WhatsApp. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
+> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AV: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AV outbox, adapter, probe WhatsApp dan persiapan Gmail TLS. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
 
 ## A. Project Overview
 
@@ -9,9 +9,9 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 6 November 2026, Asia/Bangkok (UTC+07:00) |
-| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. Bukti kode terakhir156passed/507assertions (AR). Pengguna mengonfirmasi WA uji diterima (AU); hasil API tetap unknown dan tidak ditulis ulang. Closure P9-02 masih BLOCKED pada prasyarat/verifikasi email aktual |
+| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. Persiapan Gmail TLS + regresi final180passed/637assertions (AV). WA uji diterima menurut pengguna (AU); API tetap unknown. Closure P9-02 masih BLOCKED pada pengisian kredensial/target, izin send dan verifikasi email nyata |
 | Fase aktif | Phase9 — Notifications & Background Processing, diotorisasi instruksi lanjut 5 November; berhenti sebelum Phase10 |
-| Task aktif | P9-02: penerimaan WA uji dikonfirmasi pengguna; slot satu upaya sudah terpakai, tidak resend. Menunggu pilihan provider SMTP dan alamat email internal untuk persiapan uji email nyata; mailer log belum diubah |
+| Task aktif | P9-02e Gmail SMTP dipilih pengguna; profil probe STARTTLS587 terisolasi sudah disiapkan/diuji. Dry-run belum ready, tiga variabel Gmail belum terisi pada pemeriksaan terakhir; menunggu pengisian manual. Belum ada izin atau pengiriman email nyata; default mailer tetap |
 | Milestone berikutnya | Selesaikan G-NOTIFY → implementasi/verifikasi P9-02 → P9-03/04 → approval Phase10; tidak menutup fase berdasarkan fake saja |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -189,7 +189,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies / gate | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
 | [x] P9-01 | Outbox scanner/fencing/enqueue recovery; BR-21 | R1-AC18; T-23, DBT-13 pada scope orchestration | Phase8/P1-11 selesai; G-RETRY teknis AP | 11file kode/test + tracker, daftar aktual AP | COMPLETED: final75passed/215assertions/exit0 setelah Pint; expired pre-send reclaim, stale-token fencing, unknown tanpa auto-resend, enqueue failure recovery teruji. Adapters/live/scheduler tetap task berikutnya |
-| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; WA uji disetujui AT dan penerimaannya dikonfirmasi pengguna AU; email live belum lulus | Adapter/template AQ + probe AR + key AS + outcome AT + konfirmasi AU | PARTIAL/BLOCKED: kode terakhir156passed/507assertions/exit0. WA diterima menurut pengguna; API tetap unknown tanpa ID, tidak resend atau memalsukan ACK. Menunggu provider SMTP/target email internal; mailer log tetap. P9-03/04 belum dimulai |
+| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; WA diterima AU; Gmail SMTP dipilih AV, email live belum lulus | Adapter/template AQ + probe WA AR–AU + profil/probe Gmail/tes/instruksi AV | PARTIAL/BLOCKED: final180passed/637assertions/exit0 sesudah Pint. Gmail TLS wajib dan self-recipient, default/smtp produksi tetap; slot email belum terpakai. Dry-run belum ready karena tiga variabel lokal belum terisi; belum ada izin send/email nyata. P9-03/04 belum dimulai |
 | [ ] P9-03 | Scheduler/worker config/reclaim/backoff | R1-AC18/24; T-16/23, DBT-12/13/21 | P9-02, P5-06, G-RETRY | routes/console.php; jobs/commands/tests | NOT RUN; queue timeout/lease/retry_after konsisten; stale worker fenced |
 | [ ] P9-04 | Unknown send/obsolete suppression/recovery | R1-AC18/22/24; DBT-13/21 | P9-03 | dispatcher/templates; focused tests | NOT RUN; no external exactly-once claim; purge nonaktif |
 
@@ -247,7 +247,7 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
-**Current 6 November 2026: Phase9 1/4 COMPLETED (AP–AU).** Roadmap54completed/0inprogress/1blocked/15notstarted. Kode terakhir156passed/507assertions/exit0 (AR), tidak diulang karena source tidak berubah. Pengguna mengonfirmasi satu WA uji diterima; API/manifest tetap unknown tanpa ID provider, slot tidak di-reset. Provider SMTP/target email internal masih menunggu; email tetap log, Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
+**Current 6 November 2026: Phase9 1/4 COMPLETED (AP–AV).** Roadmap54completed/0inprogress/1blocked/15notstarted. Final180passed/637assertions/exit0 sesudah Pint (AV). Gmail probe STARTTLS terisolasi siap secara kode; dry-run belum ready, kredensial/target menunggu pengisian manual dan izin send terpisah. Default mailer tetap, slot email belum dipakai. WA diterima menurut pengguna, API/manifest tetap unknown; Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
 
 **Update sesudah run final P6-01: COMPLETED, 223 passed/1106 assertions/exit0; Phase 6 1/7, roadmap 41 completed/0 in progress/0 blocked/29 not started.** Next P6-02; tidak meminta approval antar-task dalam fase yang sudah diotorisasi. Catatan status sebelumnya di bawah/AB adalah histori berurutan.
 
@@ -455,7 +455,7 @@ Oracle tambahan untuk P1-07/Phase5/6: receipt100.001 dikoreksi90.000→effective
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
 | G-PAY | READY untuk kontrak/session BCA VA Opsi B; P5-01/P5-02 COMPLETED di S/T. Bukti provider tetap A/B BCA; acceptance runtime canonical Phase5 tetap terbuka. Tidak menuntut hardexpiry universal atau mengklaim22kanal verified | Session/recovery/absolute deadline aplikasi lulus offline/MySQL; T-32 live tidak diulang karena izin transaksi sudah terpakai. Timing tanpa provenance tetap review/hold; expired_observed bukan release. Webhookdedup/receipt/ledger/closure/reconciliation/race tetap wajib P5-03–07. Kartu/21kanal lain deferred; dashboard tidak diubah |
-| G-NOTIFY | WA diterima berdasarkan konfirmasi eksplisit pengguna AU untuk TBLOOM-NOTIFY-P9-02-01. Bukti ini terpisah dari API acknowledgement yang tetap unknown/tanpa ID. Slot terpakai; tidak resend/reset atau mengubah manifest menjadi sent/delivered. Token/target/key tidak ditampilkan | Prasyarat tersisa: provider SMTP dan penerima email internal, persiapan/izin uji email nyata dan verifikasi penerimaan. Pertanyaan provider/target sudah diajukan; kredensial hanya di .env, tidak di chat. Mailer log tetap dan bukan bukti email nyata; gate belum lulus, tidak melompati P9-02 ke P9-03/04 |
+| G-NOTIFY | WA diterima menurut pengguna AU; API unknown/slot terpakai tetap dipertahankan. Gmail SMTP dipilih AV: profil gmail_probe terpisah, smtp.gmail.com587/STARTTLS wajib/verify_peertrue, self-recipient. Final180/637 lulus, dry-run belum ready dan slot email belum terpakai | Menunggu tiga variabel .env manual: NOTIFICATION_TEST_SMTP_USERNAME, NOTIFICATION_TEST_SMTP_PASSWORD, NOTIFICATION_TEST_EMAIL. Tidak meminta nilai di chat; instruksi App Password/2-Step diberikan. Setelah konfigurasi ready perlu izin satu email terpisah dan bukti penerimaan; belum ada email nyata. Default/smtp/from produksi tidak diubah. Tidak melompati P9-02 ke P9-03/04 |
 | G-CONTENT | RESOLVED checkout23Oktober (3rasa/3filling); RESOLVED pickup5November: pengguna memberikan Jalan Mayor Sastra Atmaja No.2, Margadadi Indramayu, 081395439751, kurir Gojek/Grab dipesan customer | Alamat/kontak pickup boleh ditampilkan sesuai jawaban eksplisit. Foto produk/konten publik lain/Figma tetap sesuai gate fiturnya; bukan persetujuan konten yang belum diberikan |
 | G-ARCHITECT | Tool/skill bernama AI Software Architect tidak ditemukan dalam katalog sesi | Fallback review teknis standar berdasarkan dokumen; tidak mengaku plugin architect dijalankan. Skill lokal improve-codebase-architecture diperiksa: fokus refactor scaffold, tidak sesuai tugas audit ini |
 
@@ -1084,7 +1084,7 @@ Dibandingkan checkpoint akhir Phase 2 `7bdcc86`: 35 file implementasi/test/track
 
 ## J. Next Action
 
-**Current 6 November: Phase9 1/4 COMPLETED (AP–AU).** Roadmap54/70; bukti kode terakhir156/507 lulus (AR), closure P9-02 tetap BLOCKED. Penerimaan satu WA dikonfirmasi pengguna, API tetap unknown; tidak diulang atau diubah menjadi ACK berhasil. Email masih log, menunggu provider SMTP/target internal. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan di bawah adalah histori.
+**Current 6 November: Phase9 1/4 COMPLETED (AP–AV).** Roadmap54/70; final180/637 lulus (AV), closure P9-02 tetap BLOCKED. WA diterima menurut pengguna, API unknown tidak dipalsukan atau diulang. Gmail TLS probe terisolasi sudah disiapkan; dry-run belum ready, pengisian manual/izin send/email receipt masih menunggu. Default mailer tetap. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan di bawah adalah histori.
 
 **Update: P6-01 terverifikasi selesai (AB). Next P6-02 Approve/store cancel+release+gross obligation.**
 
@@ -2340,3 +2340,39 @@ Repository diverifikasi pada `codex/phase9-internal-probe`/`706f0e2`; tiga perub
 **Sub-bukti penerimaan WA aktual terpenuhi berdasarkan konfirmasi pengguna; P9-02 keseluruhan tetap PARTIAL/BLOCKED pada email aktual.** Mailer sementara log tetap dipertahankan. Pertanyaan berikut sudah diajukan: penyedia email/SMTP dan alamat penerima internal (dapat disimpan lokal sebagai NOTIFICATION_TEST_EMAIL), dengan kredensial hanya pada .env dan tidak di chat. Belum meminta/mendapat persetujuan pengiriman email nyata; persiapan pesan dan pembatasan pengiriman harus siap sebelum meminta izin send terpisah. Konfirmasi penerimaan WA bukan izin mengirim email atau WA berikutnya.
 
 Roadmap tetap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: selesaikan prasyarat email dan uji aktual sesuai izin sebelum closure P9-02; P9-03/04 dan Phase10 tidak dimulai. Tidak ada pesan baru, bank/Sandbox transaction, DB kerja write, dependency change, deployment atau subagent pada sesi konfirmasi ini.
+
+## AV. P9-02e — persiapan Gmail SMTP TLS terisolasi, 6 November 2026
+
+Pengguna memilih Gmail SMTP dengan TLS dan penerima Gmail miliknya sendiri, meminta instruksi kredensial manual pada .env, dry-run sebelum izin send, serta melarang perubahan email production atau pengiriman tanpa persetujuan eksplisit. Scope ini hanya persiapan P9-02e, bukan otorisasi email nyata. Tujuh sumber dan dependency/gate P9-02 tetap berlaku; tidak memulai P9-03. Branch tetap codex/phase9-internal-probe; tiga perubahan checkout pihak lain dipertahankan. .ai/rules tetap tidak ada.
+
+Skill Laravel best practices (mail/config/HTTP) dan testing best practices (isolation/review) digunakan. Dokumentasi Laravel13 melalui Boost dan source Laravel13.40/Symfony8.1 terpasang diperiksa untuk MailFake serta pemetaan require_tls. Sumber resmi: [Gmail SMTP](https://developers.google.com/workspace/gmail/imap/imap-smtp) menetapkan smtp.gmail.com587 untuk STARTTLS; [Google App Passwords](https://support.google.com/accounts/answer/185833) menjelaskan App Password16karakter dan kebutuhan 2-Step Verification. Tidak mengubah pengaturan keamanan akun pengguna atau meminta password di chat.
+
+Profil tambahan `mail.mailers.gmail_probe` memakai SMTP, scheme smtp, host tetap smtp.gmail.com, port587, timeout15, auto_tls/require_tls/verify_peer **true**. Default mailer, profil smtp existing, global from, MAIL_* dan .env tidak diubah. Kredensial khusus probe hanya dibaca dari NOTIFICATION_TEST_SMTP_USERNAME/PASSWORD; penerima dari NOTIFICATION_TEST_EMAIL. Probe hanya local/testing, di luar transaksi, dengan disk privat; menolak target berbeda dari username Gmail, TLS opsional/verifikasi nonaktif, host/URL override, timeout tak terbatas, serta kredensial kosong/tidak sesuai format. Pengirim/from dan penerima/to dipasang pada pesan itu saja, tanpa CC/BCC atau mengubah global from.
+
+`notifications:email-probe` default dry-run tanpa koneksi/login SMTP, email, atau reservasi. Pesan tetap yang dapat direview: subjek **TBloom Cake — Uji email internal P9-02**, isi **TBloom Cake — Uji email internal TBLOOM-NOTIFY-P9-02-EMAIL-01. Ini pesan pengujian, bukan pesanan atau tagihan.** Jalur `--send-approved` hanya boleh dijalankan setelah izin terpisah; belum dijalankan terhadap konfigurasi nyata. Slot email independen pada `notification-probes/p9-02-email-01.json`: exclusive-create, persist unknown+flush/fsync sebelum I/O, tidak retry/reset/replacement pada accepted/timeout/unknown. Record privat hanya HMAC penerima, hash pesan dan ID provider; password/alamat mentah tidak disimpan. Exception diringkas tanpa raw SMTP response/credential. Accepted adalah sent, bukan delivered.
+
+Testing memaksa ketiga variabel Gmail kosong melalui phpunit.xml dan menolak send jika MailFake tidak terpasang. Tes konfigurasi membangun transport Symfony tanpa melakukan connect/auth dan membuktikan isTlsRequired/isAutoTls aktif serta endpoint587 benar. Profil produksi tidak dipakai atau ditimpa untuk probe. Tes actual rendering menemukan bahwa OperationalNotificationMail::build menimpa subjek probe; default subject dipindah ke constructor agar default tetap sama dan override per-message bertahan. Ini perubahan source pendukung yang relevan, bukan redesign email atau perubahan default produksi.
+
+### Instruksi manual lokal (sudah disampaikan ke pengguna)
+
+Aktifkan 2-Step Verification pada akun sendiri bila diperlukan dan buat App Password melalui Google. Ganti placeholder di bawah secara manual pada .env lokal; username dan target harus akun Gmail yang sama. Isi App Password16karakter tanpa spasi, bukan password login biasa. Jangan kirim nilai ke chat atau Git dan jangan mengganti MAIL_* existing.
+
+```dotenv
+NOTIFICATION_TEST_SMTP_USERNAME=alamat_gmail_anda@gmail.com
+NOTIFICATION_TEST_SMTP_PASSWORD="ISI_APP_PASSWORD_16_KARAKTER"
+NOTIFICATION_TEST_EMAIL=alamat_gmail_anda@gmail.com
+```
+
+Setelah diisi, jalankan/izinkan agen menjalankan `php artisan notifications:email-probe` tanpa flag send. Dry-run hanya membuktikan format/kelengkapan konfigurasi, bukan autentikasi Gmail atau delivery. Pertanyaan agar pengguna memberi tahu “sudah diisi”, tanpa nilai kredensial/alamat, sudah diajukan dan masih menunggu.
+
+### Bukti aktual
+
+Run awal `p9-02-email-red.log` exit1 berhenti pada DatasetMissing sebelum tes dijalankan; dataset mode fake dilengkapi, bukan dihitung sebagai red aplikasi. RED valid20kasus/0passed/4failed/16errors/11assertions/duration_ms17577/exit2 (`p9-02-email-red-valid.log`+.exit), command/method/profil belum ada. GREEN20passed/108assertions/duration_ms7288/exit0 (`p9-02-email-green.log`). Regresi subjek actual-render RED1failed/2assertions/duration_ms760/exit1 (`p9-02-email-subject-red.log`) membuktikan subject tertimpa; diperbaiki lalu21tes probe +38tes channel lama **59passed/245assertions/duration_ms15453/exit0** (`p9-02-email-subject-green.log`). Tidak melonggarkan assertion atau memalsukan fake sebagai delivery.
+
+**Final sesudah Pint:180passed/637assertions/duration_ms76068/exit0**, `storage/logs/p9-02-email-final-verified.log` dan `.exit`. Sembilan file: InternalEmailProbeTest, InternalNotificationProbeTest, FonnteClientTest, PreparedNotificationTransportTest, NotificationOutboxTest, DispatchNotificationDeliveriesTest, NotificationDeliveryFoundationTest, NotificationRecipientIdentityTest, PaymentNoticesTest. Run lama tidak dijumlahkan. Pint exit0 (`p9-02-email-pint.log`+.exit), hanya memformat test baru; diffcheck exit0, warning CRLF existing saja. Source PHP tidak berubah selama final run. Tidak mengulang build UI/fullsuite karena tidak ada perubahan UI; pengguna dapat menjalankan `php artisan test --compact` sesuai pedoman proyek, dengan live probes tetap nonaktif. Review mandiri tidak menyisakan defect wajib yang diketahui pada scope persiapan, bukan review independen atau bukti Gmail login/delivery.
+
+Dry-run aktual exit0: no email sent, **Email configuration ready:no**, approval slot reserved:no, authentication/delivery not verified. Presence-only menunjukkan ketiga variabel Gmail belum terisi pada pemeriksaan terakhir. Tidak mencetak alamat/password atau mengubah .env. Tidak melakukan koneksi SMTP, AUTH, atau email nyata. Tidak menyentuh/reset/mengirim ulang probe WhatsApp; bukti penerimaan WA AU tetap berlaku, acknowledgement unknown tetap dipertahankan.
+
+Scope aktual **7file kode/test + tracker (8total)**: app/InternalEmailProbe.php, app/OperationalNotificationMail.php, config/mail.php, config/notifications.php, phpunit.xml, routes/console.php, tests/Feature/InternalEmailProbeTest.php, IMPLEMENTATION-PROGRESS.md. Tidak mengubah dependency, production resource, privacy permissions, atau ketiga file checkout pihak lain. Commit hanya scope ini setelah staged diff/secret check; .env dan manifest privat tetap di luar Git.
+
+**P9-02e persiapan terimplementasi dan teruji; P9-02 keseluruhan tetap PARTIAL/BLOCKED.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: tunggu pengisian manual tiga variabel, ulangi konfigurasi/dry-run, minta persetujuan eksplisit tepat satu email, jalankan hanya jika diizinkan, lalu verifikasi penerimaan. Tidak menganggap pilihan Gmail atau pengisian kredensial sebagai izin send. P9-03/04 dan Phase10 belum dimulai. Tidak ada email/WA nyata pada sesi ini, provider status call, bank/Sandbox transaction, DB kerja DML, deployment atau subagent.

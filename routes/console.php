@@ -2,6 +2,7 @@
 
 use App\DispatchNotificationDeliveries;
 use App\DispatchPaymentEvents;
+use App\InternalEmailProbe;
 use App\InternalNotificationProbe;
 use App\MidtransSandboxProbe;
 use App\ReconcilePayments;
@@ -12,6 +13,32 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
+Artisan::command('notifications:email-probe {--send-approved : Send one self-addressed Gmail probe only after explicit approval}', function (InternalEmailProbe $probe): int {
+    try {
+        if ($this->option('send-approved')) {
+            $result = $probe->send(true);
+            $this->line('Reference: '.$result['reference']);
+            $this->line('Provider result: '.$result['result'].'; delivery is not verified.');
+
+            return $result['result'] === 'sent' ? 0 : 1;
+        }
+        $preview = $probe->preview();
+        $this->line('Mode: dry-run; no email sent.');
+        $this->line('Reference: '.$preview['reference']);
+        $this->line('Subject: '.$preview['subject']);
+        $this->line('Message: '.$preview['message']);
+        $this->line('Email configuration ready: '.($preview['email_ready'] ? 'yes' : 'no'));
+        $this->line('Approval slot reserved: '.($preview['slot_reserved'] ? 'yes' : 'no'));
+        $this->line('Gmail authentication and delivery are not verified by dry-run.');
+
+        return 0;
+    } catch (Throwable) {
+        $this->error('Email probe refused or outcome uncertain; inspect the private slot and never resend.');
+
+        return 1;
+    }
+})->purpose('Preview one self-addressed Gmail test; sending needs explicit approval and consumes one private slot');
 
 Artisan::command('notifications:internal-probe {--send-approved : Send the single internal WhatsApp probe only after explicit approval}', function (InternalNotificationProbe $probe): int {
     try {
