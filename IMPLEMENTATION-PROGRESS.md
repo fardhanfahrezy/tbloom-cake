@@ -1,6 +1,6 @@
 # IMPLEMENTATION PROGRESS — TBloom Cake
 
-> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AR: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AR outbox, adapter dan persiapan probe notifikasi. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
+> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AS: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AS outbox, adapter, persiapan probe dan key identitas notifikasi. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
 
 ## A. Project Overview
 
@@ -9,9 +9,9 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 6 November 2026, Asia/Bangkok (UTC+07:00) |
-| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. P9-02d probe + regresi final156passed/507assertions pada Laravel13.40 (AR); closure P9-02 BLOCKED pada G-NOTIFY live dan key HMAC lokal yang belum tersedia |
+| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. Bukti kode terakhir156passed/507assertions pada Laravel13.40 (AR). Key HMAC pertama dibuat sesuai persetujuan pengguna; dry-run kini ready (AS), closure P9-02 tetap BLOCKED pada G-NOTIFY live |
 | Fase aktif | Phase9 — Notifications & Background Processing, diotorisasi instruksi lanjut 5 November; berhenti sebelum Phase10 |
-| Task aktif | P9-02d persiapan probe satu-slot terverifikasi; dry-run belum ready karena NOTIFICATION_RECIPIENT_HMAC_KEY tidak tersedia. Menunggu konfirmasi pulihkan key lama atau buat key pertama; belum ada persetujuan kirim nyata. Token/target ada, mailer log tetap |
+| Task aktif | P9-02d dry-run ready; key HMAC pertama32byte dibuat lokal dengan izin pengguna tanpa ditampilkan. Slot belum dipakai; menunggu persetujuan eksplisit satu WA nyata ke target lokal. Mailer log tetap, email live belum siap |
 | Milestone berikutnya | Selesaikan G-NOTIFY → implementasi/verifikasi P9-02 → P9-03/04 → approval Phase10; tidak menutup fase berdasarkan fake saja |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -189,7 +189,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies / gate | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
 | [x] P9-01 | Outbox scanner/fencing/enqueue recovery; BR-21 | R1-AC18; T-23, DBT-13 pada scope orchestration | Phase8/P1-11 selesai; G-RETRY teknis AP | 11file kode/test + tracker, daftar aktual AP | COMPLETED: final75passed/215assertions/exit0 setelah Pint; expired pre-send reclaim, stale-token fencing, unknown tanpa auto-resend, enqueue failure recovery teruji. Adapters/live/scheduler tetap task berikutnya |
-| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; persiapan fake AQ–AR diotorisasi; G-NOTIFY live tetap terbuka | Adapter/template AQ + InternalNotificationProbe/command/config/test/progres AR | PARTIAL/BLOCKED: final156passed/507assertions/exit0 pada Laravel13.40 sesudah Pint. Dry-run probe satu-slot aman tetapi belum ready: key HMAC identitas lokal tidak tersedia, riwayat key menunggu pengguna. Token/target ada, mailer log tetap; belum ada izin kirim atau bukti live. P9-03/04 belum dimulai |
+| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; persiapan AQ–AS diotorisasi; G-NOTIFY live tetap terbuka | Adapter/template AQ + probe AR + key lokal/progres AS | PARTIAL/BLOCKED: kode terakhir156passed/507assertions/exit0 pada Laravel13.40 sesudah Pint. Pengguna mengonfirmasi belum pernah ada key dan menyetujui key pertama32byte lokal; dry-run kini ready, slot belum dipakai. Belum ada persetujuan send atau bukti live. Mailer log tetap; P9-03/04 belum dimulai |
 | [ ] P9-03 | Scheduler/worker config/reclaim/backoff | R1-AC18/24; T-16/23, DBT-12/13/21 | P9-02, P5-06, G-RETRY | routes/console.php; jobs/commands/tests | NOT RUN; queue timeout/lease/retry_after konsisten; stale worker fenced |
 | [ ] P9-04 | Unknown send/obsolete suppression/recovery | R1-AC18/22/24; DBT-13/21 | P9-03 | dispatcher/templates; focused tests | NOT RUN; no external exactly-once claim; purge nonaktif |
 
@@ -247,7 +247,7 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
-**Current 6 November 2026: Phase9 1/4 COMPLETED (AP–AR).** P9-01 selesai; probe P9-02d + regresi final156passed/507assertions/exit0 pada Laravel13.40 sesudah Pint. Roadmap54completed/0inprogress/1blocked/15notstarted. Dry-run belum ready karena key HMAC lokal tidak tersedia; riwayat/pemulihan atau pembuatan key pertama menunggu jawaban pengguna. Token/target tersedia, mailer log tetap. Pengiriman aktual belum disetujui dan tetap wajib sebelum fase selesai; Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
+**Current 6 November 2026: Phase9 1/4 COMPLETED (AP–AS).** Roadmap54completed/0inprogress/1blocked/15notstarted. Kode terakhir156passed/507assertions/exit0 pada Laravel13.40 sesudah Pint (AR); tidak diulang pada provisioning lokal AS karena source tidak berubah. Key pertama32byte dibuat dengan izin pengguna; dry-run ready dan slot belum dipakai. Pengiriman aktual belum disetujui dan tetap wajib sebelum fase selesai; email masih log, Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
 
 **Update sesudah run final P6-01: COMPLETED, 223 passed/1106 assertions/exit0; Phase 6 1/7, roadmap 41 completed/0 in progress/0 blocked/29 not started.** Next P6-02; tidak meminta approval antar-task dalam fase yang sudah diotorisasi. Catatan status sebelumnya di bawah/AB adalah histori berurutan.
 
@@ -455,7 +455,7 @@ Oracle tambahan untuk P1-07/Phase5/6: receipt100.001 dikoreksi90.000→effective
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
 | G-PAY | READY untuk kontrak/session BCA VA Opsi B; P5-01/P5-02 COMPLETED di S/T. Bukti provider tetap A/B BCA; acceptance runtime canonical Phase5 tetap terbuka. Tidak menuntut hardexpiry universal atau mengklaim22kanal verified | Session/recovery/absolute deadline aplikasi lulus offline/MySQL; T-32 live tidak diulang karena izin transaksi sudah terpakai. Timing tanpa provenance tetap review/hold; expired_observed bukan release. Webhookdedup/receipt/ledger/closure/reconciliation/race tetap wajib P5-03–07. Kartu/21kanal lain deferred; dashboard tidak diubah |
-| G-NOTIFY | PARTIAL READY persiapan AR: FONNTE_TOKEN/FONNTE_TEST_TARGET ada; NOTIFICATION_RECIPIENT_HMAC_KEY tidak tersedia, config cache tidak ada. Probe dry-run belum ready, slot belum terpakai. Nilai tidak dicetak, .env belum diubah; mailer log tetap. Riwayat key identitas perlu dikonfirmasi agar dedup lama tidak rusak | Menunggu pengguna: pulihkan key lama jika pernah ada atau izinkan key pertama32byte dibuat lokal. Setelah konfigurasi ready, tetap perlu persetujuan eksplisit satu WA ke target lokal dan verifikasi penerimaan; email nyata/provider/target belum disiapkan. Fake/accepted bukan delivered; tidak melompati P9-02 ke P9-03/04 |
+| G-NOTIFY | PARTIAL READY AS: pengguna mengonfirmasi key belum pernah dibuat dan mengizinkan key pertama32byte lokal. Key dibuat tanpa ditampilkan, .env tetap diabaikan Git; token/target dan konfigurasi lain dipertahankan. Dry-run ready, slot belum dipakai; ini bukan verifikasi akun/perangkat atau delivery | Menunggu persetujuan eksplisit tepat satu WA ke FONNTE_TEST_TARGET, lalu bukti penerimaan. Pertanyaan send sudah diajukan dengan pesan tetap dan larangan retry; persetujuan key bukan izin send. Email nyata/provider/target belum disiapkan, mailer log tetap. Tidak melompati P9-02 ke P9-03/04 |
 | G-CONTENT | RESOLVED checkout23Oktober (3rasa/3filling); RESOLVED pickup5November: pengguna memberikan Jalan Mayor Sastra Atmaja No.2, Margadadi Indramayu, 081395439751, kurir Gojek/Grab dipesan customer | Alamat/kontak pickup boleh ditampilkan sesuai jawaban eksplisit. Foto produk/konten publik lain/Figma tetap sesuai gate fiturnya; bukan persetujuan konten yang belum diberikan |
 | G-ARCHITECT | Tool/skill bernama AI Software Architect tidak ditemukan dalam katalog sesi | Fallback review teknis standar berdasarkan dokumen; tidak mengaku plugin architect dijalankan. Skill lokal improve-codebase-architecture diperiksa: fokus refactor scaffold, tidak sesuai tugas audit ini |
 
@@ -1084,7 +1084,7 @@ Dibandingkan checkpoint akhir Phase 2 `7bdcc86`: 35 file implementasi/test/track
 
 ## J. Next Action
 
-**Current 6 November: Phase9 1/4 COMPLETED (AP–AR).** Roadmap54/70; probe P9-02d + regresi final156/507 lulus, closure P9-02 tetap BLOCKED. Token/target ada, key HMAC lokal belum tersedia dan riwayat key menunggu pengguna. Dry-run tidak mengirim atau memakai slot; mailer log tetap. Uji aktual wajib sebelum fase ditutup tetapi belum disetujui secara eksplisit. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan di bawah adalah histori.
+**Current 6 November: Phase9 1/4 COMPLETED (AP–AS).** Roadmap54/70; bukti kode terakhir156/507 lulus (AR), closure P9-02 tetap BLOCKED. Key HMAC pertama sudah dibuat dengan izin pengguna; dry-run ready dan slot belum dipakai. Belum ada izin send atau pesan nyata; mailer log tetap. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan di bawah adalah histori.
 
 **Update: P6-01 terverifikasi selesai (AB). Next P6-02 Approve/store cancel+release+gross obligation.**
 
@@ -2302,3 +2302,15 @@ Scope aktual **4 file kode/test + tracker (5 total)**: `app/InternalNotification
 Checkpoint kode `0729a14` — `feat(notifications): add approval-gated internal delivery probe` — dibuat pada branch baru `codex/phase9-internal-probe`, berisi tepat empat file kode/test di atas. Staged diff dan pencocokan rahasia lokal lulus tanpa mencetak nilainya. Push normal ke `origin` berhasil; ls-remote membuktikan `0729a14e6010066c3fd3bbbbdc012bab91200db0`. Tidak force-push, merge, PR, atau deployment. Perubahan checkout pihak lain tetap tidak di-stage. Tracker disimpan sebagai checkpoint dokumentasi terpisah setelah bukti aktual ini.
 
 **P9-02 tetap PARTIAL/BLOCKED**, meskipun persiapan P9-02d sudah terimplementasi dan teruji. Roadmap tetap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4, belum selesai. Next: selesaikan prasyarat key identitas, dry-run ulang, dapatkan persetujuan eksplisit sebelum satu pengiriman WhatsApp, lalu verifikasi penerimaan; email nyata masih membutuhkan provider/target saat pengguna siap. Tidak menafsirkan instruksi lanjut sebagai izin kirim pesan dan tidak melompati P9-02 ke P9-03/04 atau Phase10. Tidak ada pesan nyata, provider status call, transaksi Sandbox baru, bank transfer, production/development DB write, .env change, purge, atau subagent pada sesi ini.
+
+## AS. P9-02d — key HMAC pertama dan dry-run ready, 6 November 2026
+
+Pengguna menjawab bahwa key belum pernah dibuat dan secara eksplisit mengizinkan key baru32byte dibuat lokal tanpa ditampilkan. Repository diperiksa: branch `codex/phase9-internal-probe`, HEAD `fdd4d83`, hanya tiga perubahan checkout pihak lain yang sudah tercatat di AR. `.ai/rules` tetap tidak ada. Target scope hanya prasyarat key P9-02; tidak mengulang implementasi atau menafsirkan persetujuan key sebagai persetujuan pengiriman.
+
+`NOTIFICATION_RECIPIENT_HMAC_KEY` pertama dibuat menggunakan cryptographic RandomNumberGenerator,32byte di-encode sebagai `base64:` sesuai decoder existing, hanya pada `.env` lokal. Operasi memakai file handle eksklusif, menolak assignment ganda, mempertahankan key nonempty jika ternyata sudah ada, dan tidak menampilkan nilai. Entry lain, token/target Fonnte dan mailer tidak diubah. Tidak membuat salinan rahasia; `.env` tetap ignored dan tidak masuk Git. Konfirmasi pengguna bahwa belum ada key menjadi dasar membuat key pertama, bukan rotasi atau penggantian key lama.
+
+Verifikasi aktual `php artisan notifications:internal-probe` **exit0**, hanya dry-run: `WhatsApp configuration ready: yes`, `Approval slot reserved: no`, `Email live verification: pending`, `no messages sent`. Ini membuktikan key dapat didecode oleh kontrak32byte/HMAC existing dan prasyarat lokal lolos; bukan bukti token/device Fonnte aktif atau pesan sampai. Tidak ada slot dibuat, request provider, email atau DB kerja write. Tidak menjalankan `--send-approved` terhadap konfigurasi nyata. Tidak ada source PHP yang berubah; Pint/regresi156passed/507assertions AR tidak dijalankan ulang atau diklaim sebagai run baru.
+
+File aktual berubah: `.env` lokal privat dan `IMPLEMENTATION-PROGRESS.md` saja; hanya tracker yang boleh dikomit. Ketiga perubahan checkout pihak lain dipertahankan tanpa staging. Pertanyaan persetujuan terpisah sudah diajukan untuk **tepat satu WhatsApp** ke FONNTE_TEST_TARGET dengan pesan tetap TBLOOM-NOTIFY-P9-02-01, tanpa email dan tanpa retry jika timeout/unknown. Jawaban send masih menunggu; elapsed time bukan persetujuan.
+
+**Prasyarat key lokal RESOLVED; P9-02 keseluruhan tetap PARTIAL/BLOCKED pada G-NOTIFY live.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: tunggu persetujuan eksplisit send, jalankan satu probe hanya bila diizinkan, verifikasi penerimaan, lalu selesaikan kebutuhan email nyata saat pengguna siap. Mailer log tetap bukan bukti email aktual. P9-03/04 dan Phase10 tidak dimulai. Tidak ada pesan nyata, transaksi Sandbox/transfer/deployment, dependency change atau subagent.
