@@ -1,6 +1,6 @@
 # IMPLEMENTATION PROGRESS — TBloom Cake
 
-> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AS: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AS outbox, adapter, persiapan probe dan key identitas notifikasi. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
+> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AT: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AT outbox, adapter, key identitas dan probe notifikasi. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
 
 ## A. Project Overview
 
@@ -9,9 +9,9 @@
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
 | Diperbarui | 6 November 2026, Asia/Bangkok (UTC+07:00) |
-| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. Bukti kode terakhir156passed/507assertions pada Laravel13.40 (AR). Key HMAC pertama dibuat sesuai persetujuan pengguna; dry-run kini ready (AS), closure P9-02 tetap BLOCKED pada G-NOTIFY live |
+| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. Bukti kode terakhir156passed/507assertions (AR). Satu probe WA disetujui dan dicoba (AT), hasil unknown tanpa ID provider; slot terpakai, tidak retry. Closure P9-02 tetap BLOCKED pada G-NOTIFY live |
 | Fase aktif | Phase9 — Notifications & Background Processing, diotorisasi instruksi lanjut 5 November; berhenti sebelum Phase10 |
-| Task aktif | P9-02d dry-run ready; key HMAC pertama32byte dibuat lokal dengan izin pengguna tanpa ditampilkan. Slot belum dipakai; menunggu persetujuan eksplisit satu WA nyata ke target lokal. Mailer log tetap, email live belum siap |
+| Task aktif | P9-02d: satu upaya WA yang disetujui menghasilkan unknown; manifest privat tersimpan, slot terpakai, tidak diulang. Menunggu konfirmasi penerimaan pengguna/review manual; email masih log dan belum diuji nyata |
 | Milestone berikutnya | Selesaikan G-NOTIFY → implementasi/verifikasi P9-02 → P9-03/04 → approval Phase10; tidak menutup fase berdasarkan fake saja |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
@@ -189,7 +189,7 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies / gate | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
 | [x] P9-01 | Outbox scanner/fencing/enqueue recovery; BR-21 | R1-AC18; T-23, DBT-13 pada scope orchestration | Phase8/P1-11 selesai; G-RETRY teknis AP | 11file kode/test + tracker, daftar aktual AP | COMPLETED: final75passed/215assertions/exit0 setelah Pint; expired pre-send reclaim, stale-token fencing, unknown tanpa auto-resend, enqueue failure recovery teruji. Adapters/live/scheduler tetap task berikutnya |
-| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; persiapan AQ–AS diotorisasi; G-NOTIFY live tetap terbuka | Adapter/template AQ + probe AR + key lokal/progres AS | PARTIAL/BLOCKED: kode terakhir156passed/507assertions/exit0 pada Laravel13.40 sesudah Pint. Pengguna mengonfirmasi belum pernah ada key dan menyetujui key pertama32byte lokal; dry-run kini ready, slot belum dipakai. Belum ada persetujuan send atau bukti live. Mailer log tetap; P9-03/04 belum dimulai |
+| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; satu WA disetujui pengguna AT, G-NOTIFY live belum lulus | Adapter/template AQ + probe AR + key AS + outcome privat/progres AT | PARTIAL/BLOCKED: kode terakhir156passed/507assertions/exit0. Satu probe aktual AT exit1/resultunknown, tanpa ID provider; slot terpakai, tidak retry. Menunggu konfirmasi penerimaan/review; bukan bukti gagal pasti atau delivered. Email masih log; P9-03/04 belum dimulai |
 | [ ] P9-03 | Scheduler/worker config/reclaim/backoff | R1-AC18/24; T-16/23, DBT-12/13/21 | P9-02, P5-06, G-RETRY | routes/console.php; jobs/commands/tests | NOT RUN; queue timeout/lease/retry_after konsisten; stale worker fenced |
 | [ ] P9-04 | Unknown send/obsolete suppression/recovery | R1-AC18/22/24; DBT-13/21 | P9-03 | dispatcher/templates; focused tests | NOT RUN; no external exactly-once claim; purge nonaktif |
 
@@ -247,7 +247,7 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
-**Current 6 November 2026: Phase9 1/4 COMPLETED (AP–AS).** Roadmap54completed/0inprogress/1blocked/15notstarted. Kode terakhir156passed/507assertions/exit0 pada Laravel13.40 sesudah Pint (AR); tidak diulang pada provisioning lokal AS karena source tidak berubah. Key pertama32byte dibuat dengan izin pengguna; dry-run ready dan slot belum dipakai. Pengiriman aktual belum disetujui dan tetap wajib sebelum fase selesai; email masih log, Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
+**Current 6 November 2026: Phase9 1/4 COMPLETED (AP–AT).** Roadmap54completed/0inprogress/1blocked/15notstarted. Kode terakhir156passed/507assertions/exit0 (AR), tidak diulang karena source tidak berubah. Pengguna menyetujui tepat satu WA; probe dicoba, exit1/resultunknown tanpa ID provider. Slot terpakai, tidak retry; penerimaan belum terverifikasi. Email masih log, Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
 
 **Update sesudah run final P6-01: COMPLETED, 223 passed/1106 assertions/exit0; Phase 6 1/7, roadmap 41 completed/0 in progress/0 blocked/29 not started.** Next P6-02; tidak meminta approval antar-task dalam fase yang sudah diotorisasi. Catatan status sebelumnya di bawah/AB adalah histori berurutan.
 
@@ -455,7 +455,7 @@ Oracle tambahan untuk P1-07/Phase5/6: receipt100.001 dikoreksi90.000→effective
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
 | G-PAY | READY untuk kontrak/session BCA VA Opsi B; P5-01/P5-02 COMPLETED di S/T. Bukti provider tetap A/B BCA; acceptance runtime canonical Phase5 tetap terbuka. Tidak menuntut hardexpiry universal atau mengklaim22kanal verified | Session/recovery/absolute deadline aplikasi lulus offline/MySQL; T-32 live tidak diulang karena izin transaksi sudah terpakai. Timing tanpa provenance tetap review/hold; expired_observed bukan release. Webhookdedup/receipt/ledger/closure/reconciliation/race tetap wajib P5-03–07. Kartu/21kanal lain deferred; dashboard tidak diubah |
-| G-NOTIFY | PARTIAL READY AS: pengguna mengonfirmasi key belum pernah dibuat dan mengizinkan key pertama32byte lokal. Key dibuat tanpa ditampilkan, .env tetap diabaikan Git; token/target dan konfigurasi lain dipertahankan. Dry-run ready, slot belum dipakai; ini bukan verifikasi akun/perangkat atau delivery | Menunggu persetujuan eksplisit tepat satu WA ke FONNTE_TEST_TARGET, lalu bukti penerimaan. Pertanyaan send sudah diajukan dengan pesan tetap dan larangan retry; persetujuan key bukan izin send. Email nyata/provider/target belum disiapkan, mailer log tetap. Tidak melompati P9-02 ke P9-03/04 |
+| G-NOTIFY | LIVE ATTEMPT UNKNOWN AT: pengguna mengizinkan tepat satu WA ke FONNTE_TEST_TARGET; satu command send dijalankan dan hasil unknown tersimpan, tanpa ID provider. Slot sudah terpakai, tidak retry atau membuat pengganti. Token/target/key tidak ditampilkan, .env tidak berubah saat send | Menunggu konfirmasi penerimaan pengguna/review manual; unknown bukan gagal pasti atau delivered. Izin satu percobaan sudah digunakan dan bukan izin mengulang. Email nyata/provider/target belum disiapkan, mailer log tetap; gate belum lulus, tidak melompati P9-02 ke P9-03/04 |
 | G-CONTENT | RESOLVED checkout23Oktober (3rasa/3filling); RESOLVED pickup5November: pengguna memberikan Jalan Mayor Sastra Atmaja No.2, Margadadi Indramayu, 081395439751, kurir Gojek/Grab dipesan customer | Alamat/kontak pickup boleh ditampilkan sesuai jawaban eksplisit. Foto produk/konten publik lain/Figma tetap sesuai gate fiturnya; bukan persetujuan konten yang belum diberikan |
 | G-ARCHITECT | Tool/skill bernama AI Software Architect tidak ditemukan dalam katalog sesi | Fallback review teknis standar berdasarkan dokumen; tidak mengaku plugin architect dijalankan. Skill lokal improve-codebase-architecture diperiksa: fokus refactor scaffold, tidak sesuai tugas audit ini |
 
@@ -1084,7 +1084,7 @@ Dibandingkan checkpoint akhir Phase 2 `7bdcc86`: 35 file implementasi/test/track
 
 ## J. Next Action
 
-**Current 6 November: Phase9 1/4 COMPLETED (AP–AS).** Roadmap54/70; bukti kode terakhir156/507 lulus (AR), closure P9-02 tetap BLOCKED. Key HMAC pertama sudah dibuat dengan izin pengguna; dry-run ready dan slot belum dipakai. Belum ada izin send atau pesan nyata; mailer log tetap. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan di bawah adalah histori.
+**Current 6 November: Phase9 1/4 COMPLETED (AP–AT).** Roadmap54/70; bukti kode terakhir156/507 lulus (AR), closure P9-02 tetap BLOCKED. Tepat satu probe WA yang disetujui sudah dicoba, hasil unknown tanpa ID provider; slot terpakai, tidak diulang. Penerimaan menunggu pengguna/review; email masih log. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan di bawah adalah histori.
 
 **Update: P6-01 terverifikasi selesai (AB). Next P6-02 Approve/store cancel+release+gross obligation.**
 
@@ -2314,3 +2314,17 @@ Verifikasi aktual `php artisan notifications:internal-probe` **exit0**, hanya dr
 File aktual berubah: `.env` lokal privat dan `IMPLEMENTATION-PROGRESS.md` saja; hanya tracker yang boleh dikomit. Ketiga perubahan checkout pihak lain dipertahankan tanpa staging. Pertanyaan persetujuan terpisah sudah diajukan untuk **tepat satu WhatsApp** ke FONNTE_TEST_TARGET dengan pesan tetap TBLOOM-NOTIFY-P9-02-01, tanpa email dan tanpa retry jika timeout/unknown. Jawaban send masih menunggu; elapsed time bukan persetujuan.
 
 **Prasyarat key lokal RESOLVED; P9-02 keseluruhan tetap PARTIAL/BLOCKED pada G-NOTIFY live.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: tunggu persetujuan eksplisit send, jalankan satu probe hanya bila diizinkan, verifikasi penerimaan, lalu selesaikan kebutuhan email nyata saat pengguna siap. Mailer log tetap bukan bukti email aktual. P9-03/04 dan Phase10 tidak dimulai. Tidak ada pesan nyata, transaksi Sandbox/transfer/deployment, dependency change atau subagent.
+
+## AT. P9-02d — satu percobaan WhatsApp disetujui, hasil unknown, 6 November 2026
+
+Pengguna secara eksplisit mengizinkan tepat satu pesan WhatsApp uji ke FONNTE_TEST_TARGET lokal, dengan pesan tetap TBLOOM-NOTIFY-P9-02-01; tanpa email dan tanpa retry jika timeout/unknown. Sebelum eksekusi, repository diverifikasi tetap `codex/phase9-internal-probe`/`c7a7eef`, tiga perubahan checkout pihak lain tetap utuh. Dry-run exit0 menunjukkan configuration ready yes dan slot reserved no.
+
+**Tepat satu pemanggilan aktual `php artisan notifications:internal-probe --send-approved` dijalankan**, exit1, output `Provider result: unknown; delivery is not verified.` Tidak menjalankan command send lagi, menghapus/reset slot, membuat reference pengganti, atau mencoba transport alternatif. Hasil ini tidak membuktikan provider menerima pesan, pesan sampai, atau kegagalan pasti; tidak mengklaim timeout karena detail penyebab tidak tersedia. Tidak ada perubahan source spekulatif atau pelonggaran validasi respons.
+
+Verifikasi setelah upaya hanya dry-run/read-only: configuration ready yes, slot reserved **yes**. Manifest privat `storage/app/private_uploads/notification-probes/p9-02-whatsapp-01.json` terbaca dengan result **unknown**, provider message ID **tidak tercatat**. File terkonfirmasi ignored oleh Git. Nilai token, nomor, key, HMAC, dan body respons provider tidak dicetak; tidak membaca atau mengunggah isi mentah manifest. Ini satu slot percobaan yang sudah dikonsumsi, bukan izin tersisa untuk mengulang. Tidak melakukan status API call tanpa reference yang terverifikasi.
+
+Pertanyaan penerimaan kepada pengguna sudah diajukan: apakah pesan dengan referensi TBLOOM-NOTIFY-P9-02-01 diterima di nomor uji. Jawaban masih menunggu; jangan menandai delivery lulus berdasarkan dugaan atau waktu tunggu. Email tidak dikirim dan mailer log dipertahankan. Tidak ada transaksi Sandbox, bank transfer, development/production DB DML, deployment atau subagent.
+
+File aktual berubah: manifest privat yang ignored dan `IMPLEMENTATION-PROGRESS.md`; .env/source tidak berubah. Hanya tracker boleh dikomit. Tidak mengulang automated tests/Pint karena tidak ada perubahan PHP; bukti terakhir tetap156passed/507assertions (AR), bukan run baru. Review diff tracker/diffcheck dilakukan; perubahan checkout pihak lain tetap di luar staging.
+
+**P9-02 tetap PARTIAL/BLOCKED pada G-NOTIFY.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: konfirmasi penerimaan/review manual atas percobaan yang sama, tanpa resend; kemudian siapkan/verifikasi email aktual ketika provider/target tersedia dan diizinkan. P9-03/04 serta Phase10 belum dimulai. Kewajiban uji aktual lulus sebelum fase selesai tetap berlaku dan belum dipenuhi oleh outcome unknown ini.
