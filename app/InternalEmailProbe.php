@@ -6,6 +6,7 @@ use Illuminate\Mail\SentMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use Throwable;
@@ -23,9 +24,10 @@ class InternalEmailProbe
     public function __construct(private NotificationRecipientIdentity $identities) {}
 
     /** @return array{reference: string, subject: string, message: string, email_ready: bool, slot_reserved: bool} */
-    public function preview(): array
+    public function preview(int $slot = 1): array
     {
         $this->guard();
+        $details = $this->slot($slot);
         $configuration = config('mail.mailers.gmail_probe', []);
         $username = $configuration['username'] ?? null;
         $recipient = config('notifications.test_email');
@@ -49,28 +51,30 @@ class InternalEmailProbe
             }
         }
 
-        return ['reference' => self::REFERENCE, 'subject' => self::SUBJECT, 'message' => self::MESSAGE,
-            'email_ready' => (bool) $ready, 'slot_reserved' => Storage::disk('private_uploads')->exists(self::PATH)];
+        return ['reference' => $details['reference'], 'subject' => self::SUBJECT, 'message' => $details['message'],
+            'email_ready' => (bool) $ready, 'slot_reserved' => Storage::disk('private_uploads')->exists($details['path'])];
     }
 
     /** @return array{reference: string, result: string} */
-    public function send(bool $approved): array
+    public function send(bool $approved, int $slot = 1): array
     {
-        $preview = $this->preview();
+        $preview = $this->preview($slot);
+        $details = $this->slot($slot);
         if (! $approved || ! $preview['email_ready'] || $preview['slot_reserved']
+            || ($slot === 2 && ! Storage::disk('private_uploads')->exists(self::PATH))
             || (app()->environment('testing') && ! Mail::isFake())) {
             throw new LogicException('Email probe requires explicit approval, secure local configuration, an unused slot and fake mail in tests.');
         }
         $recipient = CanonicalContact::email(config('notifications.test_email'));
         $disk = Storage::disk('private_uploads');
-        $disk->makeDirectory(dirname(self::PATH));
-        $reservation = @fopen($disk->path(self::PATH), 'x');
+        $disk->makeDirectory(dirname($details['path']));
+        $reservation = @fopen($disk->path($details['path']), 'x');
         if ($reservation === false) {
             throw new LogicException('Email probe slot is reserved or unavailable; never create a replacement.');
         }
-        $record = ['reference' => self::REFERENCE, 'result' => 'unknown',
+        $record = ['reference' => $details['reference'], 'result' => 'unknown',
             'recipient_key' => $this->identities->key(NotificationChannel::Email, $recipient),
-            'message_sha256' => hash('sha256', self::MESSAGE), 'attempted_at_utc' => now('UTC')->toIso8601String(),
+            'message_sha256' => hash('sha256', $details['message']), 'attempted_at_utc' => now('UTC')->toIso8601String(),
             'provider_message_id' => null];
         try {
             $json = json_encode($record, JSON_THROW_ON_ERROR);
@@ -82,7 +86,7 @@ class InternalEmailProbe
         }
 
         try {
-            $message = (new OperationalNotificationMail(self::MESSAGE))->subject(self::SUBJECT)->from($recipient, 'TBloom Cake (uji internal)');
+            $message = (new OperationalNotificationMail($details['message']))->subject(self::SUBJECT)->from($recipient, 'TBloom Cake (uji internal)');
             $sent = Mail::mailer('gmail_probe')->to($recipient)->send($message);
             if ($sent instanceof SentMessage && preg_match('/\A[\x21-\x7e]{1,128}\z/D', $sent->getMessageId())) {
                 $record['result'] = 'sent';
@@ -91,11 +95,22 @@ class InternalEmailProbe
         } catch (Throwable) {
             $record['result'] = 'unknown';
         }
-        if (! $disk->put(self::PATH, json_encode($record, JSON_THROW_ON_ERROR))) {
+        if (! $disk->put($details['path'], json_encode($record, JSON_THROW_ON_ERROR))) {
             throw new RuntimeException('Email probe acknowledgement is uncertain; inspect the reserved slot and never resend.');
         }
 
-        return ['reference' => self::REFERENCE, 'result' => $record['result']];
+        return ['reference' => $details['reference'], 'result' => $record['result']];
+    }
+
+    /** @return array{reference: string, path: string, message: string} */
+    private function slot(int $slot): array
+    {
+        return match ($slot) {
+            1 => ['reference' => self::REFERENCE, 'path' => self::PATH, 'message' => self::MESSAGE],
+            2 => ['reference' => 'TBLOOM-NOTIFY-P9-02-EMAIL-02', 'path' => 'notification-probes/p9-02-email-02.json',
+                'message' => 'TBloom Cake — Uji email internal TBLOOM-NOTIFY-P9-02-EMAIL-02. Ini pesan pengujian, bukan pesanan atau tagihan.'],
+            default => throw new InvalidArgumentException('Only internal email slots 1 and 2 are available.'),
+        };
     }
 
     private function guard(): void

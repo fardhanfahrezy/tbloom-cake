@@ -14,16 +14,22 @@ use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-Artisan::command('notifications:email-probe {--send-approved : Send one self-addressed Gmail probe only after explicit approval}', function (InternalEmailProbe $probe): int {
+Artisan::command('notifications:email-probe {--slot=1 : Explicitly select test slot 1 or 2; never an automatic retry} {--send-approved : Send one self-addressed Gmail probe only after separate explicit approval for this slot}', function (InternalEmailProbe $probe): int {
+    $slot = $this->option('slot');
+    if (! is_string($slot) || ! in_array($slot, ['1', '2'], true)) {
+        $this->error('Email test slot must be 1 or 2.');
+
+        return 1;
+    }
     try {
         if ($this->option('send-approved')) {
-            $result = $probe->send(true);
+            $result = $probe->send(true, (int) $slot);
             $this->line('Reference: '.$result['reference']);
             $this->line('Provider result: '.$result['result'].'; delivery is not verified.');
 
             return $result['result'] === 'sent' ? 0 : 1;
         }
-        $preview = $probe->preview();
+        $preview = $probe->preview((int) $slot);
         $this->line('Mode: dry-run; no email sent.');
         $this->line('Reference: '.$preview['reference']);
         $this->line('Subject: '.$preview['subject']);

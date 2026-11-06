@@ -180,3 +180,53 @@ test('automated testing clears local Gmail credentials and recipient before appl
     Mail::assertNothingOutgoing();
     Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-01.json');
 });
+
+test('a separately approved second email test has its own reference and never changes the first unknown slot', function () {
+    Storage::fake('private_uploads');
+    Mail::fake();
+    $firstRecord = '{"reference":"TBLOOM-NOTIFY-P9-02-EMAIL-01","result":"unknown"}';
+    Storage::disk('private_uploads')->put('notification-probes/p9-02-email-01.json', $firstRecord);
+    $probe = app(InternalEmailProbe::class);
+
+    expect($probe->preview(2)['reference'])->toBe('TBLOOM-NOTIFY-P9-02-EMAIL-02');
+    expect($probe->preview(2)['message'])->toContain('TBLOOM-NOTIFY-P9-02-EMAIL-02');
+    expect($probe->send(true, 2))->toBe(['reference' => 'TBLOOM-NOTIFY-P9-02-EMAIL-02', 'result' => 'unknown']);
+    expect(fn () => $probe->send(true, 2))->toThrow(LogicException::class);
+    expect(Storage::disk('private_uploads')->get('notification-probes/p9-02-email-01.json'))->toBe($firstRecord);
+    Storage::disk('private_uploads')->assertExists('notification-probes/p9-02-email-02.json');
+    Mail::assertSent(OperationalNotificationMail::class, fn ($mail) => str_contains($mail->bodyText, 'TBLOOM-NOTIFY-P9-02-EMAIL-02'));
+    Mail::assertSentCount(1);
+});
+
+test('a second email slot requires both explicit approval and the preserved first slot', function () {
+    Storage::fake('private_uploads');
+    Mail::fake();
+
+    expect(fn () => app(InternalEmailProbe::class)->send(false, 2))->toThrow(LogicException::class);
+    expect(fn () => app(InternalEmailProbe::class)->send(true, 2))->toThrow(LogicException::class);
+    Mail::assertNothingOutgoing();
+    Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-02.json');
+});
+
+test('email test slots are bounded and a third or malformed slot is refused without IO', function () {
+    Storage::fake('private_uploads');
+    Mail::fake();
+
+    expect(fn () => app(InternalEmailProbe::class)->preview(3))->toThrow(InvalidArgumentException::class);
+    $this->artisan('notifications:email-probe', ['--slot' => '3'])->assertFailed();
+    $this->artisan('notifications:email-probe', ['--slot' => '2extra'])->assertFailed();
+    Mail::assertNothingOutgoing();
+});
+
+test('previewing the second email does not consume either slot or send a message', function () {
+    Storage::fake('private_uploads');
+    Mail::fake();
+
+    $this->artisan('notifications:email-probe', ['--slot' => '2'])
+        ->expectsOutput('Mode: dry-run; no email sent.')
+        ->expectsOutput('Reference: TBLOOM-NOTIFY-P9-02-EMAIL-02')
+        ->expectsOutput('Approval slot reserved: no')->assertSuccessful();
+    Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-01.json');
+    Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-02.json');
+    Mail::assertNothingOutgoing();
+});
