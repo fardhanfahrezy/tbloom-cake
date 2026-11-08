@@ -95,6 +95,7 @@ class PaymentNotices
                 'entity_type' => 'order', 'entity_id' => $order->id,
                 'payload_minimal' => ['order_number' => $order->order_number, 'status' => $order->status->value, 'reason' => $reason?->value],
                 'status' => 'pending'])->save();
+            NotificationOutbox::enqueue($delivery);
         }
     }
 }

@@ -153,6 +153,7 @@ class CancellationRequests
                 $delivery->forceFill(['event_key' => $eventKey, 'template_key' => $recipient['template'], 'recipient_key' => $keys[0],
                     'recipient_ciphertext' => ['channel' => $channel->value, 'address' => $address], 'entity_type' => 'order_request', 'entity_id' => $request->id,
                     'payload_minimal' => ['order_number' => $order->order_number, 'request_id' => $request->id, 'status' => $request->status->value], 'status' => 'pending'])->save();
+                NotificationOutbox::enqueue($delivery);
             }
         }
     }

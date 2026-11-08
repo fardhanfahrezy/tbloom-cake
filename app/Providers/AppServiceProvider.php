@@ -6,10 +6,12 @@ use App\CanonicalContact;
 use App\DisabledNotificationTransport;
 use App\Models\User;
 use App\NotificationTransport;
+use App\PreparedNotificationTransport;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,7 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(NotificationTransport::class, DisabledNotificationTransport::class);
+        $this->app->bind(NotificationTransport::class, fn ($app): NotificationTransport => config('notifications.enabled') === true
+            ? $app->make(PreparedNotificationTransport::class)
+            : $app->make(DisabledNotificationTransport::class));
     }
 
     /**
@@ -27,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         RateLimiter::for('registration', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
         ResetPassword::createUrlUsing(fn (User $user, string $token): string => rtrim(config('app.url'), '/').route('password.reset', ['token' => $token, 'email' => $user->email], false));
         RateLimiter::for('password-recovery', function (Request $request): array {

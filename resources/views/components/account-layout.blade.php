@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title }} | TBloom Cake</title>
     <link rel="icon" href="{{ asset('favicon.PNG') }}" type="image/png">
+    @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-brand-pink font-sans text-brand-dark antialiased dark:bg-brand-dark dark:text-stone-100">
@@ -19,6 +20,9 @@
                 <a href="{{ route('catalog.index') }}" class="underline underline-offset-4">Katalog</a>
                 <a href="{{ route('pickup.show') }}" class="underline underline-offset-4">Pengambilan</a>
                 @auth
+                    @if (Route::has('account.show'))
+                        <a href="{{ route('account.show') }}" class="underline underline-offset-4">Akun saya</a>
+                    @endif
                     @if (auth()->user()->role === \App\Models\UserRole::Customer && Route::has('custom-requests.create'))
                         <a href="{{ route('custom-requests.create') }}" class="underline underline-offset-4">Custom Cake</a>
                     @endif
@@ -41,7 +45,7 @@
             </div>
         </nav>
     </header>
-    <main id="main-content" class="mx-auto max-w-3xl px-5 py-10 sm:px-8 sm:py-16">
+    <main id="main-content" tabindex="-1" class="mx-auto max-w-3xl px-5 py-10 focus:outline-none sm:px-8 sm:py-16">
         <div class="rounded-2xl border border-brand-beige bg-white p-6 shadow-sm sm:p-10 dark:border-stone-800 dark:bg-brand-brown">
             <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-brand-burgundy dark:text-brand-pink">{{ $eyebrow }}</p>
             <h1 class="text-3xl font-semibold tracking-tight">{{ $title }}</h1>
@@ -51,5 +55,18 @@
             <div class="mt-7">{{ $slot }}</div>
         </div>
     </main>
+    <footer aria-label="Informasi toko" class="border-t border-brand-beige bg-white px-6 py-8 text-xs text-stone-700 dark:border-stone-800 dark:bg-brand-brown dark:text-stone-200">
+        <div class="mx-auto flex max-w-5xl flex-wrap items-start justify-between gap-4">
+            <div>
+                <p class="font-semibold text-brand-dark dark:text-stone-100">TBloom Cake</p>
+                <p class="mt-1">{{ config('store.pickup_address') }}</p>
+                <p class="mt-1">Kontak resmi: <a href="tel:{{ config('store.contact_international') }}" class="underline underline-offset-4">{{ config('store.contact_display') }}</a></p>
+            </div>
+            <div>
+                <p>Produksi 09.00–17.00 WIB · Penyerahan 09.00–21.00 WIB · Pemesanan online 24 jam</p>
+                <p class="mt-1"><a href="{{ route('pickup.show').'#policies' }}" class="underline underline-offset-4">Kebijakan pembayaran, pembatalan, refund, perubahan, &amp; kurir</a></p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

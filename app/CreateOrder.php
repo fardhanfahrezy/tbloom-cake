@@ -131,6 +131,7 @@ class CreateOrder
                 'recipient_ciphertext' => ['channel' => $channel->value, 'address' => $address], 'template_key' => $template,
                 'entity_type' => 'order', 'entity_id' => $order->id, 'payload_minimal' => ['order_number' => $order->order_number, 'status' => 'pending'],
                 'status' => 'pending', 'created_at' => $timestamp, 'updated_at' => $timestamp])->save();
+            NotificationOutbox::enqueue($delivery);
         }
     }
 }

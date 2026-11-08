@@ -37,6 +37,7 @@ class CustomRequestEvents
                     'entity_type' => 'custom_request', 'entity_id' => $custom->id,
                     'payload_minimal' => ['request_number' => $custom->request_number, 'status' => $custom->status->value],
                     'status' => 'pending'])->save();
+                NotificationOutbox::enqueue($delivery);
             }
         }
     }

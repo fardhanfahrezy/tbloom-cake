@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
+use Pdo\Mysql;
 
 return [
 
@@ -57,13 +58,13 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
-            'engine' => null,
+            'engine' => 'InnoDB',
             'timezone' => '+00:00',
             'isolation_level' => 'READ COMMITTED',
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 (PHP_VERSION_ID >= 80500
-                    ? \Pdo\Mysql::ATTR_SSL_CA
-                    : \PDO::MYSQL_ATTR_SSL_CA
+                    ? Mysql::ATTR_SSL_CA
+                    : PDO::MYSQL_ATTR_SSL_CA
                 ) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
@@ -102,8 +103,8 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 (PHP_VERSION_ID >= 80500
-                    ? \Pdo\Mysql::ATTR_SSL_CA
-                    : \PDO::MYSQL_ATTR_SSL_CA
+                    ? Mysql::ATTR_SSL_CA
+                    : PDO::MYSQL_ATTR_SSL_CA
                 ) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],

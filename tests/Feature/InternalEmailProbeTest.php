@@ -59,7 +59,7 @@ test('the email probe subject survives actual mailable rendering', function () {
     $mail->assertFrom('probe.owner@gmail.com');
 });
 
-test('email probe rejects incomplete credentials another recipient and unsafe TLS configuration', function ($overrides) {
+test('email probe rejects incomplete credentials non Gmail addresses and unsafe TLS configuration', function ($overrides) {
     Storage::fake('private_uploads');
     Mail::fake();
     config($overrides);
@@ -73,8 +73,8 @@ test('email probe rejects incomplete credentials another recipient and unsafe TL
     'missing password' => [['mail.mailers.gmail_probe.password' => null]],
     'password whitespace' => [['mail.mailers.gmail_probe.password' => 'abcd efgh ijkl mnop']],
     'missing recipient' => [['notifications.test_email' => null]],
-    'different recipient' => [['notifications.test_email' => 'another.owner@gmail.com']],
-    'non Gmail account' => [['notifications.test_email' => 'owner@example.test', 'mail.mailers.gmail_probe.username' => 'owner@example.test']],
+    'non Gmail sender' => [['mail.mailers.gmail_probe.username' => 'owner@example.test']],
+    'non Gmail recipient' => [['notifications.test_email' => 'owner@example.test']],
     'TLS optional' => [['mail.mailers.gmail_probe.require_tls' => false]],
     'disabled verification' => [['mail.mailers.gmail_probe.verify_peer' => false]],
     'redirected server' => [['mail.mailers.gmail_probe.host' => 'mail.example.test']],
@@ -208,17 +208,52 @@ test('a second email slot requires both explicit approval and the preserved firs
     Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-02.json');
 });
 
-test('email test slots are bounded and a third or malformed slot is refused without IO', function () {
+test('a separately approved third email test supports a second Gmail recipient and preserves prior slots', function () {
+    Storage::fake('private_uploads');
+    Mail::fake();
+    config(['notifications.test_email' => 'another.owner@gmail.com']);
+    $firstRecord = '{"reference":"TBLOOM-NOTIFY-P9-02-EMAIL-01","result":"unknown"}';
+    $secondRecord = '{"reference":"TBLOOM-NOTIFY-P9-02-EMAIL-02","result":"sent"}';
+    Storage::disk('private_uploads')->put('notification-probes/p9-02-email-01.json', $firstRecord);
+    Storage::disk('private_uploads')->put('notification-probes/p9-02-email-02.json', $secondRecord);
+    $probe = app(InternalEmailProbe::class);
+
+    expect($probe->preview(3)['email_ready'])->toBeTrue();
+    expect($probe->preview(3)['reference'])->toBe('TBLOOM-NOTIFY-P9-02-EMAIL-03');
+    expect($probe->preview(3)['message'])->toContain('TBLOOM-NOTIFY-P9-02-EMAIL-03');
+    expect($probe->send(true, 3))->toBe(['reference' => 'TBLOOM-NOTIFY-P9-02-EMAIL-03', 'result' => 'unknown']);
+    expect(fn () => $probe->send(true, 3))->toThrow(LogicException::class);
+    expect(Storage::disk('private_uploads')->get('notification-probes/p9-02-email-01.json'))->toBe($firstRecord);
+    expect(Storage::disk('private_uploads')->get('notification-probes/p9-02-email-02.json'))->toBe($secondRecord);
+    Storage::disk('private_uploads')->assertExists('notification-probes/p9-02-email-03.json');
+    Mail::assertSent(OperationalNotificationMail::class, fn ($mail) => $mail->hasFrom('probe.owner@gmail.com')
+        && $mail->hasTo('another.owner@gmail.com')
+        && str_contains($mail->bodyText, 'TBLOOM-NOTIFY-P9-02-EMAIL-03'));
+    Mail::assertSentCount(1);
+});
+
+test('a third email slot requires explicit approval and both preserved prior slots', function () {
+    Storage::fake('private_uploads');
+    Mail::fake();
+    Storage::disk('private_uploads')->put('notification-probes/p9-02-email-01.json', '{"reference":"TBLOOM-NOTIFY-P9-02-EMAIL-01","result":"unknown"}');
+
+    expect(fn () => app(InternalEmailProbe::class)->send(false, 3))->toThrow(LogicException::class, 'Email probe requires explicit approval');
+    expect(fn () => app(InternalEmailProbe::class)->send(true, 3))->toThrow(LogicException::class, 'Email probe requires explicit approval');
+    Mail::assertNothingOutgoing();
+    Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-03.json');
+});
+
+test('email test slots are bounded and a fourth or malformed slot is refused without IO', function () {
     Storage::fake('private_uploads');
     Mail::fake();
 
-    expect(fn () => app(InternalEmailProbe::class)->preview(3))->toThrow(InvalidArgumentException::class);
-    $this->artisan('notifications:email-probe', ['--slot' => '3'])->assertFailed();
+    expect(fn () => app(InternalEmailProbe::class)->preview(4))->toThrow(InvalidArgumentException::class);
+    $this->artisan('notifications:email-probe', ['--slot' => '4'])->assertFailed();
     $this->artisan('notifications:email-probe', ['--slot' => '2extra'])->assertFailed();
     Mail::assertNothingOutgoing();
 });
 
-test('previewing the second email does not consume either slot or send a message', function () {
+test('previewing the second or third email does not consume any slot or send a message', function () {
     Storage::fake('private_uploads');
     Mail::fake();
 
@@ -226,7 +261,12 @@ test('previewing the second email does not consume either slot or send a message
         ->expectsOutput('Mode: dry-run; no email sent.')
         ->expectsOutput('Reference: TBLOOM-NOTIFY-P9-02-EMAIL-02')
         ->expectsOutput('Approval slot reserved: no')->assertSuccessful();
+    $this->artisan('notifications:email-probe', ['--slot' => '3'])
+        ->expectsOutput('Mode: dry-run; no email sent.')
+        ->expectsOutput('Reference: TBLOOM-NOTIFY-P9-02-EMAIL-03')
+        ->expectsOutput('Approval slot reserved: no')->assertSuccessful();
     Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-01.json');
     Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-02.json');
+    Storage::disk('private_uploads')->assertMissing('notification-probes/p9-02-email-03.json');
     Mail::assertNothingOutgoing();
 });

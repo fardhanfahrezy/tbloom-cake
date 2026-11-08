@@ -41,7 +41,8 @@ class InternalEmailProbe
             && is_numeric($configuration['timeout'] ?? null) && $configuration['timeout'] >= 1 && $configuration['timeout'] <= 30
             && filter_var($username, FILTER_VALIDATE_EMAIL) && strlen($username) <= 254
             && (str_ends_with($username, '@gmail.com') || str_ends_with($username, '@googlemail.com'))
-            && $username === $recipient
+            && filter_var($recipient, FILTER_VALIDATE_EMAIL) && strlen($recipient) <= 254
+            && (str_ends_with($recipient, '@gmail.com') || str_ends_with($recipient, '@googlemail.com'))
             && is_string($password) && preg_match('/\A[\x21-\x7e]{16}\z/D', $password) === 1;
         if ($ready) {
             try {
@@ -60,13 +61,15 @@ class InternalEmailProbe
     {
         $preview = $this->preview($slot);
         $details = $this->slot($slot);
+        $disk = Storage::disk('private_uploads');
         if (! $approved || ! $preview['email_ready'] || $preview['slot_reserved']
-            || ($slot === 2 && ! Storage::disk('private_uploads')->exists(self::PATH))
+            || ($slot === 2 && ! $disk->exists(self::PATH))
+            || ($slot === 3 && (! $disk->exists(self::PATH) || ! $disk->exists('notification-probes/p9-02-email-02.json')))
             || (app()->environment('testing') && ! Mail::isFake())) {
             throw new LogicException('Email probe requires explicit approval, secure local configuration, an unused slot and fake mail in tests.');
         }
-        $recipient = CanonicalContact::email(config('notifications.test_email'));
-        $disk = Storage::disk('private_uploads');
+        $sender = CanonicalContact::email((string) config('mail.mailers.gmail_probe.username'));
+        $recipient = CanonicalContact::email((string) config('notifications.test_email'));
         $disk->makeDirectory(dirname($details['path']));
         $reservation = @fopen($disk->path($details['path']), 'x');
         if ($reservation === false) {
@@ -86,7 +89,7 @@ class InternalEmailProbe
         }
 
         try {
-            $message = (new OperationalNotificationMail($details['message']))->subject(self::SUBJECT)->from($recipient, 'TBloom Cake (uji internal)');
+            $message = (new OperationalNotificationMail($details['message']))->subject(self::SUBJECT)->from($sender, 'TBloom Cake (uji internal)');
             $sent = Mail::mailer('gmail_probe')->to($recipient)->send($message);
             if ($sent instanceof SentMessage && preg_match('/\A[\x21-\x7e]{1,128}\z/D', $sent->getMessageId())) {
                 $record['result'] = 'sent';
@@ -109,7 +112,9 @@ class InternalEmailProbe
             1 => ['reference' => self::REFERENCE, 'path' => self::PATH, 'message' => self::MESSAGE],
             2 => ['reference' => 'TBLOOM-NOTIFY-P9-02-EMAIL-02', 'path' => 'notification-probes/p9-02-email-02.json',
                 'message' => 'TBloom Cake — Uji email internal TBLOOM-NOTIFY-P9-02-EMAIL-02. Ini pesan pengujian, bukan pesanan atau tagihan.'],
-            default => throw new InvalidArgumentException('Only internal email slots 1 and 2 are available.'),
+            3 => ['reference' => 'TBLOOM-NOTIFY-P9-02-EMAIL-03', 'path' => 'notification-probes/p9-02-email-03.json',
+                'message' => 'TBloom Cake — Uji email internal TBLOOM-NOTIFY-P9-02-EMAIL-03. Ini pesan pengujian, bukan pesanan atau tagihan.'],
+            default => throw new InvalidArgumentException('Only internal email slots 1, 2 and 3 are available.'),
         };
     }
 
