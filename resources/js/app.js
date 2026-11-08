@@ -108,8 +108,10 @@ if (checkoutForm) {
     checkoutForm.addEventListener('input', updateCheckout);
     checkoutForm.addEventListener('change', updateCheckout);
     checkoutForm.addEventListener('submit', (event) => {
-        event.submitter.disabled = true;
-        event.submitter.textContent = 'Menyimpan pesanan…';
+        if (event.submitter) {
+            event.submitter.disabled = true;
+            event.submitter.textContent = 'Menyimpan pesanan…';
+        }
     });
     window.addEventListener('pageshow', (event) => {
         if (event.persisted) window.location.reload();

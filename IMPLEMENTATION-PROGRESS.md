@@ -1,6 +1,6 @@
 # IMPLEMENTATION PROGRESS — TBloom Cake
 
-> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–AQ: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–AQ outbox dan persiapan adapter notifikasi. Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
+> Audit 23 Oktober 2026: [TESTING-REPORT.md](TESTING-REPORT.md) dan bagian K adalah snapshot historis. Sesi lanjutan dicatat di L–BJ: O–AA pembayaran, AB–AH cancellation/refund, AI–AK custom, AL–AO prasyarat konten dan pickup/handover, AP–BD outbox, adapter, probe SMTP, penutupan G-NOTIFY/P9-02, P9-03, serta P9-04 (Phase 9 4/4 COMPLETED), BE–BH untuk Phase 10 Public Pages & Operational Dashboard (P10-01–P10-04, Phase 10 4/4 COMPLETED), BI untuk Phase 11 Security, Integration & Quality Assurance (P11-01–P11-05, Phase 11 5/5 COMPLETED), serta BJ untuk Phase 12 Deployment Readiness (P12-01–P12-03 COMPLETED; P12-04 handoff readiness selesai & eksekusi live deploy menunggu G-DEPLOY/G-PLATFORM). Hasil aktual terbaru menggantikan status temuan lama tanpa mengubah bukti audit historis.
 
 ## A. Project Overview
 
@@ -8,16 +8,16 @@
 |---|---|
 | Proyek | TBloom Cake |
 | Baseline | PRD v2.1 / R1, finalisasi 19 Oktober 2026 |
-| Diperbarui | 5 November 2026, Asia/Bangkok (UTC+07:00) |
-| Status keseluruhan | Phase9 1/4 COMPLETED; roadmap54/70. Persiapan P9-02 + regresi final147passed/460assertions (AQ); closure P9-02 BLOCKED pada G-NOTIFY live, pengiriman aktual wajib sebelum fase selesai |
-| Fase aktif | Phase9 — Notifications & Background Processing, diotorisasi instruksi lanjut 5 November; berhenti sebelum Phase10 |
-| Task aktif | P9-02 persiapan adapter/template dengan fake diotorisasi pengguna (AQ); closure tetap BLOCKED pada G-NOTIFY live. Token/target Fonnte tersedia lokal, mailer log dipertahankan; P9-01 COMPLETED |
-| Milestone berikutnya | Selesaikan G-NOTIFY → implementasi/verifikasi P9-02 → P9-03/04 → approval Phase10; tidak menutup fase berdasarkan fake saja |
+| Diperbarui | 7 November 2026, Asia/Bangkok (UTC+07:00) |
+| Status keseluruhan | Phase12 3/4 COMPLETED (P12-01–P12-03 selesai; P12-04 handoff siap, live deploy tertahan G-DEPLOY/G-PLATFORM); roadmap69/70 selesai (BJ) |
+| Fase aktif | Phase12 — Deployment Readiness (P12-01–P12-03 COMPLETED; P12-04 BLOCKED pada G-DEPLOY/G-PLATFORM) |
+| Task aktif | P12-04 — menunggu keputusan eksplisit Owner atas platform target (Laravel Cloud vs Railway) dan izin deployment produksi |
+| Milestone berikutnya | Persetujuan eksplisit G-PLATFORM & G-DEPLOY dari Owner untuk eksekusi deployment P12-04 |
 | Target stack | Laravel 13 / PHP 8.4 / MySQL InnoDB / Blade + Tailwind 4 / Midtrans Snap / Fonnte + email / database queue / Pest |
 | Repository saat audit | Branch main; HEAD 95fab79959ea4d9fb8077140bd2f2d0b95a61a5e; origin fardhanfahrezy/tbloom-cake |
-| Repository sesi lanjutan | codex/phase1-database-foundation; checkpoint source473c6e9 setelah otorisasi push pengguna25Oktober; rincian commit/verifikasi remote di U. Konfigurasi lokal dipertahankan |
+| Repository sesi lanjutan | 6November: awal fix/checkout-submit-guard/12201e8, kemudian branch fitur codex/phase9-internal-probe untuk checkpoint0729a14 yang sudah dipush. origin/codex/phase1-database-foundation tetap12201e8 (implementasi f364248 + upgrade). Tiga perubahan checkout lokal pihak lain tetap utuh dan tidak masuk commit probe (AR) |
 | Checkpoint source akhir Phase 1 | Branch lokal codex/phase1-database-foundation; checkpoint fbabe6a (ledger), 352a725 (private storage), 9a80568/d9892ae (custom), 7ca58c1/0a7699e/7b8a09e (identity/audit/outbox), diikuti checkpoint P1-14; tidak ada merge/push/PR |
-| Batas eksekusi | Approval terbaru Opsi B membatasi tepat2transaksi Sandbox: A400000IDR danB500000IDR; kedua slot sudah dipakai. GET ulang dua reference yang sama diizinkan; tidak membuat transaksi tambahan. PembayaranA manual oleh pengguna; B tidak dibayar. C/D hanyafake/mock. Tanpa dashboardchange, databaseproduksi/developmentwrite, realfunds/card/OTP/keyexposure, commit/push/deploy |
+| Batas eksekusi | Approval Opsi B membatasi tepat2transaksi Sandbox: A400000IDR danB500000IDR; kedua slot sudah dipakai. GET ulang dua reference sama diizinkan; tidak membuat transaksi tambahan. Tanpa dashboardchange, databaseproduksi/developmentwrite, realfunds/card/OTP/keyexposure/deploy. Permintaan push pengguna5November mengotorisasi commit/push, tidak mengotorisasi pesan nyata. GitHub sudah memuat checkpoint12201e8 (AR); perubahan checkout pihak lain tidak boleh tercampur |
 
 Sumber yang sudah dibaca seluruhnya: PRD-TBloom-Cake-v2.1.md, Architecture-Document.md, Database-Schema.md, Laravel-Structure-Document.md, Acceptance-Criteria.md, Test-Cases.md, Traceability-Matrix.md. Dokumen sumber tetap merupakan spesifikasi, bukan bukti implementasi. Instruksi master prompt lampiran dan AGENTS.md berlaku. `.ai/rules` tidak ditemukan pada audit ini.
 
@@ -66,11 +66,11 @@ Jumlah dihitung dari task ID pada bagian C. COMPLETED untuk Phase 0 berarti deli
 | 6 — Cancellation & refund | 7 | 7 | 0 | 0 | 0 |
 | 7 — Custom requests | 3 | 3 | 0 | 0 | 0 |
 | 8 — Handover | 3 | 3 | 0 | 0 | 0 |
-| 9 — Notifications & background | 4 | 1 | 0 | 1 | 2 |
-| 10 — Public & dashboards | 4 | 0 | 0 | 0 | 4 |
-| 11 — Security & QA | 5 | 0 | 0 | 0 | 5 |
-| 12 — Deployment readiness | 4 | 0 | 0 | 0 | 4 |
-| **Total** | **70** | **54** | **0** | **1** | **15** |
+| 9 — Notifications & background | 4 | 4 | 0 | 0 | 0 |
+| 10 — Public & dashboards | 4 | 4 | 0 | 0 | 0 |
+| 11 — Security & QA | 5 | 5 | 0 | 0 | 0 |
+| 12 — Deployment readiness | 4 | 3 | 0 | 1 | 0 |
+| **Total** | **70** | **69** | **0** | **1** | **0** |
 
 Progres audit/roadmap: Phase0 5/5; Phase1 14/14 completed. Final MySQL: 840 passed, 2 live skipped, 2215 assertions; default: 90 passed, 752 skipped, 210 assertions. Tidak ada task fondasi yang masih berjalan atau blocked. Phase2 5/5 selesai: final MySQL962passed/2832assert+2live skipped (964total,duration_ms569227); default90passed/210assert+874skipped,duration_ms52285. Phase3 4/4 selesai: final MySQL1054passed/3349assert+2live skipped (1056total,duration_ms772139); default90passed/210assert+966skipped,duration_ms69053. Tidak seluruh acceptance bisnis dianggap lulus.
 
@@ -189,37 +189,37 @@ P1-09 dipecah sebelum implementasi agar satu child selesai/diuji sebelum child b
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies / gate | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
 | [x] P9-01 | Outbox scanner/fencing/enqueue recovery; BR-21 | R1-AC18; T-23, DBT-13 pada scope orchestration | Phase8/P1-11 selesai; G-RETRY teknis AP | 11file kode/test + tracker, daftar aktual AP | COMPLETED: final75passed/215assertions/exit0 setelah Pint; expired pre-send reclaim, stale-token fencing, unknown tanpa auto-resend, enqueue failure recovery teruji. Adapters/live/scheduler tetap task berikutnya |
-| [!] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; pengguna mengotorisasi persiapan fake AQ, G-NOTIFY live tetap terbuka | 12file kode/test + tracker, daftar aktual AQ | PARTIAL/BLOCKED untuk closure: persiapan adapter/21template + regresi final147passed/460assertions/exit0 sesudah Pint. Binding runtime tetap Disabled. Token/target lokal tersedia tanpa dicetak, MAIL_MAILER=log dipertahankan; belum ada izin kirim aktual/bukti perangkat/penerimaan, email nyata belum disiapkan. P9-03/04 belum dimulai |
-| [ ] P9-03 | Scheduler/worker config/reclaim/backoff | R1-AC18/24; T-16/23, DBT-12/13/21 | P9-02, P5-06, G-RETRY | routes/console.php; jobs/commands/tests | NOT RUN; queue timeout/lease/retry_after konsisten; stale worker fenced |
-| [ ] P9-04 | Unknown send/obsolete suppression/recovery | R1-AC18/22/24; DBT-13/21 | P9-03 | dispatcher/templates; focused tests | NOT RUN; no external exactly-once claim; purge nonaktif |
+| [x] P9-02 | Fonnte/email adapters & minimum templates | R1-AC19/22; T-23, DBT-13/14/21 | P9-01 COMPLETED; G-NOTIFY WA (AU) dan EMAIL-03 (BB) diterima pengguna | Adapter/template AQ + probe WA/Gmail AR–BB | COMPLETED, BB: final9file 186passed/685assertions/exit0 setelah Pint; WA uji01 dan Gmail TLS uji03 ke akun penerima kedua pengguna terkonfirmasi diterima. Runtime transport tetap nonaktif sampai P9-03/04 |
+| [x] P9-03 | Scheduler/worker config/reclaim/backoff | R1-AC18/24; T-16/23, DBT-12/13/21 | P9-02, P5-06, G-RETRY | routes/console.php; app/NotificationOutbox.php; app/ProcessNotificationDeliveryJob.php; 6 domain producers; tests/Feature/DispatchNotificationDeliveriesTest.php | COMPLETED, BC: RED10(4passed/2failed/4errors) → GREEN10passed/118assertions/exit0; regresi5file 63passed/410assertions/exit0 setelah Pint; timeout60<retry_after90<lease120 tervalidasi, after-commit producer enqueue & stale worker fencing teruji |
+| [x] P9-04 | Unknown send/obsolete suppression/recovery | R1-AC18/22/24; DBT-13/21 | P9-03 | app/Providers/AppServiceProvider.php; app/PreparedNotificationTransport.php; tests/Feature/PreparedNotificationTransportTest.php | COMPLETED, BD: RED41(38passed/3failed) → GREEN41passed/152assertions/exit0; final9file Phase9 195passed/798assertions/exit0 setelah Pint; obsolete suppression, ownership/active-staff revalidation, container binding & unknown manual review teruji |
 
 ### Phase 10 — Public Pages & Operational Dashboard
 
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies / gate | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
-| [ ] P10-01 | Public profile/pickup/policies & assets; F-008 | F008-AC3; jam/cutoff benar; keyboard/mobile | Phase 9 gate, G-CONTENT | views/components/controller/assets/test | NOT RUN; Figma hanya bila sumber tersedia; UI setiap fitur dasar tetap dibuat di fase fiturnya |
-| [ ] P10-02 | Customer history/status order-payment-refund | F002-AC6, R1-AC19; cross-customer tests, DBT-14 | P10-01, P6-06, P7-03 | controller/policy/views/test | NOT RUN; review tidak meminta bayar ulang |
-| [ ] P10-03 | Admin/Owner operational dashboard; F-010 | F010-AC1–4; T-02/28–31; DBT-14/19 | P10-02, P8-03, P9-04 | controller/query/policy/views/test | NOT RUN; filters/pagination, no revenue chart/mark-paid CRUD |
-| [ ] P10-04 | Testimonials Should Have + responsive/a11y pass | F008-AC1/2; DBT-03; viewport360/keyboard/focus/contrast | P10-03, P1-12, G-CONTENT | controller/request/policy/views/test | NOT RUN; draft tidak bocor; review prioritas tidak memblokir payment |
+| [x] P10-01 | Public profile/pickup/policies & assets; F-008 | F008-AC3; jam/cutoff benar; keyboard/mobile | Phase 9 gate, G-CONTENT | resources/views/welcome.blade.php; resources/views/pickup.blade.php; resources/views/pickup-information.blade.php; resources/views/components/account-layout.blade.php; tests/Feature/PublicInformationPageTest.php | COMPLETED, BE: RED3failed/12assertions → GREEN7passed/73assertions (PublicInformationPageTest + HandoverPageTest), Pint & npm.cmd run build exit0 |
+| [x] P10-02 | Customer history/status order-payment-refund | F002-AC6, R1-AC19; cross-customer tests, DBT-14 | P10-01, P6-06, P7-03 | app/Http/Controllers/AccountController.php; app/Http/Controllers/OrderController.php; resources/views/account.blade.php; resources/views/orders/show.blade.php; tests/Feature/CustomerAccountHistoryTest.php | COMPLETED, BF: RED2failed/4assertions → GREEN10passed/84assertions (CustomerAccountHistoryTest + CheckoutPageTest), Pint & npm.cmd run build exit0 |
+| [x] P10-03 | Admin/Owner operational dashboard; F-010 | F010-AC1–4; T-02/28–31; DBT-14/19 | P10-02, P8-03, P9-04 | app/Http/Controllers/StaffDashboardController.php; routes/web.php; resources/views/staff/dashboard.blade.php; tests/Feature/StaffOperationalDashboardTest.php | COMPLETED, BG: RED(1passed/1failed/1error) → GREEN3passed/30assertions, Pint & npm.cmd run build exit0; filter order, antrean custom/request/refund/integrasi/audit teruji tanpa grafik pendapatan atau mark-paid CRUD |
+| [x] P10-04 | Testimonials Should Have + responsive/a11y pass | F008-AC1/2; DBT-03; viewport360/keyboard/focus/contrast | P10-03, P1-12, G-CONTENT | app/Http/Controllers/TestimonialAdminController.php; app/Http/Requests/SaveTestimonialRequest.php; routes/web.php; resources/views/welcome.blade.php; resources/views/staff/testimonials/index.blade.php; tests/Feature/TestimonialManagementTest.php | COMPLETED, BH: RED2failed/3assertions → GREEN regresi5file Phase10 21passed/152assertions, Pint & npm.cmd run build exit0; publikasi published-only, batas rating 1..5 & konten<=2000, audit log teruji |
 
 ### Phase 11 — Security, Integration & Quality Assurance
 
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies / gate | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
-| [ ] P11-01 | Review traceability seluruh F/BR/K/NFR | Semua baseline AC + R1-AC01–24 dipetakan implementasi/test; DBT-20 | Phase 10 gate | tracker; koreksi source docs hanya jika diminta | NOT RUN; tutup gaps tanpa klaim test fiktif |
-| [ ] P11-02 | Review plugin + Codex Security audit | R1-AC19/20/22/23; DBT-14/15/21; findings tervalidasi | P11-01 | scoped fixes/tests hanya sesudah temuan | NOT RUN; audit keamanan belum dijalankan pada Phase 0 |
-| [ ] P11-03 | MySQL financial/concurrency/recovery suite | DBT-01–21 seluruh applicable; T-03–34; isolation/locks trace | P11-02, G-DB, G-RETRY, G-LEDGER | focused/regression tests | NOT RUN; SQLite tidak jadi pengganti |
-| [ ] P11-04 | Sandbox provider end-to-end | T-11/13–16/32–34, DBT-16; recipients aman | P11-03, G-PAY, G-NOTIFY | integration tests/evidence tracker | NOT RUN; tidak menyentuh production/customer nyata |
-| [ ] P11-05 | Full regression/build/performance/a11y | php artisan test --compact; npm run build; NFR PRD §8.2; DBT-19 | P11-04 | perbaikan scoped + test bila diperlukan | NOT RUN; target non-input belum menjadi SLA final |
+| [x] P11-01 | Review traceability seluruh F/BR/K/NFR | Semua baseline AC + R1-AC01–24 dipetakan implementasi/test; DBT-20 | Phase 10 gate | tests/Feature/TraceabilityAuditTest.php; IMPLEMENTATION-PROGRESS.md | COMPLETED, BI: 3passed/66assertions/exit0; 28tabel & 19model R1, scheduler tanpa auto-purge (K-20/R1-AC23), dan invariant retry/lease (K-18/R1-AC24) teruji |
+| [x] P11-02 | Review plugin + Codex Security audit | R1-AC19/20/22/23; DBT-14/15/21; findings tervalidasi | P11-01 | app/Http/Requests/SaveTestimonialRequest.php; app/Http/Controllers/StaffDashboardController.php; tests/Feature/Phase11SecurityAuditTest.php | COMPLETED, BI: 2 temuan keamanan diperbaiki (allowlist photo_path testimoni & LIKE wildcard escaping di StaffDashboardController); RED(6failed/1error) → GREEN7passed/21assertions/exit0 + redaksi rahasia pada /staff |
+| [x] P11-03 | MySQL financial/concurrency/recovery suite | DBT-01–21 seluruh applicable; T-03–34; isolation/locks trace | P11-02, G-DB, G-RETRY, G-LEDGER | tests/Feature/MySqlFinancialRecoveryExplainTest.php; SchemaIntegrityTest; SchemaRecoveryTest; RecoverTimelyPaymentTest; HandoverConcurrencyTest | COMPLETED, BI: 38passed/557assertions pada suite integrity/recovery/payment/concurrency + 2passed/9assertions pada MySqlFinancialRecoveryExplainTest (total 40passed/566assertions); InnoDB READ COMMITTED + UTC & EXPLAIN index teruji |
+| [x] P11-04 | Sandbox provider end-to-end | T-11/13–16/32–34, DBT-16; recipients aman | P11-03, G-PAY, G-NOTIFY | MidtransSandboxContractTest; MidtransWebhookTest; ProcessPaymentEventTest; CloseUnpaidPaymentTest; PreparedNotificationTransportTest | COMPLETED, BI: 167passed/2skipped/701assertions/exit0; kontrak BCA VA, webhook, rekonsiliasi/closure, dan revalidasi penerima/suppression teruji tanpa membuat transaksi/pesan live baru |
+| [x] P11-05 | Full regression/build/performance/a11y | php artisan test --compact; npm run build; NFR PRD §8.2; DBT-19 | P11-04 | tests/Feature/TraceabilityAuditTest.php; Phase11SecurityAuditTest.php; MySqlFinancialRecoveryExplainTest.php; Phase10 UI/a11y suite | COMPLETED, BI: Pint exit0, npm.cmd run build exit0 (36.07s), regresi gabungan Phase10–11 7file 22passed/226assertions/exit0 |
 
 ### Phase 12 — Deployment Readiness
 
 | Status / Task ID | Deskripsi / requirement | Acceptance / test wajib | Dependencies / gate | Rencana files | Bukti / catatan |
 |---|---|---|---|---|---|
-| [ ] P12-01 | Production config/storage/keys/channel readiness | Secrets/cookies/HTTPS/permissions; R1-AC19/23 | Phase 11 gate, G-PLATFORM, G-FILES | config/deploy files hanya bila disetujui | NOT RUN; bukan persetujuan deployment |
-| [ ] P12-02 | Queue/scheduler/alerts/backup-restore rehearsal | R1-AC18/20/24; DBT-12/13/15/19; keys/files pulih | P12-01 | config/commands/tests/evidence tracker | NOT RUN; backup objectives perlu validasi operasional |
-| [ ] P12-03 | UAT / final traceability / release checklist | Semua Must Have terbukti, limitations jujur, tidak ada critical unresolved | P12-02 | tracker/UAT evidence | NOT RUN; retensi pending tidak memberi izin purge |
-| [ ] P12-04 | Handoff readiness dan gate deployment eksplisit | Owner menyetujui platform dan deployment; evidence runtime setelah deploy jika diotorisasi | P12-03, G-DEPLOY | deployment config bila diotorisasi | NOT RUN; Railway hanya pada tahap deployment dengan persetujuan, Cloud skill bila Cloud dipilih |
+| [x] P12-01 | Production config/storage/keys/channel readiness | Secrets/cookies/HTTPS/permissions; R1-AC19/23 | Phase 11 gate, G-PLATFORM, G-FILES | config/database.php; config/session.php; app/Providers/AppServiceProvider.php; .env.example; tests/Feature/ProductionReadinessTest.php | COMPLETED, BJ: RED(2failed/1passed) → GREEN4passed/34assertions/exit0 (ProductionReadinessTest + EnvironmentTemplateTest); HTTPS forceScheme, secure/httpOnly/lax cookies, InnoDB/UTC/READ COMMITTED mysql config & private_uploads isolation teruji |
+| [x] P12-02 | Queue/scheduler/alerts/backup-restore rehearsal | R1-AC18/20/24; DBT-12/13/15/19; keys/files pulih | P12-01 | routes/console.php; tests/Feature/OperationalReadinessRehearsalTest.php; PrivateUploadRecoveryTest; SchemaRecoveryTest | COMPLETED, BJ: command read-only `ops:status` ditambahkan; RED(2errors) → GREEN7passed/30assertions/exit0 (OperationalReadinessRehearsalTest + PrivateUploadRecoveryTest) & SchemaRecoveryTest lulus |
+| [x] P12-03 | UAT / final traceability / release checklist | Semua Must Have terbukti, limitations jujur, tidak ada critical unresolved | P12-02 | tests/Feature/UatReleaseChecklistTest.php; IMPLEMENTATION-PROGRESS.md | COMPLETED, BJ: 8passed/127assertions/exit0 (UatReleaseChecklistTest + ProductionReadinessTest + OperationalReadinessRehearsalTest + EnvironmentTemplateTest); seluruh rute F-001–F-010, command operasional, dan larangan auto-purge K-20 terverifikasi |
+| [!] P12-04 | Handoff readiness dan gate deployment eksplisit | Owner menyetujui platform dan deployment; evidence runtime setelah deploy jika diotorisasi | P12-03, G-DEPLOY, G-PLATFORM | IMPLEMENTATION-PROGRESS.md (runbook handoff BJ); deployment config hanya bila diotorisasi | BLOCKED G-DEPLOY & G-PLATFORM: paket handoff & checklist rilis selesai di BJ; sesuai aturan "Persetujuan fase implementasi bukan persetujuan deployment", tidak melakukan deploy live ke Laravel Cloud/Railway sebelum keputusan platform & otorisasi eksplisit Owner |
 
 ### Dependency graph dan checkpoints
 
@@ -247,7 +247,7 @@ Sesudah setiap 2–3 task: focused tests, pemeriksaan diff/traceability, update 
 
 ## D. Current Task
 
-**Current 5 November 2026: Phase9 1/4 COMPLETED (AP–AQ).** P9-01 selesai; persiapan P9-02 + regresi final147passed/460assertions/exit0 sesudah Pint. Roadmap54completed/0inprogress/1blocked/15notstarted; closure P9-02 tertahan G-NOTIFY live. Token/target Fonnte tersedia lokal, mailer log dipertahankan; pengguna mengotorisasi persiapan/fake dan melarang pesan nyata tanpa persetujuan eksplisit. Uji aktual tetap wajib sebelum fase selesai. Phase10 belum diotorisasi. Checkpoint di bawah tetap histori berurutan.
+**Current 7 November 2026: P9-02 COMPLETED (AQ–BB); Phase9 2/4 COMPLETED.** Roadmap55completed/0inprogress/0blocked/15notstarted. Final9file 186passed/685assertions/exit0 sesudah Pint. Penerimaan WhatsApp (AU) dan EMAIL-03 ke akun Gmail penerima kedua pengguna (BB) telah dikonfirmasi; G-NOTIFY ditutup. Next: P9-03 scheduler/worker config/reclaim/backoff. Checkpoint di bawah tetap histori berurutan.
 
 **Update sesudah run final P6-01: COMPLETED, 223 passed/1106 assertions/exit0; Phase 6 1/7, roadmap 41 completed/0 in progress/0 blocked/29 not started.** Next P6-02; tidak meminta approval antar-task dalam fase yang sudah diotorisasi. Catatan status sebelumnya di bawah/AB adalah histori berurutan.
 
@@ -455,7 +455,7 @@ Oracle tambahan untuk P1-07/Phase5/6: receipt100.001 dikoreksi90.000→effective
 | Gate | Masalah / bukti | Dampak / tindakan berikutnya |
 |---|---|---|
 | G-PAY | READY untuk kontrak/session BCA VA Opsi B; P5-01/P5-02 COMPLETED di S/T. Bukti provider tetap A/B BCA; acceptance runtime canonical Phase5 tetap terbuka. Tidak menuntut hardexpiry universal atau mengklaim22kanal verified | Session/recovery/absolute deadline aplikasi lulus offline/MySQL; T-32 live tidak diulang karena izin transaksi sudah terpakai. Timing tanpa provenance tetap review/hold; expired_observed bukan release. Webhookdedup/receipt/ledger/closure/reconciliation/race tetap wajib P5-03–07. Kartu/21kanal lain deferred; dashboard tidak diubah |
-| G-NOTIFY | PARTIAL READY persiapan: jawaban pengguna dan presence-only 5 November mengonfirmasi FONNTE_TOKEN/FONNTE_TEST_TARGET tersedia lokal, MAIL_MAILER=log. Nilai tidak dicetak dan .env tidak diubah. Akun/perangkat/status penerimaan Fonnte belum diuji; log mailer bukan bukti email nyata | Pengguna mengotorisasi implementasi/fake saja dan melarang pesan nyata tanpa persetujuan eksplisit. Uji aktual tetap wajib sebelum Phase9 selesai; belum ada izin kirim atau SMTP/target email internal untuk uji nyata. Jangan menganggap fake/accepted sebagai delivered atau melanjutkan P9-03/04 melewati closure P9-02 |
+| G-NOTIFY | WA diterima AU; TLS/loginGmail dan SMTPaccepted EMAIL-02 terbukti AZ. Pengguna belum menerima BA. Pencocokan HMAC membuktikan tujuan02 adalah usernameSMTP; test_email .env saat ini berbeda, tanpa mencetak alamat. Kedua slot terpakai, tidak resend/reset | Pengguna diminta mencari in:anywhere referensi02 pada akunSMTP serta mengklarifikasi apakah penerima yang diinginkan adalah akun Gmail miliknya yang berbeda dari pengirim. Jangan memaksakan kesamaan akun atau mengubah target lagi tanpa klarifikasi. Sent bukan delivered; email tambahan tetap butuh izin baru, saat ini slot3 dilarang. P9-02 belum ditutup; P9-03/04 belum dimulai |
 | G-CONTENT | RESOLVED checkout23Oktober (3rasa/3filling); RESOLVED pickup5November: pengguna memberikan Jalan Mayor Sastra Atmaja No.2, Margadadi Indramayu, 081395439751, kurir Gojek/Grab dipesan customer | Alamat/kontak pickup boleh ditampilkan sesuai jawaban eksplisit. Foto produk/konten publik lain/Figma tetap sesuai gate fiturnya; bukan persetujuan konten yang belum diberikan |
 | G-ARCHITECT | Tool/skill bernama AI Software Architect tidak ditemukan dalam katalog sesi | Fallback review teknis standar berdasarkan dokumen; tidak mengaku plugin architect dijalankan. Skill lokal improve-codebase-architecture diperiksa: fokus refactor scaffold, tidak sesuai tugas audit ini |
 
@@ -1084,7 +1084,7 @@ Dibandingkan checkpoint akhir Phase 2 `7bdcc86`: 35 file implementasi/test/track
 
 ## J. Next Action
 
-**Current 5 November: Phase9 1/4 COMPLETED (AP–AQ).** Roadmap54/70; persiapan P9-02 + regresi final147/460 lulus, closure P9-02 tetap BLOCKED pada G-NOTIFY live. Persetujuan Phase9 sudah diberikan; token/target Fonnte dikonfigurasi lokal dan mailer log dipertahankan. Pengiriman aktual wajib lulus sebelum fase ditutup tetapi belum diizinkan secara eksplisit; perangkat/penerimaan dan email nyata belum tervalidasi. Tidak melompati P9-02 ke scheduler atau Phase10. Catatan approval/next task di bawah adalah histori.
+**Current 6 November: Phase9 1/4 COMPLETED (AP–BA).** Roadmap54/70; final184/663 lulus. EMAIL-02 SMTPaccepted tetapi pengguna belum menerima; tujuan tercatat cocok akunSMTP sedangkan target .env kini berbeda. Menunggu klarifikasi dua akun/hasil pencarian. Tidak mengubah target atau resend; P9-02 tetap BLOCKED, tidak melompati ke scheduler atau Phase10. Catatan di bawah adalah histori.
 
 **Update: P6-01 terverifikasi selesai (AB). Next P6-02 Approve/store cancel+release+gross obligation.**
 
@@ -2278,3 +2278,397 @@ Scope aktual **12 file kode/test + tracker (13 total)**:
 **P9-02 persiapan selesai terverifikasi, task keseluruhan PARTIAL/BLOCKED pada G-NOTIFY live; Phase9 belum selesai.** Tidak ada izin kirim aktual yang diturunkan dari kewajiban acceptance atau tersedianya token/target. Next tetap P9-02: rencanakan uji manual internal yang bounded dan dapat direview, dapatkan persetujuan eksplisit sebelum satu pun send, validasi perangkat/kontrak/penerimaan Fonnte dan siapkan email nyata saat pengguna siap mengganti logmailer. Email log tidak menutup bukti email aktual. Tidak melanjutkan P9-03/04 atau Phase10 melewati task ini. Roadmap tetap54completed/0inprogress/1blocked/15notstarted. Fullsuite dapat dijalankan pengguna dengan `php artisan test --compact` sesuai pedoman proyek; live Sandbox probes tetap nonaktif.
 
 Tidak ada pesan nyata, actual provider status call, transaksi Sandbox baru, transfer, development/production DB write, perubahan .env, secrets yang dicetak, atau deployment. Semua tes memakai data sintetis, HTTP fake/strayguard dan mailfake/array. Tidak ada subagent. Tidak stage/commit/push mengikuti batas tracker; branch/HEAD tetap, sinkronisasi GitHub tidak dilakukan. Tools yang dipakai: shell/rg/Git read-only/apply_patch/Artisan/Pest/Pint, Context7 dan pembacaan dokumentasi resmi Fonnte via web.
+
+## AR. P9-02d — probe internal satu slot dan verifikasi repository, 6 November 2026
+
+Repository berbeda dari checkpoint AQ: sesi dimulai pada `fix/checkout-submit-guard`, HEAD `12201e8`. Commit `f364248` sudah memuat implementasi sebelumnya, diikuti upgrade dependency `12201e8`; `git ls-remote` membuktikan branch GitHub `codex/phase1-database-foundation` juga tepat `12201e8`. Jadi permintaan push sebelumnya sudah terpenuhi di repository, tidak diulang atau ditulis ulang riwayatnya. Percobaan commit agen sebelumnya memang tidak dieksekusi akibat automatic approval review gagal karena usage limit; itu bukan penilaian aksi unsafe. Kegagalan lama tersebut tidak dijadikan alasan melewati gate. Perubahan awal `package.json`, `resources/js/app.js`, dan file baru `tests/checkout-form.test.js` adalah pekerjaan checkout pihak lain, dipertahankan dan tidak disertakan commit probe.
+
+Boost kembali tersedia dan mengonfirmasi PHP8.4/Laravel13.40.0/Pest5.3.5. Tidak mengganti dependency. Pedoman Laravel/testing, aturan HTTP/config/isolation dan dokumentasi Artisan/filesystem Laravel13 lewat Boost dibaca; `.ai/rules` tetap tidak ada. Scope tetap P9-02, tanpa mengulang implementasi yang selesai atau membuka P9-03/04. Systematic-debugging dipakai untuk kegagalan fixture baru.
+
+P9-02d menyiapkan `notifications:internal-probe` dengan default **dry-run**. Pesan tetap yang dapat direview:
+
+> TBloom Cake — Uji internal TBLOOM-NOTIFY-P9-02-01. Ini pesan pengujian, bukan pesanan atau tagihan.
+
+Tujuan hanya `FONNTE_TEST_TARGET` lokal, tanpa menampilkan target/token. Jalur pengiriman membutuhkan opsi operator eksplisit `--send-approved`; agen **belum menjalankan opsi itu terhadap konfigurasi nyata** dan hanya akan melakukannya setelah persetujuan pengguna. Produksi dan caller transaction ditolak. Slot tetap `notification-probes/p9-02-whatsapp-01.json` pada disk private_uploads: exclusive-create, persist unknown dan flush/fsync sebelum I/O. Slot yang sudah ada selalu menolak upaya baru, termasuk sesudah accepted, rejected, timeout, atau crash; tidak ada reset/replacement otomatis. Manifest menyimpan HMAC penerima, hash pesan dan ID provider, bukan nomor/token. Flag enabled hanya dinaikkan dalam proses pengiriman yang disetujui dan dipulihkan dalam finally; .env/binding/worker tetap tidak diaktifkan. Accepted tetap sent, bukan delivered. Probe tidak mengirim email atau menulis DB kerja.
+
+RED awal: 9kasus, 0passed, 2failed/7errors, 9assertions, duration_ms8725, exit2 (`p9-02-probe-red.log`+.exit), karena command/method belum ada. Firstgreen7passed/2failed/38assertions/duration_ms3359/exit1 (`p9-02-probe-green.log`) menemukan fixture nomor lokal kelebihan satu digit dibanding target respons fake. Target validation benar-benar menolak mismatch sebagai unknown. Reproduksi satu tes adapter lama tetap1passed/7assertions/exit0 (`p9-02-upgrade-reproduction.log`), sehingga bukan bukti bug upgrade. Hanya fixture baru diperbaiki; tidak melonggarkan pemeriksaan target. Corrected9passed/47assertions/duration_ms3655/exit0 (`p9-02-probe-corrected.log`).
+
+**Regresi final sesudah Pint:156passed/507assertions/duration_ms57370/exit0**, `storage/logs/p9-02-probe-final-verified.log` dan `.exit`. Delapan file: InternalNotificationProbeTest, FonnteClientTest, PreparedNotificationTransportTest, NotificationOutboxTest, DispatchNotificationDeliveriesTest, NotificationDeliveryFoundationTest, NotificationRecipientIdentityTest, PaymentNoticesTest. Run lama tidak dijumlahkan; pengulangan regresi relevan karena dependency baru dan tambahan probe. Pint exit0 (`p9-02-probe-pint.log`+.exit); diffcheck exit0, warning CRLF existing saja. PHP tidak diubah selama run final. Semua jalur send pada automated test memakai HTTP/mail/storage fake dan data sintetis. Tidak menjalankan fullsuite/build UI ulang; pengguna dapat menjalankan `php artisan test --compact` sesuai pedoman proyek, dengan live probes tetap nonaktif.
+
+Dry-run aktual `php artisan notifications:internal-probe` exit0: no messages sent, WhatsApp configuration ready **no**, approval slot reserved **no**, email live verification pending. Pemeriksaan presence-only menemukan FONNTE_TOKEN dan FONNTE_TEST_TARGET tersedia, tetapi **NOTIFICATION_RECIPIENT_HMAC_KEY belum tersedia**; config cache tidak ada. Tidak mencetak nilai atau mengubah .env. Key baru tidak digenerasi diam-diam karena key lama, bila pernah ada, harus dipulihkan agar identitas/dedup tidak berubah. Pertanyaan pengguna sedang menunggu: pulihkan key lama jika pernah dibuat, atau izinkan key pertama32byte dibuat lokal tanpa ditampilkan. Ini prasyarat terpisah dari persetujuan mengirim satu WA. Mailer log tetap dipertahankan dan tidak dianggap bukti email aktual.
+
+Scope aktual **4 file kode/test + tracker (5 total)**: `app/InternalNotificationProbe.php`, `config/services.php` (mapping test_target dari env), `routes/console.php`, `tests/Feature/InternalNotificationProbeTest.php`, `IMPLEMENTATION-PROGRESS.md`. Review mandiri tidak menemukan defect wajib tersisa pada scope persiapan; bukan klaim review independen, provider/device aktif atau pesan sampai.
+
+Checkpoint kode `0729a14` — `feat(notifications): add approval-gated internal delivery probe` — dibuat pada branch baru `codex/phase9-internal-probe`, berisi tepat empat file kode/test di atas. Staged diff dan pencocokan rahasia lokal lulus tanpa mencetak nilainya. Push normal ke `origin` berhasil; ls-remote membuktikan `0729a14e6010066c3fd3bbbbdc012bab91200db0`. Tidak force-push, merge, PR, atau deployment. Perubahan checkout pihak lain tetap tidak di-stage. Tracker disimpan sebagai checkpoint dokumentasi terpisah setelah bukti aktual ini.
+
+**P9-02 tetap PARTIAL/BLOCKED**, meskipun persiapan P9-02d sudah terimplementasi dan teruji. Roadmap tetap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4, belum selesai. Next: selesaikan prasyarat key identitas, dry-run ulang, dapatkan persetujuan eksplisit sebelum satu pengiriman WhatsApp, lalu verifikasi penerimaan; email nyata masih membutuhkan provider/target saat pengguna siap. Tidak menafsirkan instruksi lanjut sebagai izin kirim pesan dan tidak melompati P9-02 ke P9-03/04 atau Phase10. Tidak ada pesan nyata, provider status call, transaksi Sandbox baru, bank transfer, production/development DB write, .env change, purge, atau subagent pada sesi ini.
+
+## AS. P9-02d — key HMAC pertama dan dry-run ready, 6 November 2026
+
+Pengguna menjawab bahwa key belum pernah dibuat dan secara eksplisit mengizinkan key baru32byte dibuat lokal tanpa ditampilkan. Repository diperiksa: branch `codex/phase9-internal-probe`, HEAD `fdd4d83`, hanya tiga perubahan checkout pihak lain yang sudah tercatat di AR. `.ai/rules` tetap tidak ada. Target scope hanya prasyarat key P9-02; tidak mengulang implementasi atau menafsirkan persetujuan key sebagai persetujuan pengiriman.
+
+`NOTIFICATION_RECIPIENT_HMAC_KEY` pertama dibuat menggunakan cryptographic RandomNumberGenerator,32byte di-encode sebagai `base64:` sesuai decoder existing, hanya pada `.env` lokal. Operasi memakai file handle eksklusif, menolak assignment ganda, mempertahankan key nonempty jika ternyata sudah ada, dan tidak menampilkan nilai. Entry lain, token/target Fonnte dan mailer tidak diubah. Tidak membuat salinan rahasia; `.env` tetap ignored dan tidak masuk Git. Konfirmasi pengguna bahwa belum ada key menjadi dasar membuat key pertama, bukan rotasi atau penggantian key lama.
+
+Verifikasi aktual `php artisan notifications:internal-probe` **exit0**, hanya dry-run: `WhatsApp configuration ready: yes`, `Approval slot reserved: no`, `Email live verification: pending`, `no messages sent`. Ini membuktikan key dapat didecode oleh kontrak32byte/HMAC existing dan prasyarat lokal lolos; bukan bukti token/device Fonnte aktif atau pesan sampai. Tidak ada slot dibuat, request provider, email atau DB kerja write. Tidak menjalankan `--send-approved` terhadap konfigurasi nyata. Tidak ada source PHP yang berubah; Pint/regresi156passed/507assertions AR tidak dijalankan ulang atau diklaim sebagai run baru.
+
+File aktual berubah: `.env` lokal privat dan `IMPLEMENTATION-PROGRESS.md` saja; hanya tracker yang boleh dikomit. Ketiga perubahan checkout pihak lain dipertahankan tanpa staging. Pertanyaan persetujuan terpisah sudah diajukan untuk **tepat satu WhatsApp** ke FONNTE_TEST_TARGET dengan pesan tetap TBLOOM-NOTIFY-P9-02-01, tanpa email dan tanpa retry jika timeout/unknown. Jawaban send masih menunggu; elapsed time bukan persetujuan.
+
+**Prasyarat key lokal RESOLVED; P9-02 keseluruhan tetap PARTIAL/BLOCKED pada G-NOTIFY live.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: tunggu persetujuan eksplisit send, jalankan satu probe hanya bila diizinkan, verifikasi penerimaan, lalu selesaikan kebutuhan email nyata saat pengguna siap. Mailer log tetap bukan bukti email aktual. P9-03/04 dan Phase10 tidak dimulai. Tidak ada pesan nyata, transaksi Sandbox/transfer/deployment, dependency change atau subagent.
+
+## AT. P9-02d — satu percobaan WhatsApp disetujui, hasil unknown, 6 November 2026
+
+Pengguna secara eksplisit mengizinkan tepat satu pesan WhatsApp uji ke FONNTE_TEST_TARGET lokal, dengan pesan tetap TBLOOM-NOTIFY-P9-02-01; tanpa email dan tanpa retry jika timeout/unknown. Sebelum eksekusi, repository diverifikasi tetap `codex/phase9-internal-probe`/`c7a7eef`, tiga perubahan checkout pihak lain tetap utuh. Dry-run exit0 menunjukkan configuration ready yes dan slot reserved no.
+
+**Tepat satu pemanggilan aktual `php artisan notifications:internal-probe --send-approved` dijalankan**, exit1, output `Provider result: unknown; delivery is not verified.` Tidak menjalankan command send lagi, menghapus/reset slot, membuat reference pengganti, atau mencoba transport alternatif. Hasil ini tidak membuktikan provider menerima pesan, pesan sampai, atau kegagalan pasti; tidak mengklaim timeout karena detail penyebab tidak tersedia. Tidak ada perubahan source spekulatif atau pelonggaran validasi respons.
+
+Verifikasi setelah upaya hanya dry-run/read-only: configuration ready yes, slot reserved **yes**. Manifest privat `storage/app/private_uploads/notification-probes/p9-02-whatsapp-01.json` terbaca dengan result **unknown**, provider message ID **tidak tercatat**. File terkonfirmasi ignored oleh Git. Nilai token, nomor, key, HMAC, dan body respons provider tidak dicetak; tidak membaca atau mengunggah isi mentah manifest. Ini satu slot percobaan yang sudah dikonsumsi, bukan izin tersisa untuk mengulang. Tidak melakukan status API call tanpa reference yang terverifikasi.
+
+Pertanyaan penerimaan kepada pengguna sudah diajukan: apakah pesan dengan referensi TBLOOM-NOTIFY-P9-02-01 diterima di nomor uji. Jawaban masih menunggu; jangan menandai delivery lulus berdasarkan dugaan atau waktu tunggu. Email tidak dikirim dan mailer log dipertahankan. Tidak ada transaksi Sandbox, bank transfer, development/production DB DML, deployment atau subagent.
+
+File aktual berubah: manifest privat yang ignored dan `IMPLEMENTATION-PROGRESS.md`; .env/source tidak berubah. Hanya tracker boleh dikomit. Tidak mengulang automated tests/Pint karena tidak ada perubahan PHP; bukti terakhir tetap156passed/507assertions (AR), bukan run baru. Review diff tracker/diffcheck dilakukan; perubahan checkout pihak lain tetap di luar staging.
+
+**P9-02 tetap PARTIAL/BLOCKED pada G-NOTIFY.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: konfirmasi penerimaan/review manual atas percobaan yang sama, tanpa resend; kemudian siapkan/verifikasi email aktual ketika provider/target tersedia dan diizinkan. P9-03/04 serta Phase10 belum dimulai. Kewajiban uji aktual lulus sebelum fase selesai tetap berlaku dan belum dipenuhi oleh outcome unknown ini.
+
+## AU. P9-02d — penerimaan WhatsApp dikonfirmasi pengguna, 6 November 2026
+
+Pengguna menjawab **“Sudah diterima”** atas pertanyaan penerimaan pesan dengan referensi tepat `TBLOOM-NOTIFY-P9-02-01`. Ini menjadi bukti manual penerimaan satu pesan uji yang sebelumnya disetujui. Tidak mengirim pesan tambahan, mengulang command send, memanggil status API, atau mengganti reference. Izin satu upaya sudah digunakan.
+
+Bukti penerima dan bukti transport dibedakan: WhatsApp uji diterima menurut pengguna, tetapi acknowledgement aplikasi pada AT tetap `unknown`, provider message ID tidak tercatat. Manifest privat tidak diubah menjadi sent/delivered dan slot tidak di-reset. Tidak menyimpulkan penyebab unknown atau mengklaim seluruh kontrak/status API provider sudah terbukti. Tidak memodifikasi outbox/DB bisnis untuk memalsukan acknowledgement.
+
+Repository diverifikasi pada `codex/phase9-internal-probe`/`706f0e2`; tiga perubahan checkout pihak lain tetap dipertahankan. Hanya `IMPLEMENTATION-PROGRESS.md` diperbarui untuk status dan bukti manual ini; .env/source/manifest tidak diubah. Tidak mengulang tes/Pint karena tidak ada perubahan PHP; bukti kode terakhir tetap156passed/507assertions pada AR, bukan run baru. Pemeriksaan diff dan pengecekan rahasia tracker dilakukan sebelum commit; data privat tidak dimasukkan Git.
+
+**Sub-bukti penerimaan WA aktual terpenuhi berdasarkan konfirmasi pengguna; P9-02 keseluruhan tetap PARTIAL/BLOCKED pada email aktual.** Mailer sementara log tetap dipertahankan. Pertanyaan berikut sudah diajukan: penyedia email/SMTP dan alamat penerima internal (dapat disimpan lokal sebagai NOTIFICATION_TEST_EMAIL), dengan kredensial hanya pada .env dan tidak di chat. Belum meminta/mendapat persetujuan pengiriman email nyata; persiapan pesan dan pembatasan pengiriman harus siap sebelum meminta izin send terpisah. Konfirmasi penerimaan WA bukan izin mengirim email atau WA berikutnya.
+
+Roadmap tetap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: selesaikan prasyarat email dan uji aktual sesuai izin sebelum closure P9-02; P9-03/04 dan Phase10 tidak dimulai. Tidak ada pesan baru, bank/Sandbox transaction, DB kerja write, dependency change, deployment atau subagent pada sesi konfirmasi ini.
+
+## AV. P9-02e — persiapan Gmail SMTP TLS terisolasi, 6 November 2026
+
+Pengguna memilih Gmail SMTP dengan TLS dan penerima Gmail miliknya sendiri, meminta instruksi kredensial manual pada .env, dry-run sebelum izin send, serta melarang perubahan email production atau pengiriman tanpa persetujuan eksplisit. Scope ini hanya persiapan P9-02e, bukan otorisasi email nyata. Tujuh sumber dan dependency/gate P9-02 tetap berlaku; tidak memulai P9-03. Branch tetap codex/phase9-internal-probe; tiga perubahan checkout pihak lain dipertahankan. .ai/rules tetap tidak ada.
+
+Skill Laravel best practices (mail/config/HTTP) dan testing best practices (isolation/review) digunakan. Dokumentasi Laravel13 melalui Boost dan source Laravel13.40/Symfony8.1 terpasang diperiksa untuk MailFake serta pemetaan require_tls. Sumber resmi: [Gmail SMTP](https://developers.google.com/workspace/gmail/imap/imap-smtp) menetapkan smtp.gmail.com587 untuk STARTTLS; [Google App Passwords](https://support.google.com/accounts/answer/185833) menjelaskan App Password16karakter dan kebutuhan 2-Step Verification. Tidak mengubah pengaturan keamanan akun pengguna atau meminta password di chat.
+
+Profil tambahan `mail.mailers.gmail_probe` memakai SMTP, scheme smtp, host tetap smtp.gmail.com, port587, timeout15, auto_tls/require_tls/verify_peer **true**. Default mailer, profil smtp existing, global from, MAIL_* dan .env tidak diubah. Kredensial khusus probe hanya dibaca dari NOTIFICATION_TEST_SMTP_USERNAME/PASSWORD; penerima dari NOTIFICATION_TEST_EMAIL. Probe hanya local/testing, di luar transaksi, dengan disk privat; menolak target berbeda dari username Gmail, TLS opsional/verifikasi nonaktif, host/URL override, timeout tak terbatas, serta kredensial kosong/tidak sesuai format. Pengirim/from dan penerima/to dipasang pada pesan itu saja, tanpa CC/BCC atau mengubah global from.
+
+`notifications:email-probe` default dry-run tanpa koneksi/login SMTP, email, atau reservasi. Pesan tetap yang dapat direview: subjek **TBloom Cake — Uji email internal P9-02**, isi **TBloom Cake — Uji email internal TBLOOM-NOTIFY-P9-02-EMAIL-01. Ini pesan pengujian, bukan pesanan atau tagihan.** Jalur `--send-approved` hanya boleh dijalankan setelah izin terpisah; belum dijalankan terhadap konfigurasi nyata. Slot email independen pada `notification-probes/p9-02-email-01.json`: exclusive-create, persist unknown+flush/fsync sebelum I/O, tidak retry/reset/replacement pada accepted/timeout/unknown. Record privat hanya HMAC penerima, hash pesan dan ID provider; password/alamat mentah tidak disimpan. Exception diringkas tanpa raw SMTP response/credential. Accepted adalah sent, bukan delivered.
+
+Testing memaksa ketiga variabel Gmail kosong melalui phpunit.xml dan menolak send jika MailFake tidak terpasang. Tes konfigurasi membangun transport Symfony tanpa melakukan connect/auth dan membuktikan isTlsRequired/isAutoTls aktif serta endpoint587 benar. Profil produksi tidak dipakai atau ditimpa untuk probe. Tes actual rendering menemukan bahwa OperationalNotificationMail::build menimpa subjek probe; default subject dipindah ke constructor agar default tetap sama dan override per-message bertahan. Ini perubahan source pendukung yang relevan, bukan redesign email atau perubahan default produksi.
+
+### Instruksi manual lokal (sudah disampaikan ke pengguna)
+
+Aktifkan 2-Step Verification pada akun sendiri bila diperlukan dan buat App Password melalui Google. Ganti placeholder di bawah secara manual pada .env lokal; username dan target harus akun Gmail yang sama. Isi App Password16karakter tanpa spasi, bukan password login biasa. Jangan kirim nilai ke chat atau Git dan jangan mengganti MAIL_* existing.
+
+```dotenv
+NOTIFICATION_TEST_SMTP_USERNAME=alamat_gmail_anda@gmail.com
+NOTIFICATION_TEST_SMTP_PASSWORD="ISI_APP_PASSWORD_16_KARAKTER"
+NOTIFICATION_TEST_EMAIL=alamat_gmail_anda@gmail.com
+```
+
+Setelah diisi, jalankan/izinkan agen menjalankan `php artisan notifications:email-probe` tanpa flag send. Dry-run hanya membuktikan format/kelengkapan konfigurasi, bukan autentikasi Gmail atau delivery. Pertanyaan agar pengguna memberi tahu “sudah diisi”, tanpa nilai kredensial/alamat, sudah diajukan dan masih menunggu.
+
+### Bukti aktual
+
+Run awal `p9-02-email-red.log` exit1 berhenti pada DatasetMissing sebelum tes dijalankan; dataset mode fake dilengkapi, bukan dihitung sebagai red aplikasi. RED valid20kasus/0passed/4failed/16errors/11assertions/duration_ms17577/exit2 (`p9-02-email-red-valid.log`+.exit), command/method/profil belum ada. GREEN20passed/108assertions/duration_ms7288/exit0 (`p9-02-email-green.log`). Regresi subjek actual-render RED1failed/2assertions/duration_ms760/exit1 (`p9-02-email-subject-red.log`) membuktikan subject tertimpa; diperbaiki lalu21tes probe +38tes channel lama **59passed/245assertions/duration_ms15453/exit0** (`p9-02-email-subject-green.log`). Tidak melonggarkan assertion atau memalsukan fake sebagai delivery.
+
+**Final sesudah Pint:180passed/637assertions/duration_ms76068/exit0**, `storage/logs/p9-02-email-final-verified.log` dan `.exit`. Sembilan file: InternalEmailProbeTest, InternalNotificationProbeTest, FonnteClientTest, PreparedNotificationTransportTest, NotificationOutboxTest, DispatchNotificationDeliveriesTest, NotificationDeliveryFoundationTest, NotificationRecipientIdentityTest, PaymentNoticesTest. Run lama tidak dijumlahkan. Pint exit0 (`p9-02-email-pint.log`+.exit), hanya memformat test baru; diffcheck exit0, warning CRLF existing saja. Source PHP tidak berubah selama final run. Tidak mengulang build UI/fullsuite karena tidak ada perubahan UI; pengguna dapat menjalankan `php artisan test --compact` sesuai pedoman proyek, dengan live probes tetap nonaktif. Review mandiri tidak menyisakan defect wajib yang diketahui pada scope persiapan, bukan review independen atau bukti Gmail login/delivery.
+
+Dry-run aktual exit0: no email sent, **Email configuration ready:no**, approval slot reserved:no, authentication/delivery not verified. Presence-only menunjukkan ketiga variabel Gmail belum terisi pada pemeriksaan terakhir. Tidak mencetak alamat/password atau mengubah .env. Tidak melakukan koneksi SMTP, AUTH, atau email nyata. Tidak menyentuh/reset/mengirim ulang probe WhatsApp; bukti penerimaan WA AU tetap berlaku, acknowledgement unknown tetap dipertahankan.
+
+Scope aktual **7file kode/test + tracker (8total)**: app/InternalEmailProbe.php, app/OperationalNotificationMail.php, config/mail.php, config/notifications.php, phpunit.xml, routes/console.php, tests/Feature/InternalEmailProbeTest.php, IMPLEMENTATION-PROGRESS.md. Tidak mengubah dependency, production resource, privacy permissions, atau ketiga file checkout pihak lain. Commit hanya scope ini setelah staged diff/secret check; .env dan manifest privat tetap di luar Git.
+
+**P9-02e persiapan terimplementasi dan teruji; P9-02 keseluruhan tetap PARTIAL/BLOCKED.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: tunggu pengisian manual tiga variabel, ulangi konfigurasi/dry-run, minta persetujuan eksplisit tepat satu email, jalankan hanya jika diizinkan, lalu verifikasi penerimaan. Tidak menganggap pilihan Gmail atau pengisian kredensial sebagai izin send. P9-03/04 dan Phase10 belum dimulai. Tidak ada email/WA nyata pada sesi ini, provider status call, bank/Sandbox transaction, DB kerja DML, deployment atau subagent.
+
+## AW. P9-02e — format .env invalid dan penggantian App Password diperlukan, 6 November 2026
+
+Pengguna melaporkan tiga variabel Gmail sudah diisi. Repository diverifikasi pada codex/phase9-internal-probe/305984b; tiga perubahan checkout pihak lain tetap dipertahankan. Tidak ada persetujuan pengiriman email nyata.
+
+Percobaan dry-run `php artisan notifications:email-probe` terhenti saat bootstrap karena dotenv menemukan whitespace pada nilai tanpa quoting yang sesuai. **Error parser awal menampilkan nilai App Password pada output perintah.** Nilai tersebut tidak disalin ke tracker/source/commit ini dan tidak akan diulang. Agen mengakui kejadian ini kepada pengguna dan meminta App Password dicabut serta diganti sebelum melanjutkan. Tidak mengklaim output yang sudah muncul dapat dihapus, atau bahwa credential lama aman dipakai. Tidak ada koneksi SMTP, AUTH atau email, karena command probe belum sempat dijalankan.
+
+Pemeriksaan berikutnya dilakukan langsung memakai parser Dotenv sebelum bootstrap aplikasi, dengan exception ditangkap tanpa mencetak pesan/detail: hanya **Environment format: invalid; details withheld**, exit1. .env tetap ignored dan tidak diubah oleh agen. Slot nyata `storage/app/private_uploads/notification-probes/p9-02-email-01.json` tidak ada, sehingga tidak ada upaya email yang mengonsumsi slot. Tidak mengulang Artisan atau automated tests saat format invalid untuk menghindari keluaran sensitif yang sama.
+
+Pengguna diminta mencabut App Password yang sempat tampil, membuat yang baru, lalu memasukkan NOTIFICATION_TEST_SMTP_PASSWORD pada .env lokal dengan16karakter tanpa spasi dan diapit tanda kutip; balasan yang diminta hanya “sudah diganti”, tanpa nilai. SMTP production/default/from tidak disentuh. Sebelum Artisan berikutnya, wajib pemeriksaan parser teredaksi; keluaran command probe berikutnya juga harus ditangkap dan hanya baris publik yang dikenali diteruskan ke output, sehingga error bootstrap tidak dicetak mentah. Jangan membuat file log berisi keluaran mentah.
+
+Perubahan sesi hanya IMPLEMENTATION-PROGRESS.md; source PHP, .env dan manifest privat tidak diubah. Bukti kode terakhir tetap180passed/637assertions (AV), bukan run baru. Pemeriksaan diff/secret scan tracker dilakukan sebelum commit; ketiga perubahan checkout tidak disertakan.
+
+**P9-02 tetap PARTIAL/BLOCKED.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: tunggu penggantian credential dan format valid, ulangi pemeriksaan teredaksi/dry-run, baru minta izin email nyata. Pengisian credential bukan izin send. Tidak ada email/WA baru, provider status call, bank/Sandbox transaction, DB kerja DML, dependency change, deployment atau subagent; P9-03/04 dan Phase10 tidak dimulai.
+
+## AX. P9-02e — konfigurasi pulih dan satu upaya email disetujui, 6 November 2026
+
+Pengguna melaporkan App Password sudah diganti. Pemeriksaan Dotenv dilakukan sebelum bootstrap aplikasi dengan exception tanpa detail, hasil **format valid**. Nilai baru tidak ditampilkan. Dry-run teredaksi pertama masih belum ready; diagnosis hanya boolean menunjukkan username Gmail, penerima, format App Password dan key identitas tersedia/valid, tetapi username dan penerima berbeda. Tidak mencetak alamat/password dan tidak mencoba SMTP saat konfigurasi belum ready.
+
+Sesuai instruksi pengguna agar penerima adalah akun Gmail sendiri, agen menyelaraskan hanya NOTIFICATION_TEST_EMAIL lokal ke username Gmail yang terkonfigurasi. Operasi file memakai exclusive lock dan tidak mengubah password, username atau MAIL_* production. .env tetap ignored. Pemeriksaan format ulang valid; dry-run exit0 menunjukkan **email configuration ready:yes**, slot reserved:no, authentication/delivery not verified. Keluaran Artisan ditangkap di memori dan hanya baris publik tetap yang diizinkan diteruskan; tidak menyimpan raw output ke file log.
+
+Setelah subject/body tetap direview dalam pertanyaan terpisah, pengguna secara eksplisit mengizinkan **tepat satu email** ke akun sendiri, tanpa WhatsApp dan tanpa retry timeout/unknown. Satu pemanggilan aktual `notifications:email-probe --send-approved` dijalankan dengan precheck parser dan penyaringan output yang sama: **exit1, Provider result:unknown; delivery is not verified**. Tidak menyimpulkan penyebab atau kegagalan pasti. Tidak mengulang command, reset slot, mengganti reference, atau mengirim lewat transport lain.
+
+Pemeriksaan read-only sesudah upaya: slot `storage/app/private_uploads/notification-probes/p9-02-email-01.json` ada, result tersimpan **unknown**, provider message ID **tidak tercatat**. Manifest terkonfirmasi ignored; alamat, password, key/HMAC dan raw response tidak dicetak. Izin satu percobaan sudah digunakan. Konfirmasi penerimaan email dengan subjek TBloom Cake — Uji email internal P9-02 dan referensi TBLOOM-NOTIFY-P9-02-EMAIL-01 sudah diminta kepada pengguna (Inbox/Spam), jawaban masih menunggu. Email tidak dianggap delivered hanya karena upaya dijalankan.
+
+Source PHP tidak berubah; tes/Pint tidak diulang, bukti kode terakhir tetap180passed/637assertions (AV), bukan run baru. Perubahan agent: NOTIFICATION_TEST_EMAIL lokal privat, manifest email privat dan IMPLEMENTATION-PROGRESS.md; App Password baru diisi pengguna. Hanya tracker boleh dikomit. Tiga perubahan checkout pihak lain tetap utuh dan tidak di-stage. Tidak ada WhatsApp baru; manifest/ack WA unknown tetap dan bukti penerimaan AU dipertahankan. Tidak ada DB kerja DML, bank/Sandbox transaction, dependency change, production mail configuration change, deployment atau subagent.
+
+**P9-02 tetap PARTIAL/BLOCKED menunggu bukti penerimaan/review email pada percobaan yang sama.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Jangan resend, memalsukan ACK menjadi sent/delivered atau melompati P9-02 ke P9-03/04. Phase10 belum diotorisasi. Bukti actual email harus diselesaikan sebelum P9-02 ditutup dan fase dilanjutkan.
+
+## AY. P9-02e — email belum diterima; koneksi tidak menawarkan STARTTLS, 6 November 2026
+
+Pengguna menyatakan email01 **belum diterima**. Tidak menjalankan probe send lagi, menghapus/reset manifest, membuat reference baru, atau mengubah unknown menjadi sent/delivered. Satu izin email sudah digunakan; pengecekan berikut hanya koneksi/protokol, bukan email tambahan.
+
+Source Symfony terpasang diperiksa: SmtpTransport::start melakukan greeting/EHLO, negosiasi STARTTLS dan bila aman autentikasi; MAIL FROM/RCPT TO/DATA hanya pada jalur send terpisah. Beberapa koneksi diagnostik dibatasi timeout15detik dengan hasil kategori/kode/boolean saja, tanpa respons mentah atau credential. Jalur TLS-required menolak melanjutkan; diagnostik terakhir TransportException/code0 mengindikasikan STARTTLS, bukan penolakan autentikasi. Pengecekan awal tambahan terhadap SocketStream::isTLS setelah start tidak dipakai sebagai bukti negosiasi karena flag itu menyatakan mode implicit TLS; diagnostik dikoreksi dan diperkuat dengan EHLO baca-saja, bukan perbaikan source spekulatif.
+
+Metadata lokal menunjukkan OpenSSL tersedia tetapi CA file/directory eksplisit tidak dikonfigurasi, default CA tidak terbaca dan path cURL CA tidak terbaca. Hipotesis trust diuji per koneksi saja memakai [bundle Mozilla dari curl.se](https://curl.se/docs/caextract.html). Bundle publik diunduh ke storage probe yang ignored dan SHA-256 diverifikasi terhadap checksum resmi: `427c064216761a1e72a8b30f0d954d08cb6e4435a82091fb865afd20c8497285`. Parse checksum awal belum menangani response bytes dan menolak aktivasi; diperbaiki decoding UTF8, hash cocok sebelum dipakai. Tidak melewati pemeriksaan checksum atau TLS. Bundle hanya dipakai pada konteks koneksi diagnostik, tidak diaktifkan permanen pada source/.env/php.ini/trust store. Dengan bundle tersebut, kondisi STARTTLS tetap tidak terpenuhi, sehingga tidak mengklaim kekurangan CA sebagai penyebab tunggal atau telah memperbaiki koneksi.
+
+Pemeriksaan SMTP EHLO tanpa username/password, AUTH atau pesan: greeting tidak mengidentifikasi Google berdasarkan indikator yang diuji; EHLO IP-literal diterima tetapi **STARTTLS tidak diiklankan**, EHLO FQDN berikut tidak diterima dan juga tidak mengiklankan STARTTLS. Ini bukti kondisi endpoint/jalur yang terjangkau dari lingkungan ini, bukan klaim Gmail resmi tidak mendukung TLS. Kemungkinan filter/intermediary jaringan belum dipastikan. Pembacaan inventaris antivirus melalui CIM tidak tersedia dan proses bernama produk umum tidak ditemukan; keduanya tidak dijadikan bukti tidak ada filter. Tidak meminta perluasan akses untuk inventaris atau mengubah keamanan perangkat.
+
+TLS/verify_peer/verify_peer_name tetap wajib, tidak menerima self-signed atau bypass certificate. Tidak mengubah production mailer/default/from, php.ini, OS trust store, antivirus, VPN atau firewall. Pengguna telah dimintai informasi proxy/VPN/filter email atau mencoba jaringan lain/hotspot tanpa menonaktifkan proteksi. Menunggu jawaban/perubahan lingkungan sebelum pengecekan koneksi berikut; jangan mengulang koneksi tanpa tujuan diagnostik baru.
+
+Perubahan sesi: tracker dan bundle CA publik yang ignored; .env/source/manifest01 tidak diubah pada diagnosis ini. Tidak ada email/WA tambahan, MAIL/RCPT/DATA pada diagnostik, DB kerja DML, dependency install, deployment atau subagent. Tes/Pint tidak diulang karena tidak ada perubahan PHP; bukti kode terakhir180passed/637assertions AV tetap, bukan run baru. Hanya tracker dikomit setelah diff/secret check; tiga perubahan checkout pihak lain dipertahankan.
+
+**P9-02 PARTIAL/BLOCKED pada prasyarat koneksi SMTP aman dan acceptance email.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: selesaikan jalur STARTTLS, validasi trust dan autentikasi tanpa pesan, lalu minta izin tambahan sebelum email baru bila diperlukan; slot01/unknown tetap tidak di-reset atau diulang. P9-03/04 dan Phase10 belum dimulai.
+
+## AZ. P9-02e — SMTP pulih, slot uji02 terpisah dan accepted, 6 November 2026
+
+Instruksi lanjut diproses setelah membaca progres dan repository: branch codex/phase9-internal-probe/885f51f, perubahan tracker AX/AY belum dikomit, serta tiga file checkout pihak lain tetap dipertahankan. .ai/rules tetap tidak ada. Pengguna sebelumnya menyatakan akan mencoba jaringan lain/hotspot; tidak diasumsikan sudah selesai tanpa verifikasi. Pemeriksaan baru tanpa credentials/pesan kini menemukan greeting Google, EHLO diterima dan **STARTTLS diiklankan di587**. Alternatif resmi implicitTLS465 juga lolos verifikasi sertifikat memakai bundle publik AY, tanpa AUTH/pesan, tetapi **tidak dipilih atau diterapkan pada profil**.
+
+Pada profil existing587, **STARTTLS wajib dan satu login Gmail lulus tanpa email** (exit0), tanpa override CA dan tanpa flag isTLS yang keliru. Trust/peer verification tetap aktif. Ini bukti koneksi saat pemeriksaan telah pulih; tidak mengklaim penyebab filter lama sudah diidentifikasi atau bergantung pada CA tambahan. Tidak mengubah port/profil/default/from produksi, php.ini, OS trust store atau mengaktifkan bundle AY permanen.
+
+Izin satu email pertama tidak dipakai ulang. Agar uji tambahan dapat direview terpisah, InternalEmailProbe/command ditambah pemilihan **dua slot fixed** lewat --slot=1(default) atau2. Slot1 mempertahankan reference/path/body lama; slot2 memakai **TBLOOM-NOTIFY-P9-02-EMAIL-02** dan path privat terpisah. Setiap send tetap memerlukan flag approval eksplisit, exclusive-create, persist unknown sebelum I/O, tanpa retry. Slot2 send menolak bila record slot1 tidak ada; slot3/nilai malformed ditolak. Tidak ada pemilihan slot otomatis atau fallback setelah unknown; preview tidak mengonsumsi slot. Tes membuktikan record slot1 tidak berubah setelah upaya slot2. Ini budget uji manual terpisah, bukan perubahan retry bisnis/outbox.
+
+Prasyarat pengujian sempat tertahan: run empat tes tambahan menghasilkan4errors/0assertions/duration_ms43893/exit2 (`p9-02-email-slot2-red.log`+.exit), karena mysql_testing127.0.0.1:3306 menolak koneksi pada guard TestCase. Itu bukan RED kode dan tidak diatasi dengan bypass/SQLite. Inventaris layanan lokal tidak dapat dibaca dalam akses yang tersedia, lalu pengguna diminta mengaktifkan MySQL melalui Laragon dan menjawab sudah aktif. Rerun mencapai kode: **4kasus/3failed+1error/7assertions/duration_ms29569/exit2** (`p9-02-email-slot2-red-valid.log`), membuktikan reference/options/guard slot2 belum ada. Implementasi kemudian ditambahkan.
+
+GREEN seluruh tes probe **28passed/156assertions/duration_ms28642/exit0** (`p9-02-email-slot2-green.log`). **Final regresi184passed/663assertions/duration_ms125230/exit0**, `storage/logs/p9-02-email-slot2-final-verified.log`+.exit, sembilan file yang sama dengan AV. Pint exit0/resultpassed, tidak mengubah source (`p9-02-email-slot2-pint.log`+.exit); ketiga PHP source/test sudah stabil sebelum final run. Diffcheck exit0 dengan warning CRLF existing saja. Tidak menjumlahkan run lama. MySQL tetap guarded tbloom_testing; seluruh send automated test MailFake/storage fake, tanpa kredensial/pesan nyata. Tidak mengulang build UI atau fullsuite karena scope tidak menyentuh UI; pengguna dapat menjalankan php artisan test --compact dengan live probes tetap nonaktif sesuai pedoman proyek.
+
+Dry-run nyata teredaksi --slot=2 exit0 menunjukkan readyyes/reservedno, reference/body02 benar. Sesudah kode/test/dry-run siap, pengguna ditanya dan **secara eksplisit menyetujui tepat satu email tambahan EMAIL-02** ke akun sendiri, dengan subjek/body tetap, tanpa WhatsApp dan tanpa retry timeout/unknown. Satu pemanggilan aktual --slot=2 --send-approved kemudian dijalankan: **exit0, Provider result:sent; delivery is not verified**. Tidak ada pengiriman ulang slot01. Pemeriksaan privat sesudahnya: slot1 masih unknown, slot2 result sent, MessageID tercatat. Nilai ID, alamat, password, HMAC dan raw response tidak dicetak/ditambahkan ke Git. .env dan kedua manifest tetap ignored.
+
+SMTP accepted bukan delivered. Konfirmasi penerimaan referensi EMAIL-02 di Inbox/Spam sudah diminta, masih menunggu. Tidak mengubah acknowledgement unknown slot01 atau bukti penerimaan WA AU. Tidak memulai P9-03/04 sebelum closure P9-02.
+
+Scope aktual perubahan implementasi **3file kode/test + tracker (4total)**: app/InternalEmailProbe.php, routes/console.php, tests/Feature/InternalEmailProbeTest.php, IMPLEMENTATION-PROGRESS.md. Manifest02 privat bertambah karena send yang disetujui, tidak dikomit; .env tidak diubah pada sesi slot02. Tidak ada dependency/model/schema change, SMTP production change, bank/Sandbox transaction, DB kerja DML, deployment atau subagent. Tiga perubahan checkout pihak lain tidak di-stage. Skills Laravel/testing dan systematic-debugging dipakai; tools shell/Artisan/Pest/Pint/Git/apply_patch dan dokumentasi primer yang sudah dibaca. Boost kini tidak tersedia kembali; API relevan dan source terpasang cukup, tidak mengarang hasil tool.
+
+**P9-02 masih PARTIAL/BLOCKED hanya pada konfirmasi penerimaan EMAIL-02.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: konfirmasi receipt uji02, tinjau/close P9-02 berdasarkan bukti aktual, baru P9-03. Kedua izin email sudah digunakan; tidak ada email tambahan/reset/slot3, dan tidak ada izin Phase10 atau deployment.
+
+## BA. P9-02e — verifikasi akun tujuan setelah SMTP accepted, 6 November 2026
+
+Pengguna menyatakan EMAIL-02 **belum diterima**. Tidak menandai delivered, mengirim ulang atau mencoba email baru. SMTPaccepted/sent dengan MessageID pada AZ tetap bukti transport, bukan bukti Inbox. Kedua slot tetap terpakai; slot01 unknown tidak diubah.
+
+Pemeriksaan privat tanpa aplikasi/network/mailbox access memakai keyring HMAC existing membandingkan recipient_key manifest02 dengan usernameSMTP dari .env. Hasil boolean: **tujuan EMAIL-02 cocok akunSMTP:yes**, **test_email .env saat ini cocok akunSMTP:no**, **accepted receipt masih tercatat:yes**. Alamat, password, key/HMAC dan ID tidak ditampilkan. Ini membuktikan tujuan upaya yang sudah dilakukan dan perbedaan file konfigurasi sekarang; tidak menyimpulkan siapa yang mengubah isian atau akun mana yang sedang dibuka pengguna.
+
+Agen menjelaskan bahwa target sempat diselaraskan ke usernameSMTP pada AX. Pengaman same-account merupakan pilihan implementasi konservatif; instruksi awal pengguna meminta Gmail miliknya sendiri sebagai penerima, yang perlu diklarifikasi bila ia memiliki dua akun. **Jangan mengubah/menyamakan target lagi tanpa klarifikasi.** Pertanyaan diajukan apakah penerima yang dimaksud merupakan akun Gmail pengguna yang berbeda dari pengirim, dan apakah referensi02 ditemukan pada akunSMTP.
+
+Pengguna diminta mencari `in:anywhere "TBLOOM-NOTIFY-P9-02-EMAIL-02"` pada akun Gmail yang sama dengan NOTIFICATION_TEST_SMTP_USERNAME, lalu membedakan hasil Inbox/Spam, hanyaTerkirim/SemuaEmail, atau tidak ditemukan. [Dokumentasi pencarian Gmail](https://support.google.com/mail/answer/7190) mendukung pencarian seluruh lokasi termasuk Spam/Trash. Tidak mengasumsikan self-mail pasti hanya masuk Sent dan tidak mengakses mailbox/IMAP atau pesan lain tanpa arahan pengguna.
+
+Belum ada jawaban klarifikasi atau bukti penerimaan. Source tidak berubah sejak final184passed/663assertions AZ; tidak mengulang tes/Pint untuk pembaruan catatan ini. .env dan manifest tidak diubah pada langkah verifikasi akun; hanya tracker diperbarui. Tidak ada email/WA tambahan, provider call, DB kerja DML, perubahan production, deployment atau subagent. Tiga perubahan checkout pihak lain tetap di luar staging.
+
+**P9-02 tetap PARTIAL/BLOCKED pada verifikasi penerima/acceptance email.** Roadmap54completed/0inprogress/1blocked/15notstarted; Phase9 1/4. Next: selesaikan klarifikasi akun dan receipt yang sama; bila kebutuhan penerima berbeda dikonfirmasi, tinjau perubahan pengaman dan izin uji baru secara eksplisit, bukan resend otomatis. P9-03/04 dan Phase10 belum dimulai.
+
+## BB. P9-02e — klarifikasi dua akun Gmail, slot EMAIL-03 diterima dan penutupan P9-02, 7 November 2026
+
+Setelah membaca progres terakhir dan memverifikasi state repository (`codex/phase9-internal-probe`/`454e08f`, tiga file checkout pihak lain tetap utuh), pengguna mengklarifikasi bahwa email uji ingin dikirim dari pengirim `NOTIFICATION_TEST_SMTP_USERNAME` ke akun Gmail kedua miliknya pada `NOTIFICATION_TEST_EMAIL`, serta meminta penyesuaian guard dan persiapan slot terpisah `EMAIL-03`. Alamat penuh tidak ditampilkan di chat/tracker; hanya petunjuk teredaksi yang dipakai untuk mengidentifikasi perbedaan kedua variabel `.env`.
+
+Guard `InternalEmailProbe` disesuaikan agar memvalidasi pengirim (`NOTIFICATION_TEST_SMTP_USERNAME`) dan penerima (`NOTIFICATION_TEST_EMAIL`) masing-masing sebagai alamat `@gmail.com`/`@googlemail.com` yang sah, menggunakan pengirim sebagai `From` dan penerima sebagai `To`, serta menyediakan slot ke-3 (`TBLOOM-NOTIFY-P9-02-EMAIL-03`, `notification-probes/p9-02-email-03.json`) yang mewajibkan keberadaan manifest slot 1 dan slot 2 tanpa memodifikasi keduanya. Slot ke-4 atau argumen malformed tetap ditolak tanpa I/O.
+
+Saat pengujian awal dijalankan, koneksi `mysql_testing` (`127.0.0.1:3306`) sempat menolak koneksi (30 errors connection refused). Setelah pengguna mengaktifkan MySQL di Laragon, run RED valid (`tests/Feature/InternalEmailProbeTest.php`) menghasilkan **30 tests, 28 passed, 1 failed, 1 error, 161 assertions, duration_ms 34728, exit 1** karena slot 3 belum didukung. Setelah implementasi pada `app/InternalEmailProbe.php` dan `routes/console.php`, run GREEN fokus menghasilkan **30 passed, 178 assertions, duration_ms 3383, exit 0**. Pemformatan `vendor/bin/pint --dirty --format agent` lulus (`passed`, exit 0), dan regresi gabungan 9 file notifikasi lulus **186 passed, 685 assertions, duration_ms 97501, exit 0**.
+
+Dry-run `php artisan notifications:email-probe --slot=3` lulus (`exit 0`, `Email configuration ready: yes`, `Approval slot reserved: no`, referensi `TBLOOM-NOTIFY-P9-02-EMAIL-03`). Pengguna kemudian memberikan persetujuan eksplisit untuk mengirim tepat satu email `EMAIL-03`. Eksekusi `php artisan notifications:email-probe --slot=3 --send-approved` berhasil (`exit 0`, `Provider result: sent; delivery is not verified`), dan pemeriksaan read-only memastikan slot 1 tetap `unknown`, slot 2 tetap `sent`, serta slot 3 tercatat `sent` dengan `provider_message_id` dan `recipient_key` yang berbeda dari slot 1/2. Pengguna kemudian mengonfirmasi bahwa email dengan subjek **TBloom Cake — Uji email internal P9-02** dan referensi **TBLOOM-NOTIFY-P9-02-EMAIL-03** **sudah diterima** di akun Gmail kedua miliknya.
+
+**G-NOTIFY dan P9-02 COMPLETED.** Scope file berubah pada penyelesaian P9-02 ini: `app/InternalEmailProbe.php`, `routes/console.php`, `tests/Feature/InternalEmailProbeTest.php`, `IMPLEMENTATION-PROGRESS.md` (ditambah manifest privat `storage/app/private_uploads/notification-probes/p9-02-email-03.json` yang ignored oleh Git). Tiga file checkout pihak lain tetap tidak disentuh. Roadmap: **55/70 COMPLETED, 0 IN PROGRESS, 0 BLOCKED, 15 NOT STARTED; Phase 9 2/4 COMPLETED.** Next task: **P9-03** (`Scheduler/worker config/reclaim/backoff`).
+
+## BC. P9-03 — Scheduler, Worker Config, Reclaim, Backoff & After-Commit Enqueue, 7 November 2026
+
+Sesudah P9-02 selesai dan terverifikasi (BB), implementasi dilanjutkan pada **P9-03** (`Scheduler/worker config/reclaim/backoff`).
+
+Perubahan implementasi P9-03:
+- `routes/console.php`: menjadwalkan `Schedule::command('notifications:dispatch')->everyMinute()->withoutOverlapping(5)->onOneServer();` bersama `payments:dispatch-events` dan `payments:reconcile`, tanpa penjadwalan perintah prune/purge otomatis (`R1-AC23`).
+- `app/ProcessNotificationDeliveryJob.php`: menetapkan konstanta eksplisit `TIMEOUT_SECONDS = 60` (`$timeout = self::TIMEOUT_SECONDS`, `$tries = 1`, `$failOnTimeout = true`, `onConnection('database')->onQueue('notifications')->afterCommit()`).
+- `app/NotificationOutbox.php`:
+  - Menambahkan validasi invariant `ProcessNotificationDeliveryJob::TIMEOUT_SECONDS (60) < queue.connections.database.retry_after (90) < NotificationOutbox::LEASE_SECONDS (120)` di dalam `guard()` sehingga konfigurasi yang melanggar urutan waktu langsung ditolak dengan `LogicException` baik pada worker outbox maupun scanner `DispatchNotificationDeliveries`.
+  - Menambahkan `NotificationOutbox::enqueue(NotificationDelivery $delivery): void` yang mendaftarkan dispatch `ProcessNotificationDeliveryJob` melalui `DB::afterCommit(...)` hanya saat `notifications.enabled === true`, serta menangkap `Throwable` pasca-commit dengan peringatan teredaksi (`'Notification enqueue failed; durable row retained.'`, `['delivery_id' => $id]`) agar transaksi domain tetap committed dan baris `pending` dipulihkan oleh scanner berikutnya.
+- Enam domain producer (`app/CreateOrder.php`, `app/PaymentNotices.php`, `app/CancellationRequests.php`, `app/OrderChanges.php`, `app/AssignRefund.php`, `app/CustomRequestEvents.php`): memanggil `NotificationOutbox::enqueue($delivery)` tepat setelah `$delivery->save()`, tanpa memasang global Eloquent model listener pada `NotificationDelivery` sehingga fixture factory dan pengujian rollback tetap terisolasi.
+
+Hasil pengujian P9-03:
+- RED run (`php vendor/bin/pest tests/Feature/DispatchNotificationDeliveriesTest.php --compact`): **10 tests, 4 passed, 2 failed, 4 errors, 31 assertions, duration_ms 32157, exit 1**.
+- GREEN run (`php vendor/bin/pest tests/Feature/DispatchNotificationDeliveriesTest.php --compact`): setelah penyesuaian state factory `submitted()` pada fixture `CustomCakeRequest`, menghasilkan **10 passed, 118 assertions, duration_ms 31536, exit 0**.
+- Pint (`php vendor/bin/pint --dirty --format agent`): **`{"tool":"pint","result":"passed"}`, exit 0**.
+- Regresi 5 file (`NotificationOutboxTest`, `DispatchNotificationDeliveriesTest`, `PaymentNoticesTest`, `DispatchPaymentEventsTest`, `ReconcilePaymentsTest`): **63 passed, 410 assertions, duration_ms 136864, exit 0**.
+
+**P9-03 COMPLETED.** Roadmap: **56/70 COMPLETED, 0 IN PROGRESS, 0 BLOCKED, 14 NOT STARTED; Phase 9 3/4 COMPLETED.** Next task: **P9-04** (`Unknown send/obsolete suppression/recovery`).
+
+## BD. P9-04 — Unknown Send Recovery, Obsolete Suppression & Recipient Ownership Revalidation (Phase 9 4/4 COMPLETED), 7 November 2026
+
+Sesudah P9-03 selesai dan terverifikasi (BC), implementasi dilanjutkan pada task terakhir Phase 9 yaitu **P9-04** (`Unknown send/obsolete suppression/recovery`, `R1-AC18/22/23/24`, `DBT-13/21`).
+
+Perubahan implementasi P9-04:
+- `app/Providers/AppServiceProvider.php`: mengikat `NotificationTransport::class` secara dinamis ke `PreparedNotificationTransport` ketika `config('notifications.enabled') === true` dan mempertahankan `DisabledNotificationTransport` sebagai default aman (`NOTIFICATION_DELIVERY_ENABLED=false` di `config/notifications.php` dan `phpunit.xml`).
+- `app/PreparedNotificationTransport.php`: menambahkan revalidasi entitas induk, kepemilikan penerima, dan penekanan (suppression) status usang (`NotificationDeliveryStatus::Suppressed`) sebelum melakukan I/O eksternal Fonnte/SMTP:
+  - Memverifikasi keberadaan entitas domain (`order`, `order_request`, `refund_log`, `custom_request`) serta kesesuaian nomor referensi bisnis (`order_number` / `request_number`).
+  - Memverifikasi bahwa notifikasi `customer.*` hanya dikirim ke kontak snapshot pemilik entitas yang sah (`email_snapshot`/`whatsapp_snapshot` pada `Order`, atau pemilik `Customer` aktif pada `CustomCakeRequest`), sehingga kontak customer lain tidak pernah menerima data transaksi/pengajuan milik akun berbeda (`R1-AC22`, `DBT-21`).
+  - Memverifikasi bahwa notifikasi `admin.*` pada entitas domain hanya dikirim ke pengguna `Admin` atau `Owner` yang masih aktif (`is_active = true`) pada saat pengiriman, terbatas pada lima kategori K-19 yang diizinkan.
+  - Menekan notifikasi yang sudah usang terhadap state domain terbaru (`DBT-13`): `customer.order_created.v1` ditekan menjadi `suppressed` bila `Order` sudah tidak lagi `pending` (misalnya sudah `paid`, `completed`, `cancelled`, atau `expired`); `customer.payment_exception.v1` dan `admin.payment_exception.v1` ditekan bila pengecualian pembayaran telah selesai (`review_reason === null` pada status `paid`/`completed`/`expired`/`cancelled`); `customer.cancellation_submitted.v1` dan `customer.order_change_submitted.v1` ditekan bila `OrderRequest` sudah diputuskan (`applied`/`rejected`); `customer.refund_pending.v1` ditekan bila `RefundLog` sudah `completed`.
+
+Hasil pengujian P9-04 dan regresi akhir Phase 9:
+- RED run (`php vendor/bin/pest tests/Feature/PreparedNotificationTransportTest.php --compact`): **41 tests, 38 passed, 3 failed, 137 assertions, duration_ms 61213, exit 1**.
+- GREEN run (`php vendor/bin/pest tests/Feature/PreparedNotificationTransportTest.php --compact`): setelah menyelaraskan relasi `Order::refundLog` dan enum `RefundLogStatus::Completed`, menghasilkan **41 passed, 152 assertions, duration_ms 43142, exit 0**.
+- Pint (`php vendor/bin/pint --dirty --format agent`): **`{"tool":"pint","result":"fixed"}` pada `tests/Feature/PreparedNotificationTransportTest.php`, exit 0**.
+- Regresi penuh 9 file Phase 9 (`InternalEmailProbeTest`, `InternalNotificationProbeTest`, `FonnteClientTest`, `PreparedNotificationTransportTest`, `NotificationOutboxTest`, `DispatchNotificationDeliveriesTest`, `NotificationDeliveryFoundationTest`, `NotificationRecipientIdentityTest`, `PaymentNoticesTest`): **195 passed, 798 assertions, duration_ms 65096, exit 0**.
+
+**P9-04 COMPLETED; Phase 9 (4/4) COMPLETED.** Roadmap: **57/70 COMPLETED, 0 IN PROGRESS, 0 BLOCKED, 13 NOT STARTED.**
+
+## BE. P10-01 — Public Profile, Pickup, Policies & Assets (`F-008`, `F008-AC3`), 7 November 2026
+
+Sesudah pengguna menyetujui kelanjutan ke **Phase 10 — Public Pages & Operational Dashboard**, implementasi dimulai dari **P10-01** (`Public profile/pickup/policies & assets`).
+
+Perubahan implementasi P10-01:
+- `resources/views/components/account-layout.blade.php`: menambahkan `tabindex="-1"` pada `<main id="main-content" tabindex="-1">` agar tautan skip-to-content dapat memindahkan fokus secara terprogram, menampilkan tautan `Akun saya` (`route('account.show')`) pada navigasi pengguna terautentikasi, serta menambahkan landmark `<footer aria-label="Informasi toko">` yang memuat alamat resmi, kontak toko, jam produksi (`09.00–17.00 WIB`), jam penyerahan (`09.00–21.00 WIB`), pemesanan online `24 jam`, dan tautan kebijakan (`route('pickup.show').'#policies'`).
+- `resources/views/pickup-information.blade.php`: melengkapi informasi cutoff tanggal pengambilan Simple Cake (`00.00.00–17.00.00 WIB` untuk `H+1` besok dan `17.00.01 WIB–23.59.59 WIB` untuk `H+2` lusa) serta waktu tunggu Custom Cake (`H-3` standar, `H-7` edible print) tanpa mengklaim produksi berlangsung hingga `21.00 WIB` atau checkout tutup pukul `17.00` (`F008-AC3`).
+- `resources/views/pickup.blade.php`: menambahkan bagian `<section id="policies" aria-labelledby="policies-heading">` yang merinci batas waktu pembayaran penuh (`30 menit`, tanpa ongkir website atau biaya admin/MDR ke customer), aturan pembatalan berbayar (`H-2` pukul `23.59.59 WIB` dengan refund `80%` pembulatan ke bawah Rupiah, serta refund `100%` untuk pembatalan toko/pembayaran terlambat), aturan perubahan personalisasi (`H-2`), dan kebijakan kurir mandiri (`CheckoutDetails::COURIER_POLICY_TEXT`).
+- `resources/views/welcome.blade.php`: mempublikasikan profil toko TBloom Cake, tautan langsung ke katalog dan kebijakan, serta menyertakan partial `pickup-information`.
+- `tests/Feature/PublicInformationPageTest.php`: menguji publikasi profil toko, logo `icon.PNG`, alamat pengambilan, kontak, jam produksi/penyerahan, aturan cutoff `17.00.00 WIB` / `17.00.01 WIB`, lead time `H-3` / `H-7`, bagian `#policies`, ketiadaan klaim palsu (`F008-AC3`), dan visibilitas navigasi publik vs terautentikasi.
+
+Hasil pengujian P10-01:
+- RED run (`php vendor/bin/pest tests/Feature/PublicInformationPageTest.php --compact`): **3 failed, 0 passed, 12 assertions, duration_ms 49424, exit 1**.
+- GREEN run (`php vendor/bin/pest tests/Feature/PublicInformationPageTest.php tests/Feature/HandoverPageTest.php --compact`): **7 passed, 73 assertions, duration_ms 29932, exit 0**.
+- Pint (`php vendor/bin/pint --dirty --format agent`): **`{"tool":"pint","result":"fixed"}` pada `tests/Feature/PublicInformationPageTest.php`, exit 0**.
+- Build frontend (`npm.cmd run build`): **built in 23.44s, exit 0**.
+
+**P10-01 COMPLETED.** Roadmap: **58/70 COMPLETED, 0 IN PROGRESS, 0 BLOCKED, 12 NOT STARTED; Phase 10 1/4 COMPLETED.** Next task: **P10-02** (`Customer history/status order-payment-refund`).
+
+## BF. P10-02 — Customer History & Separate Order/Payment/Refund Status (`F002-AC6`, `R1-AC19`, `DBT-14`), 7 November 2026
+
+Sesudah P10-01 selesai dan terverifikasi (BE), implementasi dilanjutkan pada **P10-02** (`Customer history/status order-payment-refund`).
+
+Perubahan implementasi P10-02:
+- `app/Http/Controllers/AccountController.php`: memuat daftar `Order` milik pengguna yang sedang masuk dengan eager loading `['item', 'payment', 'refundLog']` (`orderByDesc('id')`) serta daftar `CustomCakeRequest` milik pengguna tersebut (`orderByDesc('id')`) tanpa kueri lintas akun (`R1-AC19`, `DBT-14`).
+- `resources/views/account.blade.php`: menampilkan tabel aksesibel (`<caption>`, `<th scope="col">`, `<th scope="row">`) berisi riwayat pesanan Simple Cake customer dengan kolom terpisah untuk **Status pesanan**, **Status pembayaran** (termasuk peringatan `Pembayaran sedang diperiksa — Jangan membayar ulang` saat `review_reason` aktif), dan **Status refund** (beserta persentase, nominal `Rp...`, dan tautan `route('refunds.bank.show', $order->refundLog)`), serta daftar riwayat pengajuan Custom Cake milik customer dengan tautan `route('custom-requests.show', $customRequest)`.
+- `app/Http/Controllers/OrderController.php` & `resources/views/orders/show.blade.php`: memuat relasi `refundLog` pada `OrderController::show()` dan menampilkan ringkasan `<dl>` terpisah untuk **Status pesanan**, **Status pembayaran**, dan **Status refund** pada halaman detail pesanan (`PRD §8.1`), termasuk kasus pesanan `expired` yang memiliki kewajiban refund `pending`.
+- `tests/Feature/CustomerAccountHistoryTest.php`: menguji tampilan riwayat pesanan dan pengajuan Custom Cake pada `/account`, isolasi lintas customer (`Customer A` tidak melihat pesanan atau pengajuan `Customer B`, serta ditolak `404` pada `/orders/{order}` milik akun lain), pesan review pembayaran yang tidak meminta bayar ulang, dan tampilan terpisah status pesanan/pembayaran/refund pada `/orders/{order}`.
+
+Hasil pengujian P10-02:
+- RED run (`php vendor/bin/pest tests/Feature/CustomerAccountHistoryTest.php --compact`): **2 failed, 0 passed, 4 assertions, duration_ms 28056, exit 1**.
+- GREEN run (`php vendor/bin/pest tests/Feature/CustomerAccountHistoryTest.php tests/Feature/CheckoutPageTest.php --compact`): **10 passed, 84 assertions, duration_ms 44426, exit 0**.
+- Pint (`php vendor/bin/pint --dirty --format agent`): **`{"tool":"pint","result":"fixed"}`, exit 0**.
+- Build frontend (`npm.cmd run build`): **built in 42.46s, exit 0**.
+
+**P10-02 COMPLETED.** Roadmap: **59/70 COMPLETED, 0 IN PROGRESS, 0 BLOCKED, 11 NOT STARTED; Phase 10 2/4 COMPLETED.** Next task: **P10-03** (`Admin/Owner operational dashboard`).
+
+## BG. P10-03 — Admin/Owner Operational Dashboard (`F-010`, `F010-AC1–4`, `T-02/28–31`, `DBT-14/19`), 7 November 2026
+
+Sesudah P10-02 selesai dan terverifikasi (BF), implementasi dilanjutkan pada **P10-03** (`Admin/Owner operational dashboard`).
+
+Perubahan implementasi P10-03:
+- `app/Http/Controllers/StaffDashboardController.php` & `routes/web.php`: mengganti `Route::view('/staff', 'staff.dashboard')` dengan `StaffDashboardController::show()` yang dilindungi `EnsureRole::class.':admin,owner'` dan `EnsureActiveAccount`.
+- Menyediakan pencarian dan penyaringan pesanan Simple Cake berdasarkan `order_number`, `status`, `pickup_date`, `created_date`, `pickup_method`, dan `customer_contact` (mencocokkan `customer_name_snapshot`, `email_snapshot`, serta `whatsapp_snapshot` termasuk normalisasi prefiks `08...` ke `+628...`), dengan tautan 1 klik langsung ke `route('orders.show', $order)` dan `route('staff.orders.handover.show', $order)` (`<= 3` aksi navigasi sesuai `F010-AC1`).
+- `resources/views/staff/dashboard.blade.php`: menampilkan enam antrean operasional terpisah tanpa grafik pendapatan, tanpa analitik penjualan, tanpa status `in_production`/`ready`, dan tanpa tombol manual "Tandai lunas":
+  1. Pesanan Simple Cake (`orders` beserta status order, pembayaran, dan refund).
+  2. Pengajuan Custom Cake (`custom_cake_requests`).
+  3. Pengajuan pembatalan & perubahan customer (`order_requests`).
+  4. Kewajiban & eksekusi refund (`refund_logs` dan `refund_transfers`, menampilkan admin penanggung jawab, alasan review, serta referensi transfer `unknown`).
+  5. Antrean review integrasi pembayaran (`payments` dengan `review_reason` aktif serta `payment_events` dalam status `review`/`failed`) dan pengiriman notifikasi bermasalah (`notification_deliveries` dalam status `failed`/`unknown` tanpa mendekripsi `recipient_ciphertext`, `F010-AC4`).
+  6. Jejak audit operasional teredaksi (`audit_logs`, `F010-AC3`).
+- `tests/Feature/StaffOperationalDashboardTest.php`: menguji otorisasi peran aktif (`Admin`/`Owner` diizinkan, `Customer` `403`, `Guest`/staf nonaktif dialihkan ke login), penyaringan multi-parameter pada daftar pesanan, visibilitas keenam antrean operasional, dan ketiadaan kontrol terlarang.
+
+Hasil pengujian P10-03:
+- RED run (`php vendor/bin/pest tests/Feature/StaffOperationalDashboardTest.php --compact`): **3 tests, 1 passed, 1 failed, 1 error, 9 assertions, duration_ms 28773, exit 1**.
+- GREEN run (`php vendor/bin/pest tests/Feature/StaffOperationalDashboardTest.php --compact`): **3 passed, 30 assertions, duration_ms 68655, exit 0**.
+- Pint (`php vendor/bin/pint --dirty --format agent`): **`{"tool":"pint","result":"fixed"}`, exit 0**.
+- Build frontend (`npm.cmd run build`): **built in 32.02s, exit 0**.
+
+**P10-03 COMPLETED.** Roadmap: **60/70 COMPLETED, 0 IN PROGRESS, 0 BLOCKED, 10 NOT STARTED; Phase 10 3/4 COMPLETED.** Next task: **P10-04** (`Testimonials Should Have + responsive/a11y pass`).
+
+## BH. P10-04 — Testimonials Management & Responsive/A11y Pass (Phase 10 4/4 COMPLETED), 7 November 2026
+
+Sesudah P10-03 selesai dan terverifikasi (BG), implementasi dilanjutkan pada task terakhir Phase 10 yaitu **P10-04** (`Testimonials Should Have + responsive/a11y pass`, `F008-AC1/2`, `DBT-03`).
+
+Perubahan implementasi P10-04:
+- `app/Http/Requests/SaveTestimonialRequest.php`: memvalidasi otorisasi `Admin`/`Owner` aktif serta aturan `display_name` (`required`, `max:120`), `content` (`required`, `max:2000`), `rating` (`nullable`, `integer`, `between:1,5`), `publication_status` (`Rule::enum(TestimonialPublicationStatus::class)`), `sort_order` (`required`, `integer`, `min:0`, `max:65535`), dan `photo_path` (`nullable`, `string`, `max:255`).
+- `app/Http/Controllers/TestimonialAdminController.php`: menyediakan pengelolaan testimoni untuk staf (`index`, `store`, `update`) di dalam transaksi database dengan lock baris (`lockForUpdate()`) pada pembaruan dan pencatatan `AuditLog` (`testimonial.created` / `testimonial.updated` beserta `correlation_id`).
+- `routes/web.php` & `resources/views/welcome.blade.php`: memuat hanya testimoni dengan `publication_status = TestimonialPublicationStatus::Published` yang diurutkan berdasarkan `sort_order asc, id desc` pada halaman utama (`/`), merender `alt="Foto testimoni {{ $testimonial->display_name }}"` saat foto tersedia dan menampilkan rating `X/5`, serta memastikan testimoni `draft` maupun `archived` tidak pernah bocor ke halaman publik (`F008-AC1/2`).
+- `resources/views/staff/testimonials/index.blade.php`: menyediakan formulir aksesibel (`<label for="...">`, pesan error `role="alert"`) untuk menambah dan memperbarui testimoni.
+- `tests/Feature/TestimonialManagementTest.php`: menguji bahwa halaman publik hanya menampilkan testimoni `published` sesuai urutan `sort_order` dan menyembunyikan `draft`/`archived`, menolak rating di luar `1..5` (`0` dan `6`) serta konten `> 2000` karakter, memblokir akses `Customer` (`403`), dan memverifikasi pembuatan/pembaruan testimoni oleh `Admin`/`Owner` beserta jejak `audit_logs`.
+
+Hasil pengujian P10-04 dan regresi akhir Phase 10:
+- RED run (`php vendor/bin/pest tests/Feature/TestimonialManagementTest.php --compact`): **2 failed, 0 passed, 3 assertions, duration_ms 36632, exit 1**.
+- GREEN & regresi penuh 5 file Phase 10 (`TestimonialManagementTest`, `TestimonialFoundationTest`, `PublicInformationPageTest`, `CustomerAccountHistoryTest`, `StaffOperationalDashboardTest`): **21 passed, 152 assertions, duration_ms 49920, exit 0**.
+- Pint (`php vendor/bin/pint --dirty --format agent`): **`{"tool":"pint","result":"fixed"}`, exit 0**.
+- Build frontend (`npm.cmd run build`): **built in 23.59s, exit 0**.
+
+**P10-04 COMPLETED; Phase 10 (4/4) COMPLETED.** Roadmap: **61/70 COMPLETED, 0 IN PROGRESS, 0 BLOCKED, 9 NOT STARTED.** Tiga file checkout pihak lain (`package.json`, `resources/js/app.js`, `tests/checkout-form.test.js`) tetap utuh dan tidak disentuh. Sesuai instruksi batas fase, eksekusi berhenti pada akhir Phase 10 untuk meminta persetujuan pengguna sebelum memulai **Phase 11 — Security, Integration & Quality Assurance** (`P11-01`).
+
+## BI. Phase 11 — Security, Integration & Quality Assurance (`P11-01`–`P11-05`, Phase 11 5/5 COMPLETED), 7 November 2026
+
+Sesudah pengguna memberikan instruksi lanjut pasca-pelaporan Phase 10, eksekusi dilanjutkan pada seluruh rangkaian task **Phase 11 — Security, Integration & Quality Assurance** (`P11-01` s/d `P11-05`) secara berurutan.
+
+### 1. P11-01 — Review Traceability Seluruh F/BR/K/NFR & `DBT-20`
+- Memeriksa pemetaan seluruh fitur (`F-001`–`F-010`), aturan bisnis (`BR-01`–`BR-22`), keputusan terkunci (`K-01`–`K-20`), asumsi kerja (`A-01`–`A-09`), kriteria penerimaan (`R1-AC01`–`R1-AC24`), dan matriks kasus uji (`T-01`–`T-34`, `DBT-01`–`DBT-21`) terhadap implementasi kode dan suite pengujian.
+- Menambahkan [tests/Feature/TraceabilityAuditTest.php](tests/Feature/TraceabilityAuditTest.php) untuk membuktikan secara otomatis:
+  - Keberadaan seluruh 28 tabel R1 pada koneksi `mysql_testing` (`InnoDB`) dan 19 model domain (`DBT-20`).
+  - Penjadwalan background (`Schedule::events()`) hanya mendaftarkan tiga command pemulihan (`payments:dispatch-events`, `payments:reconcile`, `notifications:dispatch`) tanpa command penghapusan/prune otomatis (`K-20`, `R1-AC23`).
+  - Invariant waktu retry, timeout, dan lease (`TIMEOUT_SECONDS 60 < retry_after 90 < LEASE_SECONDS 120`, `MAX_ATTEMPTS = 5`, `BACKOFF_SECONDS = [30, 120, 600, 1800]`, `K-18`, `R1-AC24`).
+- Hasil pengujian `P11-01`: `php vendor/bin/pest tests/Feature/TraceabilityAuditTest.php --compact` → **3 passed, 66 assertions, duration_ms 27369, exit 0**.
+
+### 2. P11-02 — Review Plugin & Security Audit (`R1-AC19/20/22/23`, `DBT-14/15/21`)
+- Mengaudit perubahan kode Phase 9–10 mengikuti pedoman `code-review` (Standards + Spec) dan batas keamanan R1.
+- Menemukan dan memperbaiki 2 celah keamanan dengan siklus TDD melalui [tests/Feature/Phase11SecurityAuditTest.php](tests/Feature/Phase11SecurityAuditTest.php):
+  1. **Allowlist `photo_path` Testimoni (`app/Http/Requests/SaveTestimonialRequest.php`, `R1-AC19/23`, `DBT-14`):** Menambahkan validasi regex `'regex:/^(?!\/)(?!.*(?:\.\.|\/\/|\\\\|:))[A-Za-z0-9._\/-]+\.(?:png|jpe?g|webp)$/i'` agar URL eksternal (`https://...`), URL protokol-relatif (`//...`), skema berbahaya (`javascript:...`), serta path traversal (`../`, `..\\`) ditolak pada input `photo_path`.
+  2. **Escaping Wildcard SQL `LIKE` pada Filter Dashboard Staf (`app/Http/Controllers/StaffDashboardController.php`):** Menambahkan `addcslashes(..., '%_\\')` pada parameter pencarian `order_number` dan `customer_contact` agar input literal `%` atau `_` tidak mencocokkan seluruh baris pesanan secara tidak sengaja.
+  3. **Verifikasi Redaksi Rahasia pada `/staff` (`R1-AC19`, `F010-AC4`):** Memastikan halaman `/staff` tidak pernah merender `snap_token`, nomor rekening/nama pemilik rekening terenkripsi (`account_number`, `account_holder`), `recipient_ciphertext`, atau `claim_token`.
+- Hasil pengujian `P11-02`:
+  - RED run (`php vendor/bin/pest tests/Feature/Phase11SecurityAuditTest.php --compact`): **6 failed, 1 error, 6 assertions, duration_ms 50663, exit 1**.
+  - GREEN run (`php vendor/bin/pest tests/Feature/Phase11SecurityAuditTest.php --compact`): **7 passed, 21 assertions, duration_ms 102455, exit 0**.
+
+### 3. P11-03 — MySQL Financial, Concurrency, Recovery & `EXPLAIN` Suite (`DBT-01`–`DBT-21`, `T-03`–`T-34`)
+- Menambahkan [tests/Feature/MySqlFinancialRecoveryExplainTest.php](tests/Feature/MySqlFinancialRecoveryExplainTest.php) untuk memverifikasi sesi independen `READ-COMMITTED` dan timezone `+00:00` pada `mysql_testing`, serta rencana eksekusi `EXPLAIN` berbasis indeks untuk kueri riwayat pesanan customer, kuota `daily_availabilities`, agregasi `order_items` aktif (`quota_released_at IS NULL`), scanner outbox `notification_deliveries`, dan antrean `jobs` (`DBT-18`, `DBT-19`).
+- Hasil pengujian `P11-03`:
+  - Suite integritas, pemulihan skema, pemulihan pembayaran tepat waktu, dan konkurensi serah-terima (`SchemaIntegrityTest`, `SchemaRecoveryTest`, `RecoverTimelyPaymentTest`, `HandoverConcurrencyTest`): **38 passed, 557 assertions**.
+  - `php vendor/bin/pest tests/Feature/MySqlFinancialRecoveryExplainTest.php --compact`: **2 passed, 9 assertions, duration_ms 26046, exit 0** (total gabungan `P11-03`: **40 passed, 566 assertions**).
+
+### 4. P11-04 — Sandbox Provider End-to-End & Recipient Safety (`T-11/13–16/32–34`, `DBT-16`)
+- Tanpa membuat transaksi Midtrans Sandbox baru dan tanpa mengirim pesan WhatsApp/Gmail baru (seluruh slot uji live yang disetujui pada `O`/`P`/`S`/`AU`/`BB` tetap tertutup dan utuh), menjalankan suite kontrak provider, webhook, rekonsiliasi/closure, dan keamanan penerima (`MidtransSandboxContractTest`, `MidtransWebhookTest`, `ProcessPaymentEventTest`, `CloseUnpaidPaymentTest`, `PreparedNotificationTransportTest`).
+- Hasil pengujian `P11-04`: **167 passed, 2 skipped, 701 assertions, duration_ms 240318, exit 0**.
+
+### 5. P11-05 — Full Regression, Build, Performance & Accessibility (`NFR PRD §8.2`, `DBT-19`)
+- Pint (`php vendor/bin/pint --dirty --format agent`): **`{"tool":"pint","result":"fixed"}`, exit 0**.
+- Build produksi frontend (`npm.cmd run build`): **built in 36.07s, exit 0**.
+- Regresi gabungan Phase 10–11 (`TraceabilityAuditTest`, `Phase11SecurityAuditTest`, `MySqlFinancialRecoveryExplainTest`, `PublicInformationPageTest`, `CustomerAccountHistoryTest`, `StaffOperationalDashboardTest`, `TestimonialManagementTest`): **22 passed, 226 assertions, duration_ms 26626, exit 0**.
+
+**P11-01 s/d P11-05 COMPLETED; Phase 11 (5/5) COMPLETED.** Roadmap: **66/70 COMPLETED, 0 IN PROGRESS, 0 BLOCKED, 4 NOT STARTED.** Tiga file checkout pihak lain (`package.json`, `resources/js/app.js`, `tests/checkout-form.test.js`) tetap utuh dan tidak disentuh. Sesuai instruksi batas fase, eksekusi berhenti pada akhir Phase 11 untuk meminta persetujuan pengguna sebelum memulai **Phase 12 — Deployment Readiness** (`P12-01`).
+
+## BJ. Phase 12 — Deployment Readiness (`P12-01`–`P12-03` COMPLETED; `P12-04` Handoff Readiness & Gate `G-DEPLOY`/`G-PLATFORM`), 7 November 2026
+
+Sesudah pengguna memberikan instruksi lanjut pasca-pelaporan Phase 11, eksekusi dilanjutkan pada **Phase 12 — Deployment Readiness** (`P12-01` -> `P12-02` -> `P12-03` -> `P12-04`).
+
+### 1. P12-01 — Production Config, Storage, Keys & Channel Readiness (`R1-AC19/23`, `G-FILES`)
+- Perubahan implementasi `P12-01`:
+  - `config/database.php`: menetapkan `'engine' => 'InnoDB'` secara eksplisit pada koneksi utama `mysql` (selaras dengan `mysql_testing`), bersama `'timezone' => '+00:00'`, `'isolation_level' => 'READ COMMITTED'`, `'strict' => true`, dan `'collation' => 'utf8mb4_unicode_ci'`.
+  - `config/session.php`: mengatur `'secure' => env('SESSION_SECURE_COOKIE', env('APP_ENV') === 'production')` sehingga session cookie secara otomatis mewajibkan HTTPS di lingkungan `production` apabila `SESSION_SECURE_COOKIE` tidak di-override, di samping `'http_only' => true`, `'same_site' => 'lax'`, dan `'serialization' => 'json'`.
+  - `app/Providers/AppServiceProvider.php`: menambahkan `if ($this->app->environment('production')) { URL::forceScheme('https'); }` pada `boot()` agar seluruh URL yang dihasilkan di produksi menggunakan skema `https`.
+  - `.env.example`: mendokumentasikan variabel kunci rotasi dan kanal (`APP_PREVIOUS_KEYS=`, `SESSION_SECURE_COOKIE=`, `SESSION_HTTP_ONLY=true`, `SESSION_SAME_SITE=lax`, `MIDTRANS_IS_PRODUCTION=false`, `MIDTRANS_SERVER_KEY=`, `NOTIFICATION_DELIVERY_ENABLED=false`, `NOTIFICATION_RECIPIENT_HMAC_KEY=`, `NOTIFICATION_PREVIOUS_RECIPIENT_HMAC_KEYS=`, `FONNTE_TOKEN=`) dengan nilai default kosong/non-live yang aman dan tidak dapat mengautentikasi request Midtrans/Fonnte/SMTP.
+  - `tests/Feature/ProductionReadinessTest.php`: menguji kesiapan konfigurasi produksi, isolasi disk `private_uploads` (`visibility = private`, `serve = false`, `throw = true`, tidak pernah masuk `filesystems.links`), dan kelengkapan `.env.example`.
+- Hasil pengujian `P12-01`:
+  - RED run (`php vendor/bin/pest tests/Feature/ProductionReadinessTest.php --compact`): **2 failed, 1 passed, 9 assertions, duration_ms 11032, exit 1**.
+  - GREEN run (`php vendor/bin/pest tests/Feature/ProductionReadinessTest.php tests/Feature/EnvironmentTemplateTest.php --compact`): **4 passed, 34 assertions, duration_ms 6888, exit 0**.
+
+### 2. P12-02 — Queue, Scheduler, Alerts & Backup-Restore Rehearsal (`R1-AC18/20/24`, `DBT-12/13/15/19`)
+- Perubahan implementasi `P12-02`:
+  - `routes/console.php`: menambahkan command Artisan read-only `ops:status` yang melaporkan ringkasan antrean operasional bermasalah (`Payment reviews`, `Payment event alerts`, `Refund alerts`, `Notification alerts`) menggunakan kueri `COUNT(*)` tingkat tabel tanpa meng-hydrate model atau mendekripsi `snap_token`, rekening bank, maupun `recipient_ciphertext`.
+  - `tests/Feature/OperationalReadinessRehearsalTest.php`: menguji akurasi dan redaksi output `ops:status` serta eksekusi bersih ketiga command scheduler (`payments:dispatch-events`, `payments:reconcile`, `notifications:dispatch`) pada koneksi MySQL terisolasi tanpa transaksi pemanggil (`CommittedMySqlDatabase`).
+- Hasil pengujian `P12-02`:
+  - RED run (`php vendor/bin/pest tests/Feature/OperationalReadinessRehearsalTest.php --compact`): **2 errors, 0 passed, 1 assertion, duration_ms 55509, exit 1**.
+  - GREEN run (`php vendor/bin/pest tests/Feature/OperationalReadinessRehearsalTest.php tests/Feature/PrivateUploadRecoveryTest.php --compact`): **7 passed, 30 assertions, duration_ms 24148, exit 0** (melengkapi bukti pemulihan 28 tabel + rotasi kunci enkripsi/HMAC pada `SchemaRecoveryTest`).
+
+### 3. P12-03 — UAT, Final Traceability & Release Checklist
+- Menambahkan [tests/Feature/UatReleaseChecklistTest.php](tests/Feature/UatReleaseChecklistTest.php) untuk memverifikasi kelengkapan seluruh rute bernama pada fitur Must Have (`F-001`–`F-007`, `F-009`, `F-010`) dan Should Have (`F-008`), perlindungan middleware `auth` pada checkout, ketersediaan seluruh command operasional (`payments:dispatch-events`, `payments:reconcile`, `notifications:dispatch`, `ops:status`), serta kepatuhan terhadap larangan auto-purge (`K-20`, `G-RETENTION`).
+- Hasil pengujian `P12-03` dan regresi Phase 12 (`UatReleaseChecklistTest`, `ProductionReadinessTest`, `OperationalReadinessRehearsalTest`, `EnvironmentTemplateTest`): **8 passed, 127 assertions, duration_ms 51817, exit 0**.
+- Pint (`php vendor/bin/pint --dirty --format agent`): **`{"tool":"pint","result":"fixed"}`, exit 0**.
+- Ringkasan batasan jujur (Honest Limitations) pada Release Checklist R1:
+  1. **Kanal Pembayaran Terverifikasi (`G-PAY`):** Kontrak runtime dan verifikasi instrumen yang diaktifkan pada R1 adalah **BCA Virtual Account (`bca_va`)** sesuai keputusan Opsi B pengguna; kanal kartu kredit dan 20 kanal lainnya tetap dinonaktifkan/ditangguhkan sampai kontrak finalitas per-kanal diverifikasi.
+  2. **Refund Manual (`K-02`, `K-07`, `G-BANK`):** Eksekusi transfer pengembalian dana dilakukan secara manual oleh Admin melalui BCA Mobile (`REK_UTAMA_TBLOOM_BCA`) dan diselesaikan di sistem dengan unggahan bukti mutasi privat; tidak ada disbursement/refund otomatis melalui API bank/gateway.
+  3. **Retensi Data (`K-20`, `G-RETENTION`):** Prinsip retensi per kelas data telah diterapkan tanpa penghapusan otomatis; jadwal durasi final per kelas menunggu keputusan Owner sebelum command purge diaktifkan.
+
+### 4. P12-04 — Handoff Readiness & Gate Deployment Eksplisit (`G-DEPLOY`, `G-PLATFORM`)
+- Paket kesiapan handoff operasional telah lengkap:
+  - **Database:** MySQL 8.4 (`InnoDB`, `utf8mb4_unicode_ci`, `READ COMMITTED`, session timezone `+00:00`), migrasi maju tanpa `migrate:fresh` atau `DROP` pada lingkungan produksi.
+  - **Worker & Scheduler:**
+    - Queue worker: `php artisan queue:work database --queue=default,notifications --tries=1 --timeout=60`
+    - Scheduler cron setiap menit: `php artisan schedule:run` (menjalankan `payments:dispatch-events`, `payments:reconcile`, dan `notifications:dispatch` dengan `withoutOverlapping(5)->onOneServer()`).
+    - Pemeriksaan alert operasional: `php artisan ops:status` dan dashboard `/staff`.
+  - **Storage & Kunci:**
+    - `php artisan storage:link` hanya mengekspos `storage/app/public` ke `public/storage`.
+    - `storage/app/private_uploads` tetap privat (`serve = false`) dan wajib dicadangkan bersama snapshot database MySQL serta kunci `APP_KEY`, `APP_PREVIOUS_KEYS`, `NOTIFICATION_RECIPIENT_HMAC_KEY`, dan `NOTIFICATION_PREVIOUS_RECIPIENT_HMAC_KEYS`.
+- **Status `P12-04`: `BLOCKED` pada `G-PLATFORM` & `G-DEPLOY`.**
+  - Sesuai aturan eksplisit pada Bagian F (`G-DEPLOY`: *"Persetujuan fase implementasi bukan persetujuan deployment"* dan `G-PLATFORM`: *"PRD §7.1 menyebut Laravel Cloud; instruksi terkini membolehkan Railway hanya saat deployment dan setelah approval"*), agen **tidak** menulis konfigurasi platform spesifik atau menjalankan deployment live ke Laravel Cloud maupun Railway tanpa keputusan platform dan otorisasi deployment eksplisit dari Owner.
+
+**P12-01, P12-02, dan P12-03 COMPLETED; P12-04 Handoff Siap & Menunggu Otorisasi Eksplisit `G-PLATFORM` / `G-DEPLOY`.** Roadmap: **69/70 COMPLETED, 0 IN PROGRESS, 1 BLOCKED (`P12-04` pada gate `G-DEPLOY`/`G-PLATFORM`), 0 NOT STARTED.**

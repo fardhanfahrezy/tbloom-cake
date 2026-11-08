@@ -1,13 +1,22 @@
 <?php
 
 use App\EmailNotificationClient;
+use App\Models\CustomCakeRequest;
 use App\Models\NotificationDelivery;
 use App\Models\NotificationDeliveryStatus;
+use App\Models\OrderRequest;
+use App\Models\OrderStatus;
+use App\Models\Payment;
+use App\Models\RefundLog;
+use App\Models\User;
 use App\NotificationChannel;
 use App\NotificationMessage;
 use App\NotificationRecipientIdentity;
+use App\NotificationTransport;
 use App\OperationalNotificationMail;
+use App\PaymentReviewReason;
 use App\PreparedNotificationTransport;
+use App\ProcessNotificationDeliveryJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\PendingMail;
 use Illuminate\Mail\SentMessage;
@@ -17,6 +26,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Testing\Fakes\MailFake;
 use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mime\Email;
+use Tests\CommittedMySqlDatabase;
+
+uses(CommittedMySqlDatabase::class);
 
 beforeEach(function () {
     config(['notifications.enabled' => true, 'services.fonnte.token' => 'synthetic-fonnte-token',
@@ -184,4 +196,157 @@ test('an email delivery uses its own channel without WhatsApp fallback', functio
     Http::assertNothingSent();
     Mail::assertSent(OperationalNotificationMail::class, fn ($mail) => $mail->hasTo('synthetic@example.test'));
     Mail::assertSentCount(1);
+});
+
+test('container resolves prepared transport when enabled and suppresses obsolete order created reminder after order becomes paid', function () {
+    expect(app(NotificationTransport::class))->toBeInstanceOf(PreparedNotificationTransport::class);
+
+    $payment = Payment::factory()->create();
+    $order = $payment->order;
+    $identities = app(NotificationRecipientIdentity::class);
+
+    $obsoleteReminder = NotificationDelivery::factory()->create([
+        'event_key' => 'order:'.$order->id.':created',
+        'template_key' => 'customer.order_created.v1',
+        'entity_type' => 'order',
+        'entity_id' => $order->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $order->whatsapp_snapshot],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $order->whatsapp_snapshot),
+        'payload_minimal' => ['order_number' => $order->order_number, 'status' => 'pending'],
+    ]);
+
+    $order->forceFill(['status' => OrderStatus::Paid, 'paid_at' => now()])->save();
+    $payment->forceFill(['status' => 'paid', 'provider_paid_at' => now(), 'verified_at' => now(), 'is_late' => false])->save();
+
+    $paidNotice = NotificationDelivery::factory()->create([
+        'event_key' => 'order:'.$order->id.':paid',
+        'template_key' => 'customer.payment_paid.v1',
+        'entity_type' => 'order',
+        'entity_id' => $order->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $order->whatsapp_snapshot],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $order->whatsapp_snapshot),
+        'payload_minimal' => ['order_number' => $order->order_number, 'status' => 'paid'],
+    ]);
+
+    Http::preventStrayRequests();
+    Http::fake(['https://api.fonnte.com/send' => Http::response(['status' => true, 'id' => ['80367171'], 'target' => [substr($order->whatsapp_snapshot, 1)]])]);
+
+    app()->call([new ProcessNotificationDeliveryJob($obsoleteReminder->id), 'handle']);
+    expect($obsoleteReminder->fresh()->status)->toBe(NotificationDeliveryStatus::Suppressed);
+    expect($obsoleteReminder->fresh()->last_error)->toBe('notification_suppressed');
+    expect($obsoleteReminder->fresh()->sent_at)->toBeNull();
+    Http::assertNothingSent();
+
+    app()->call([new ProcessNotificationDeliveryJob($paidNotice->id), 'handle']);
+    expect($paidNotice->fresh()->status)->toBe(NotificationDeliveryStatus::Sent);
+    expect($paidNotice->fresh()->provider_message_id)->toBe('80367171');
+    Http::assertSentCount(1);
+});
+
+test('prepared transport suppresses obsolete request submission payment exception and refund pending notices once resolved', function () {
+    $payment = Payment::factory()->create(['status' => 'paid', 'provider_paid_at' => now(), 'verified_at' => now(), 'is_late' => false, 'review_reason' => null]);
+    $order = $payment->order;
+    $order->forceFill(['status' => OrderStatus::Paid, 'paid_at' => now()])->save();
+    $identities = app(NotificationRecipientIdentity::class);
+
+    $appliedRequest = OrderRequest::factory()->for($order)->for($order->user)->applied()->create();
+    $obsoleteRequestNotice = NotificationDelivery::factory()->create([
+        'event_key' => 'order_request:'.$appliedRequest->id.':submitted',
+        'template_key' => 'customer.cancellation_submitted.v1',
+        'entity_type' => 'order_request',
+        'entity_id' => $appliedRequest->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $order->whatsapp_snapshot],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $order->whatsapp_snapshot),
+        'payload_minimal' => ['order_number' => $order->order_number, 'request_id' => $appliedRequest->id, 'status' => 'pending'],
+    ]);
+
+    $obsoleteExceptionNotice = NotificationDelivery::factory()->create([
+        'event_key' => 'order:'.$order->id.':payment_exception:payment_time_unverified',
+        'template_key' => 'customer.payment_exception.v1',
+        'entity_type' => 'order',
+        'entity_id' => $order->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $order->whatsapp_snapshot],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $order->whatsapp_snapshot),
+        'payload_minimal' => ['order_number' => $order->order_number, 'status' => 'pending', 'reason' => PaymentReviewReason::TimeUnverified->value],
+    ]);
+
+    RefundLog::factory()->for($order)->for($payment)->completed()->create();
+    $obsoleteRefundPendingNotice = NotificationDelivery::factory()->create([
+        'event_key' => 'order:'.$order->id.':refund_pending',
+        'template_key' => 'customer.refund_pending.v1',
+        'entity_type' => 'order',
+        'entity_id' => $order->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $order->whatsapp_snapshot],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $order->whatsapp_snapshot),
+        'payload_minimal' => ['order_number' => $order->order_number, 'status' => 'cancelled'],
+    ]);
+
+    Http::preventStrayRequests();
+    Http::fake(['https://api.fonnte.com/send' => Http::response([])]);
+
+    foreach ([$obsoleteRequestNotice, $obsoleteExceptionNotice, $obsoleteRefundPendingNotice] as $notice) {
+        expect(app(PreparedNotificationTransport::class)->send($notice)->status)->toBe(NotificationDeliveryStatus::Suppressed);
+    }
+    Http::assertNothingSent();
+});
+
+test('prepared transport enforces customer ownership and active staff role at send time', function () {
+    $payment = Payment::factory()->create();
+    $order = $payment->order;
+    $stranger = User::factory()->create();
+    $activeAdmin = User::factory()->admin()->create();
+    $inactiveAdmin = User::factory()->admin()->create(['is_active' => false]);
+    $custom = CustomCakeRequest::factory()->submitted()->for($order->user)->create();
+    $identities = app(NotificationRecipientIdentity::class);
+
+    $crossCustomerOrder = NotificationDelivery::factory()->create([
+        'event_key' => 'order:'.$order->id.':created:stranger',
+        'template_key' => 'customer.order_created.v1',
+        'entity_type' => 'order',
+        'entity_id' => $order->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $stranger->whatsapp_number],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $stranger->whatsapp_number),
+        'payload_minimal' => ['order_number' => $order->order_number, 'status' => 'pending'],
+    ]);
+
+    $crossCustomerCustom = NotificationDelivery::factory()->create([
+        'event_key' => 'custom:'.$custom->id.':stranger',
+        'template_key' => 'customer.custom_request.v1',
+        'entity_type' => 'custom_request',
+        'entity_id' => $custom->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $stranger->whatsapp_number],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $stranger->whatsapp_number),
+        'payload_minimal' => ['request_number' => $custom->request_number, 'status' => 'submitted'],
+    ]);
+
+    $deactivatedStaffNotice = NotificationDelivery::factory()->create([
+        'event_key' => 'order:'.$order->id.':created:inactive-admin',
+        'template_key' => 'admin.new_order.v1',
+        'entity_type' => 'order',
+        'entity_id' => $order->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $inactiveAdmin->whatsapp_number],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $inactiveAdmin->whatsapp_number),
+        'payload_minimal' => ['order_number' => $order->order_number, 'status' => 'pending'],
+    ]);
+
+    $activeStaffNotice = NotificationDelivery::factory()->create([
+        'event_key' => 'order:'.$order->id.':created:active-admin',
+        'template_key' => 'admin.new_order.v1',
+        'entity_type' => 'order',
+        'entity_id' => $order->id,
+        'recipient_ciphertext' => ['channel' => 'whatsapp', 'address' => $activeAdmin->whatsapp_number],
+        'recipient_key' => $identities->key(NotificationChannel::WhatsApp, $activeAdmin->whatsapp_number),
+        'payload_minimal' => ['order_number' => $order->order_number, 'status' => 'pending'],
+    ]);
+
+    Http::preventStrayRequests();
+    Http::fake(['https://api.fonnte.com/send' => Http::response(['status' => true, 'id' => ['80367179'], 'target' => [substr($activeAdmin->whatsapp_number, 1)]])]);
+
+    foreach ([$crossCustomerOrder, $crossCustomerCustom, $deactivatedStaffNotice] as $unauthorized) {
+        expect(app(PreparedNotificationTransport::class)->send($unauthorized)->status)->toBe(NotificationDeliveryStatus::Suppressed);
+    }
+    Http::assertNothingSent();
+
+    expect(app(PreparedNotificationTransport::class)->send($activeStaffNotice)->status)->toBe(NotificationDeliveryStatus::Sent);
+    Http::assertSentCount(1);
 });

@@ -1,9 +1,20 @@
 <?php
 
+use App\CustomRequestEvents;
 use App\DispatchNotificationDeliveries;
+use App\Models\CustomCakeRequest;
 use App\Models\NotificationDelivery;
+use App\Models\NotificationDeliveryStatus;
+use App\Models\Order;
+use App\Models\Payment;
+use App\Models\User;
+use App\NotificationOutbox;
+use App\NotificationSendResult;
+use App\NotificationTransport;
+use App\PaymentNotices;
 use App\ProcessNotificationDeliveryJob;
 use Carbon\CarbonImmutable;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -73,4 +84,117 @@ test('scanner refuses invalid batch sizes and nested caller transactions', funct
     } finally {
         DB::rollBack();
     }
+});
+
+test('scheduler registers notifications dispatch every minute without overlap on one server and schedules no automatic purge', function () {
+    $events = collect(app(Schedule::class)->events());
+    $notificationEvent = $events->first(fn ($event) => str_contains((string) $event->command, 'notifications:dispatch'));
+
+    expect($notificationEvent)->not->toBeNull();
+    expect($notificationEvent->expression)->toBe('* * * * *');
+    expect($notificationEvent->withoutOverlapping)->toBeTrue();
+    expect($notificationEvent->expiresAt)->toBe(5);
+    expect($notificationEvent->onOneServer)->toBeTrue();
+    expect($events->contains(fn ($event) => str_contains(strtolower((string) $event->command), 'prune')
+        || str_contains(strtolower((string) $event->command), 'purge')))->toBeFalse();
+});
+
+test('worker timeout queue retry after and outbox lease invariant fences premature duplicate jobs and rejects misconfiguration', function (mixed $invalidRetryAfter) {
+    $job = new ProcessNotificationDeliveryJob(1);
+    expect(ProcessNotificationDeliveryJob::TIMEOUT_SECONDS)->toBe(60);
+    expect($job->timeout)->toBe(60);
+    expect($job->tries)->toBe(1);
+    expect($job->failOnTimeout)->toBeTrue();
+    expect(config('queue.connections.database.retry_after'))->toBe(90);
+    expect(NotificationOutbox::LEASE_SECONDS)->toBe(120);
+
+    $row = NotificationDelivery::factory()->create();
+    $outbox = app(NotificationOutbox::class);
+    $firstClaim = $outbox->claim($row->id);
+    expect($firstClaim)->not->toBeNull();
+
+    // At 90s (queue retry_after), a duplicate worker released by the database queue must still be fenced by the 120s outbox lease.
+    $this->travel(90)->seconds();
+    $sender = Mockery::mock(NotificationTransport::class)->shouldNotReceive('send')->getMock();
+    (new ProcessNotificationDeliveryJob($row->id))->handle($outbox, $sender);
+    expect($row->fresh()->attempts)->toBe(1);
+    expect($row->fresh()->claim_token)->toBe($firstClaim->claim_token);
+
+    // At 120s (lease_until), the scanner re-queues the pre-send crashed claim and the new worker fences the old claim token.
+    $this->travel(30)->seconds();
+    Queue::fake();
+    expect(app(DispatchNotificationDeliveries::class)->dispatch())->toBe(1);
+    $secondSender = new class implements NotificationTransport
+    {
+        public int $calls = 0;
+
+        public function send(NotificationDelivery $delivery): NotificationSendResult
+        {
+            $this->calls++;
+
+            return new NotificationSendResult(NotificationDeliveryStatus::Sent, 'reclaimed-msg-1');
+        }
+    };
+    (new ProcessNotificationDeliveryJob($row->id))->handle($outbox, $secondSender);
+    expect($secondSender->calls)->toBe(1);
+    expect($row->fresh()->status)->toBe(NotificationDeliveryStatus::Sent);
+    expect($row->fresh()->attempts)->toBe(2);
+    expect($outbox->begin($row->id, $firstClaim->claim_token))->toBeNull();
+    expect($outbox->finish($row->id, $firstClaim->claim_token, new NotificationSendResult(NotificationDeliveryStatus::Sent)))->toBeFalse();
+
+    config(['queue.connections.database.retry_after' => $invalidRetryAfter]);
+    expect(fn () => $outbox->claim($row->id))->toThrow(LogicException::class);
+    expect(fn () => app(DispatchNotificationDeliveries::class)->dispatch())->toThrow(LogicException::class);
+})->with([60, 120, '90', null]);
+
+test('domain producers enqueue notification jobs only after commit and retain durable rows if after commit enqueue fails', function () {
+    Queue::fake();
+    $payment = Payment::factory()->create();
+    $order = $payment->order;
+
+    expect(fn () => DB::transaction(function () use ($order): void {
+        Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
+        Payment::query()->where('order_id', $order->id)->lockForUpdate()->firstOrFail();
+        app(PaymentNotices::class)->paid($order);
+        Queue::assertNothingPushed();
+        throw new RuntimeException('Rollback before commit');
+    }))->toThrow(RuntimeException::class);
+
+    $this->assertDatabaseCount('notification_deliveries', 0);
+    Queue::assertNothingPushed();
+
+    DB::transaction(function () use ($order): void {
+        Order::query()->whereKey($order->id)->lockForUpdate()->firstOrFail();
+        Payment::query()->where('order_id', $order->id)->lockForUpdate()->firstOrFail();
+        app(PaymentNotices::class)->paid($order);
+        Queue::assertNothingPushed();
+    });
+
+    $this->assertDatabaseCount('notification_deliveries', 2);
+    Queue::assertPushedTimes(ProcessNotificationDeliveryJob::class, 2);
+
+    $customer = User::factory()->create();
+    $custom = CustomCakeRequest::factory()->submitted()->for($customer)->create();
+    $originalBus = Bus::getFacadeRoot();
+    Log::spy();
+    Bus::shouldReceive('dispatch')->twice()->andThrow(new RuntimeException('Private broker failure after commit'));
+    try {
+        DB::transaction(function () use ($custom, $customer): void {
+            app(CustomRequestEvents::class)->record($custom, $customer, 'submitted', [], ['status' => $custom->status->value]);
+        });
+    } finally {
+        Bus::swap($originalBus);
+    }
+
+    $customDeliveries = NotificationDelivery::query()->where('entity_type', 'custom_request')->where('entity_id', $custom->id)->orderBy('id')->get();
+    expect($customDeliveries)->toHaveCount(2);
+    foreach ($customDeliveries as $delivery) {
+        expect($delivery->status)->toBe(NotificationDeliveryStatus::Pending);
+        expect($delivery->attempts)->toBe(0);
+        Log::shouldHaveReceived('warning')->with('Notification enqueue failed; durable row retained.', ['delivery_id' => $delivery->id])->once();
+    }
+
+    Queue::fake();
+    expect(app(DispatchNotificationDeliveries::class)->dispatch())->toBe(4);
+    Queue::assertPushedTimes(ProcessNotificationDeliveryJob::class, 4);
 });

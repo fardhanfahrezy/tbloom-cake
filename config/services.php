@@ -4,6 +4,7 @@ return [
 
     'fonnte' => [
         'token' => env('FONNTE_TOKEN'),
+        'test_target' => env('FONNTE_TEST_TARGET'),
     ],
 
     'midtrans' => [

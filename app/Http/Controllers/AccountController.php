@@ -9,6 +9,17 @@ class AccountController extends Controller
 {
     public function show(Request $request): View
     {
-        return view('account', ['user' => $request->user()]);
+        $user = $request->user();
+
+        return view('account', [
+            'user' => $user,
+            'orders' => $user->orders()
+                ->with(['item', 'payment', 'refundLog'])
+                ->orderByDesc('id')
+                ->get(),
+            'customRequests' => $user->customCakeRequests()
+                ->orderByDesc('id')
+                ->get(),
+        ]);
     }
 }

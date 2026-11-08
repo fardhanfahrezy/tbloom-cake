@@ -26,11 +26,23 @@ use App\Http\Controllers\RefundTransferController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SnapSessionController;
 use App\Http\Controllers\StaffAccountController;
+use App\Http\Controllers\StaffDashboardController;
+use App\Http\Controllers\TestimonialAdminController;
 use App\Http\Middleware\EnsureActiveAccount;
 use App\Http\Middleware\EnsureRole;
+use App\Models\Testimonial;
+use App\Models\TestimonialPublicationStatus;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', function () {
+    return view('welcome', [
+        'testimonials' => Testimonial::query()
+            ->where('publication_status', TestimonialPublicationStatus::Published)
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->get(),
+    ]);
+})->name('home');
 Route::view('/pickup', 'pickup')->name('pickup.show');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/catalog/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
@@ -101,8 +113,11 @@ Route::middleware(['auth', EnsureActiveAccount::class, 'auth.session'])->group(f
         Route::resource('products', ProductAdminController::class)->only(['index', 'create', 'store', 'edit', 'update']);
         Route::resource('products.images', ProductImageAdminController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->scoped();
         Route::resource('products.variants', ProductVariantAdminController::class)->only(['create', 'store', 'edit', 'update'])->scoped();
+        Route::get('testimonials', [TestimonialAdminController::class, 'index'])->name('testimonials.index');
+        Route::post('testimonials', [TestimonialAdminController::class, 'store'])->middleware('throttle:10,1')->name('testimonials.store');
+        Route::put('testimonials/{testimonial}', [TestimonialAdminController::class, 'update'])->middleware('throttle:10,1')->name('testimonials.update');
     });
-    Route::view('/staff', 'staff.dashboard')->middleware(EnsureRole::class.':admin,owner')->name('staff.dashboard');
+    Route::get('/staff', [StaffDashboardController::class, 'show'])->middleware(EnsureRole::class.':admin,owner')->name('staff.dashboard');
     Route::post('/staff/payments/{payment}/reconciliation', [PaymentReconciliationController::class, 'store'])
         ->middleware([EnsureRole::class.':owner', 'throttle:6,1'])->name('staff.payments.reconciliation.store');
     Route::middleware(EnsureRole::class.':owner')->prefix('staff/accounts')->name('staff.accounts.')->group(function (): void {

@@ -6,6 +6,7 @@ use App\Models\NotificationDelivery;
 use App\Models\NotificationDeliveryStatus;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use LogicException;
 use Throwable;
@@ -17,6 +18,24 @@ class NotificationOutbox
     public const LEASE_SECONDS = 120;
 
     public const BACKOFF_SECONDS = [30, 120, 600, 1800];
+
+    public static function enqueue(NotificationDelivery $delivery): void
+    {
+        $id = $delivery->id;
+        if (! is_int($id) || $id <= 0 || config('notifications.enabled') !== true) {
+            return;
+        }
+        DB::afterCommit(static function () use ($id): void {
+            if (config('notifications.enabled') !== true) {
+                return;
+            }
+            try {
+                ProcessNotificationDeliveryJob::dispatch($id);
+            } catch (Throwable) {
+                Log::warning('Notification enqueue failed; durable row retained.', ['delivery_id' => $id]);
+            }
+        });
+    }
 
     public function deliver(int $id, NotificationTransport $transport): bool
     {
@@ -143,6 +162,10 @@ class NotificationOutbox
         $session = $connection->selectOne('SELECT @@transaction_isolation AS isolation_level, @@session.time_zone AS time_zone');
         if ($session->isolation_level !== 'READ-COMMITTED' || $session->time_zone !== '+00:00') {
             throw new LogicException('Notification outbox requires READ COMMITTED and UTC.');
+        }
+        $retryAfter = config('queue.connections.database.retry_after');
+        if (! is_int($retryAfter) || $retryAfter <= ProcessNotificationDeliveryJob::TIMEOUT_SECONDS || $retryAfter >= self::LEASE_SECONDS) {
+            throw new LogicException('Notification worker timeout, queue retry_after, and outbox lease are misconfigured.');
         }
     }
 }

@@ -9,9 +9,48 @@
         \App\Models\OrderStatus::Expired => 'Pesanan kedaluwarsa',
         \App\Models\OrderStatus::Cancelled => 'Pesanan dibatalkan',
     };
+    $paymentStatusSummary = match ($order->payment?->status) {
+        \App\Models\PaymentStatus::Pending => $paymentReview ? 'Pembayaran sedang diperiksa — Jangan membayar ulang' : 'Menunggu pembayaran',
+        \App\Models\PaymentStatus::Paid => 'Pembayaran diterima',
+        \App\Models\PaymentStatus::Failed => 'Pembayaran gagal',
+        \App\Models\PaymentStatus::Expired => 'Pembayaran kedaluwarsa',
+        \App\Models\PaymentStatus::Cancelled => 'Pembayaran dibatalkan',
+        \App\Models\PaymentStatus::PartiallyRefunded => 'Refund sebagian selesai',
+        \App\Models\PaymentStatus::Refunded => 'Refund penuh selesai',
+        default => 'Belum ada catatan pembayaran',
+    };
+    $refundStatusSummary = match ($order->refundLog?->status) {
+        \App\Models\RefundLogStatus::Pending => 'Refund menunggu tindak lanjut',
+        \App\Models\RefundLogStatus::Processing => 'Refund sedang diproses',
+        \App\Models\RefundLogStatus::Review => 'Refund sedang ditinjau',
+        \App\Models\RefundLogStatus::Completed => 'Refund selesai',
+        default => 'Tidak ada kewajiban refund',
+    };
 @endphp
 <x-account-layout eyebrow="Detail pesanan" :title="$order->order_number">
     <p class="rounded-lg border border-brand-beige p-4 font-semibold" role="status">{{ $status }}</p>
+    <dl class="mt-4 grid gap-3 rounded-lg border border-brand-beige p-4 text-sm sm:grid-cols-3">
+        <div>
+            <dt class="font-semibold">Status pesanan</dt>
+            <dd class="mt-1">{{ $status }}</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Status pembayaran</dt>
+            <dd class="mt-1">{{ $paymentStatusSummary }}</dd>
+        </div>
+        <div>
+            <dt class="font-semibold">Status refund</dt>
+            <dd class="mt-1">
+                @if ($order->refundLog)
+                    {{ $refundStatusSummary }} ({{ $order->refundLog->percentage }}% — Rp{{ number_format($order->refundLog->amount, 0, ',', '.') }})
+                    <br>
+                    <a href="{{ route('refunds.bank.show', $order->refundLog) }}" class="mt-1 inline-block underline underline-offset-4">Kelola rekening refund</a>
+                @else
+                    {{ $refundStatusSummary }}
+                @endif
+            </dd>
+        </div>
+    </dl>
     @if ($order->status === \App\Models\OrderStatus::Completed)
         <p class="mt-3 text-sm">Dicatat pada <time datetime="{{ $order->completed_at->toIso8601String() }}">{{ $order->completed_at->setTimezone('Asia/Jakarta')->format('d-m-Y H:i:s') }} WIB</time>.</p>
     @endif

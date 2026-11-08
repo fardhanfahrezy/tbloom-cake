@@ -14,6 +14,6 @@ class OrderController extends Controller
     {
         Gate::authorize('view', $order);
 
-        return view('orders.show', ['order' => $order->load(['item', 'payment']), 'instant' => CarbonImmutable::now('UTC'), 'paymentAvailable' => $sessions->configured()]);
+        return view('orders.show', ['order' => $order->load(['item', 'payment', 'refundLog']), 'instant' => CarbonImmutable::now('UTC'), 'paymentAvailable' => $sessions->configured()]);
     }
 }

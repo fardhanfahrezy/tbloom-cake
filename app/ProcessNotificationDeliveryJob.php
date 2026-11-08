@@ -11,9 +11,11 @@ class ProcessNotificationDeliveryJob implements ShouldQueue
 {
     use Queueable;
 
+    public const TIMEOUT_SECONDS = 60;
+
     public int $tries = 1;
 
-    public int $timeout = 60;
+    public int $timeout = self::TIMEOUT_SECONDS;
 
     public bool $failOnTimeout = true;
 

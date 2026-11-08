@@ -2,15 +2,75 @@
 
 use App\DispatchNotificationDeliveries;
 use App\DispatchPaymentEvents;
+use App\InternalEmailProbe;
+use App\InternalNotificationProbe;
 use App\MidtransSandboxProbe;
 use App\ReconcilePayments;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
+Artisan::command('notifications:email-probe {--slot=1 : Explicitly select test slot 1, 2 or 3; never an automatic retry} {--send-approved : Send one internal Gmail probe only after separate explicit approval for this slot}', function (InternalEmailProbe $probe): int {
+    $slot = $this->option('slot');
+    if (! is_string($slot) || ! in_array($slot, ['1', '2', '3'], true)) {
+        $this->error('Email test slot must be 1, 2 or 3.');
+
+        return 1;
+    }
+    try {
+        if ($this->option('send-approved')) {
+            $result = $probe->send(true, (int) $slot);
+            $this->line('Reference: '.$result['reference']);
+            $this->line('Provider result: '.$result['result'].'; delivery is not verified.');
+
+            return $result['result'] === 'sent' ? 0 : 1;
+        }
+        $preview = $probe->preview((int) $slot);
+        $this->line('Mode: dry-run; no email sent.');
+        $this->line('Reference: '.$preview['reference']);
+        $this->line('Subject: '.$preview['subject']);
+        $this->line('Message: '.$preview['message']);
+        $this->line('Email configuration ready: '.($preview['email_ready'] ? 'yes' : 'no'));
+        $this->line('Approval slot reserved: '.($preview['slot_reserved'] ? 'yes' : 'no'));
+        $this->line('Gmail authentication and delivery are not verified by dry-run.');
+
+        return 0;
+    } catch (Throwable) {
+        $this->error('Email probe refused or outcome uncertain; inspect the private slot and never resend.');
+
+        return 1;
+    }
+})->purpose('Preview one self-addressed Gmail test; sending needs explicit approval and consumes one private slot');
+
+Artisan::command('notifications:internal-probe {--send-approved : Send the single internal WhatsApp probe only after explicit approval}', function (InternalNotificationProbe $probe): int {
+    try {
+        if ($this->option('send-approved')) {
+            $result = $probe->send(true);
+            $this->line('Reference: '.$result['reference']);
+            $this->line('Provider result: '.$result['result'].'; delivery is not verified.');
+
+            return $result['result'] === 'sent' ? 0 : 1;
+        }
+        $preview = $probe->preview();
+        $this->line('Mode: dry-run; no messages sent.');
+        $this->line('Reference: '.$preview['reference']);
+        $this->line('Message: '.$preview['message']);
+        $this->line('WhatsApp configuration ready: '.($preview['whatsapp_ready'] ? 'yes' : 'no'));
+        $this->line('Approval slot reserved: '.($preview['slot_reserved'] ? 'yes' : 'no'));
+        $this->line('Email live verification: pending');
+
+        return 0;
+    } catch (Throwable) {
+        $this->error('Probe refused or outcome uncertain; inspect the private slot and never resend.');
+
+        return 1;
+    }
+})->purpose('Preview one redacted internal WhatsApp probe; sending requires explicit approval and consumes one durable slot');
 
 Artisan::command('notifications:dispatch {--limit=100}', function (DispatchNotificationDeliveries $dispatcher): int {
     $limit = $this->option('limit');
@@ -23,6 +83,8 @@ Artisan::command('notifications:dispatch {--limit=100}', function (DispatchNotif
 
     return 0;
 })->purpose('Recover due durable notification outbox rows without sending from the scanner');
+
+Schedule::command('notifications:dispatch')->everyMinute()->withoutOverlapping(5)->onOneServer();
 
 Artisan::command('payments:dispatch-events {--limit=100}', function (DispatchPaymentEvents $dispatcher): int {
     $limit = $this->option('limit');
@@ -51,6 +113,21 @@ Artisan::command('payments:reconcile {--limit=100}', function (ReconcilePayments
 })->purpose('Recover missing payment observations and verify unpaid deadlines without releasing ambiguous funds');
 
 Schedule::command('payments:reconcile')->everyMinute()->withoutOverlapping(5)->onOneServer();
+
+Artisan::command('ops:status', function (): int {
+    $paymentReviews = DB::table('payments')->whereNotNull('review_reason')->count();
+    $paymentEventAlerts = DB::table('payment_events')->whereIn('processing_status', ['review', 'failed'])->count();
+    $refundAlerts = DB::table('refund_logs')->where('status', 'review')->count()
+        + DB::table('refund_transfers')->where('status', 'unknown')->count();
+    $notificationAlerts = DB::table('notification_deliveries')->whereIn('status', ['failed', 'unknown'])->count();
+
+    $this->line('Payment reviews: '.$paymentReviews);
+    $this->line('Payment event alerts: '.$paymentEventAlerts);
+    $this->line('Refund alerts: '.$refundAlerts);
+    $this->line('Notification alerts: '.$notificationAlerts);
+
+    return 0;
+})->purpose('Report redacted operational alert counters for payments, refunds, and notifications without mutating state');
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
