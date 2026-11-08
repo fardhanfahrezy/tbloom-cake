@@ -138,3 +138,45 @@ if (countdown) {
         if (!document.hidden) window.location.reload();
     });
 }
+
+const authForm = document.querySelector('[data-auth-form]');
+if (authForm) {
+    for (const toggle of authForm.querySelectorAll?.('[data-password-toggle]') ?? []) {
+        toggle.addEventListener('click', () => {
+            const inputId = toggle.getAttribute('aria-controls');
+            const input = inputId ? document.getElementById?.(inputId) : null;
+            if (!input) return;
+
+            const isVisible = input.type === 'text';
+            input.type = isVisible ? 'password' : 'text';
+            toggle.setAttribute('aria-pressed', String(!isVisible));
+            toggle.setAttribute('aria-label', isVisible ? 'Tampilkan kata sandi' : 'Sembunyikan kata sandi');
+
+            const iconOff = toggle.querySelector('[data-password-icon-off]');
+            const iconOn = toggle.querySelector('[data-password-icon-on]');
+            if (iconOff && iconOn) {
+                iconOff.hidden = !isVisible;
+                iconOn.hidden = isVisible;
+            }
+        });
+    }
+
+    const submitButton = authForm.querySelector('[data-auth-submit]');
+    const originalText = submitButton?.textContent;
+
+    authForm.addEventListener('submit', () => {
+        if (!submitButton) return;
+        submitButton.disabled = true;
+        if (submitButton.dataset?.loadingText) {
+            submitButton.textContent = submitButton.dataset.loadingText;
+        }
+    });
+
+    window.addEventListener('pageshow', () => {
+        if (!submitButton) return;
+        submitButton.disabled = false;
+        if (originalText) {
+            submitButton.textContent = originalText;
+        }
+    });
+}

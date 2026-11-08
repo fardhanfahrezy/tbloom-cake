@@ -33,6 +33,7 @@ class RegisterCustomerRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:254', Rule::unique('users', 'email')],
             'whatsapp_number' => ['required', 'string', 'regex:/\A\+[1-9][0-9]{1,14}\z/', Rule::unique('users', 'whatsapp_number')],
             'password' => ['bail', 'required', 'string', 'min:12', 'confirmed', new AccountPassword],
+            'terms' => ['sometimes', 'accepted'],
         ];
     }
 
@@ -47,6 +48,7 @@ class RegisterCustomerRequest extends FormRequest
             'whatsapp_number.regex' => 'Masukkan nomor WhatsApp dengan format internasional yang valid.',
             'password.min' => 'Password minimal 12 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'terms.accepted' => 'Anda harus menyetujui syarat dan ketentuan.',
         ];
     }
 }

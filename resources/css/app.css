@@ -10,6 +10,12 @@
     --color-brand-taupe: #726251;
     --color-brand-beige: #C3B59C;
     --color-brand-pink: #F7E3DF;
+    --color-auth-canvas: #FEF6EF;
+    --color-auth-ink: #38271F;
+    --color-auth-muted: #6F594C;
+    --color-auth-accent: #6B283B;
+    --color-auth-neutral: #757575;
+    --color-auth-heading: #424242;
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
     --font-lufga: 'Lufga', ui-sans-serif, system-ui, sans-serif;
