@@ -23,6 +23,8 @@ class PasswordResetLinkController extends Controller
 
         return $request->expectsJson()
             ? response()->json(['message' => self::RECOVERY_MESSAGE])
-            : to_route('password.request')->with('status', self::RECOVERY_MESSAGE);
+            : to_route('password.request')
+                ->with('status', self::RECOVERY_MESSAGE)
+                ->with('reset_email', $request->validated('email'));
     }
 }

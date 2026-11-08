@@ -93,6 +93,7 @@ test('rejects invalid registration data without creating or authenticating an ac
     'NUL password' => [['password' => "secret\0password", 'password_confirmation' => "secret\0password"], 'password'],
     'email array' => [['email' => ['x@example.test']], 'email'],
     'number array' => [['whatsapp_number' => ['+6281234567890']], 'whatsapp_number'],
+    'unaccepted terms' => [['terms' => '0'], 'terms'],
 ]);
 
 test('accepts the documented account field boundaries and twelve character password', function () {

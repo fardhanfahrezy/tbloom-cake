@@ -31,7 +31,15 @@ test('renders forgot and reset forms without reflecting a token into page text',
 test('sends a broker email notification only to an active account with a hashed expiring token', function () {
     $user = User::factory()->unverified()->create(['email' => 'reset@example.test']);
     Notification::fake();
-    $this->from('/forgot-password')->post('/forgot-password', ['email' => ' RESET@Example.Test '])->assertRedirect('/forgot-password')->assertSessionHas('status');
+    $this->from('/forgot-password')->post('/forgot-password', ['email' => ' RESET@Example.Test '])
+        ->assertRedirect('/forgot-password')
+        ->assertSessionHas('status')
+        ->assertSessionHas('reset_email', 'reset@example.test');
+    $this->get('/forgot-password')
+        ->assertOk()
+        ->assertSee('Periksa email')
+        ->assertSee('reset@example.test')
+        ->assertSee('Kirim ulang tautan');
     Notification::assertSentTo($user, ResetPassword::class, function (ResetPassword $notification, array $channels) use ($user): bool {
         expect($channels)->toBe(['mail']);
         $stored = DB::table('password_reset_tokens')->where('email', $user->email)->value('token');
