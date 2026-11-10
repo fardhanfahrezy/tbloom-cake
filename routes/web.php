@@ -9,6 +9,7 @@ use App\Http\Controllers\CustomRequestAdminController;
 use App\Http\Controllers\CustomRequestAttachmentController;
 use App\Http\Controllers\CustomRequestController;
 use App\Http\Controllers\HandoverController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\OrderChangeController;
 use App\Http\Controllers\OrderController;
@@ -30,19 +31,9 @@ use App\Http\Controllers\StaffDashboardController;
 use App\Http\Controllers\TestimonialAdminController;
 use App\Http\Middleware\EnsureActiveAccount;
 use App\Http\Middleware\EnsureRole;
-use App\Models\Testimonial;
-use App\Models\TestimonialPublicationStatus;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome', [
-        'testimonials' => Testimonial::query()
-            ->where('publication_status', TestimonialPublicationStatus::Published)
-            ->orderBy('sort_order')
-            ->orderByDesc('id')
-            ->get(),
-    ]);
-})->name('home');
+Route::get('/', [LandingPageController::class, 'index'])->name('home');
 Route::view('/pickup', 'pickup')->name('pickup.show');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/catalog/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
