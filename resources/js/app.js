@@ -1,3 +1,23 @@
+const mobileNavigation = document.querySelector('[data-mobile-navigation]');
+if (mobileNavigation) {
+    const summary = mobileNavigation.querySelector('summary');
+
+    mobileNavigation.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => mobileNavigation.removeAttribute('open'));
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!mobileNavigation.contains(event.target)) mobileNavigation.removeAttribute('open');
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && mobileNavigation.open) {
+            mobileNavigation.removeAttribute('open');
+            summary?.focus();
+        }
+    });
+}
+
 const catalogPage = document.querySelector('[data-catalog-page]');
 
 if (catalogPage) {
