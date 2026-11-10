@@ -1,0 +1,1269 @@
+{
+  "background": {
+    "page": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Peran background/page untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:69",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:03d29ba373c197eb22a64a3036c9ceed59550998/-1:-1",
+          "targetVariableName": "neutral/0",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "subtle": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9686274528503418,
+          0.9686274528503418,
+          0.9686274528503418
+        ],
+        "alpha": 1,
+        "hex": "#F7F7F7"
+      },
+      "$description": "Peran background/subtle untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:71",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4d79707b70d879183a119a09cf65245d9a1a1fea/-1:-1",
+          "targetVariableName": "neutral/50",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 1,
+        "hex": "#000000"
+      },
+      "$description": "Peran background/inverse untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:73",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4538efdd720a7011a53aca0a67185935da46e91c/-1:-1",
+          "targetVariableName": "neutral/1000",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    }
+  },
+  "surface": {
+    "default": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Peran surface/default untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:75",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:03d29ba373c197eb22a64a3036c9ceed59550998/-1:-1",
+          "targetVariableName": "neutral/0",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "raised": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Peran surface/raised untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:77",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:03d29ba373c197eb22a64a3036c9ceed59550998/-1:-1",
+          "targetVariableName": "neutral/0",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "image-placeholder": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9686274528503418,
+          0.9686274528503418,
+          0.9686274528503418
+        ],
+        "alpha": 1,
+        "hex": "#F7F7F7"
+      },
+      "$description": "Peran surface/image-placeholder untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:79",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4d79707b70d879183a119a09cf65245d9a1a1fea/-1:-1",
+          "targetVariableName": "neutral/50",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "avatar": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8509804010391235,
+          0.8509804010391235,
+          0.8509804010391235
+        ],
+        "alpha": 1,
+        "hex": "#D9D9D9"
+      },
+      "$description": "Peran surface/avatar untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:81",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:96a923c9c7bb58fb901b380ac52fb34b378ea29f/-1:-1",
+          "targetVariableName": "neutral/300",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    }
+  },
+  "text": {
+    "primary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 1,
+        "hex": "#000000"
+      },
+      "$description": "Peran text/primary untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:83",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4538efdd720a7011a53aca0a67185935da46e91c/-1:-1",
+          "targetVariableName": "neutral/1000",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.2705882489681244,
+          0.2705882489681244,
+          0.2705882489681244
+        ],
+        "alpha": 1,
+        "hex": "#454545"
+      },
+      "$description": "Peran text/secondary untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:85",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:b2617c6bdcbd6f4e32eac789de7b43b1bd84287c/-1:-1",
+          "targetVariableName": "neutral/700",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "muted": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5098039507865906,
+          0.5098039507865906,
+          0.5098039507865906
+        ],
+        "alpha": 1,
+        "hex": "#828282"
+      },
+      "$description": "Peran text/muted untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:87",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:93171e5d69513528e2aac496ff43a27cc2044294/-1:-1",
+          "targetVariableName": "neutral/500",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Peran text/inverse untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:89",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:03d29ba373c197eb22a64a3036c9ceed59550998/-1:-1",
+          "targetVariableName": "neutral/0",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "intro": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 1,
+        "hex": "#000000"
+      },
+      "$description": "Peran text/intro untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:91",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4538efdd720a7011a53aca0a67185935da46e91c/-1:-1",
+          "targetVariableName": "neutral/1000",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "disabled": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6901960968971252,
+          0.6901960968971252,
+          0.6901960968971252
+        ],
+        "alpha": 1,
+        "hex": "#B0B0B0"
+      },
+      "$description": "Peran text/disabled untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:93",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1ecf73b7aff82b81c3350420b7c3c5bbb021885c/-1:-1",
+          "targetVariableName": "neutral/400",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    }
+  },
+  "icon": {
+    "primary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 1,
+        "hex": "#000000"
+      },
+      "$description": "Peran icon/primary untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:95",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4538efdd720a7011a53aca0a67185935da46e91c/-1:-1",
+          "targetVariableName": "neutral/1000",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5098039507865906,
+          0.5098039507865906,
+          0.5098039507865906
+        ],
+        "alpha": 1,
+        "hex": "#828282"
+      },
+      "$description": "Peran icon/secondary untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:97",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:93171e5d69513528e2aac496ff43a27cc2044294/-1:-1",
+          "targetVariableName": "neutral/500",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Peran icon/inverse untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:99",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:03d29ba373c197eb22a64a3036c9ceed59550998/-1:-1",
+          "targetVariableName": "neutral/0",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    }
+  },
+  "border": {
+    "default": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8784313797950745,
+          0.8784313797950745,
+          0.8784313797950745
+        ],
+        "alpha": 1,
+        "hex": "#E0E0E0"
+      },
+      "$description": "Peran border/default untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:101",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:2e34c3b8adfda597d49a4889afd1ebc2716388e1/-1:-1",
+          "targetVariableName": "neutral/250",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "subtle": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9019607901573181,
+          0.9019607901573181,
+          0.9019607901573181
+        ],
+        "alpha": 1,
+        "hex": "#E6E6E6"
+      },
+      "$description": "Peran border/subtle untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:103",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:7fa6f53f048d362bf2602ff81793137eab53f9fb/-1:-1",
+          "targetVariableName": "neutral/200",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "strong": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5098039507865906,
+          0.5098039507865906,
+          0.5098039507865906
+        ],
+        "alpha": 1,
+        "hex": "#828282"
+      },
+      "$description": "Peran border/strong untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:105",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:93171e5d69513528e2aac496ff43a27cc2044294/-1:-1",
+          "targetVariableName": "neutral/500",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "focus": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.14509804546833038,
+          0.38823530077934265,
+          0.9215686321258545
+        ],
+        "alpha": 1,
+        "hex": "#2563EB"
+      },
+      "$description": "Peran border/focus untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:107",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:47e8447306459b70ff302c8fe14112fcb8b92f90/-1:-1",
+          "targetVariableName": "blue/600",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    }
+  },
+  "action": {
+    "primary": {
+      "default": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#000000"
+        },
+        "$description": "Peran action/primary/default untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:109",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:4538efdd720a7011a53aca0a67185935da46e91c/-1:-1",
+            "targetVariableName": "neutral/1000",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1725490242242813,
+            0.1725490242242813,
+            0.1725490242242813
+          ],
+          "alpha": 1,
+          "hex": "#2C2C2C"
+        },
+        "$description": "Peran action/primary/hover untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:111",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:7bd83c4612b0cf64e49afe34e5aa068f36b9869e/-1:-1",
+            "targetVariableName": "neutral/800",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2705882489681244,
+            0.2705882489681244,
+            0.2705882489681244
+          ],
+          "alpha": 1,
+          "hex": "#454545"
+        },
+        "$description": "Peran action/primary/pressed untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:113",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:b2617c6bdcbd6f4e32eac789de7b43b1bd84287c/-1:-1",
+            "targetVariableName": "neutral/700",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#FFFFFF"
+        },
+        "$description": "Peran action/primary/foreground untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:115",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:03d29ba373c197eb22a64a3036c9ceed59550998/-1:-1",
+            "targetVariableName": "neutral/0",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      }
+    },
+    "secondary": {
+      "default": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9019607901573181,
+            0.9019607901573181,
+            0.9019607901573181
+          ],
+          "alpha": 1,
+          "hex": "#E6E6E6"
+        },
+        "$description": "Peran action/secondary/default untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:117",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:7fa6f53f048d362bf2602ff81793137eab53f9fb/-1:-1",
+            "targetVariableName": "neutral/200",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8509804010391235,
+            0.8509804010391235,
+            0.8509804010391235
+          ],
+          "alpha": 1,
+          "hex": "#D9D9D9"
+        },
+        "$description": "Peran action/secondary/hover untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:119",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:96a923c9c7bb58fb901b380ac52fb34b378ea29f/-1:-1",
+            "targetVariableName": "neutral/300",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 1,
+          "hex": "#000000"
+        },
+        "$description": "Peran action/secondary/foreground untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:121",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:4538efdd720a7011a53aca0a67185935da46e91c/-1:-1",
+            "targetVariableName": "neutral/1000",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      }
+    },
+    "disabled": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9411764740943909,
+            0.9411764740943909,
+            0.9411764740943909
+          ],
+          "alpha": 1,
+          "hex": "#F0F0F0"
+        },
+        "$description": "Peran action/disabled/background untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:123",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:800ab9e800bbc5614279b5cdf3061876ab9b1767/-1:-1",
+            "targetVariableName": "neutral/100",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5098039507865906,
+            0.5098039507865906,
+            0.5098039507865906
+          ],
+          "alpha": 1,
+          "hex": "#828282"
+        },
+        "$description": "Peran action/disabled/foreground untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:125",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:93171e5d69513528e2aac496ff43a27cc2044294/-1:-1",
+            "targetVariableName": "neutral/500",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      }
+    }
+  },
+  "overlay": {
+    "scrim": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 1,
+        "hex": "#000000"
+      },
+      "$description": "Peran overlay/scrim untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:127",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4538efdd720a7011a53aca0a67185935da46e91c/-1:-1",
+          "targetVariableName": "neutral/1000",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    }
+  },
+  "link": {
+    "default": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.2705882489681244,
+          0.2705882489681244,
+          0.2705882489681244
+        ],
+        "alpha": 1,
+        "hex": "#454545"
+      },
+      "$description": "Peran link/default untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:129",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:b2617c6bdcbd6f4e32eac789de7b43b1bd84287c/-1:-1",
+          "targetVariableName": "neutral/700",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    },
+    "hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 1,
+        "hex": "#000000"
+      },
+      "$description": "Peran link/hover untuk tema terang.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:27:131",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4538efdd720a7011a53aca0a67185935da46e91c/-1:-1",
+          "targetVariableName": "neutral/1000",
+          "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+          "targetVariableSetName": "01 · Color Primitives"
+        }
+      }
+    }
+  },
+  "feedback": {
+    "info": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9372549057006836,
+            0.9647058844566345,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#EFF6FF"
+        },
+        "$description": "Peran feedback/info/background untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:133",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:fa4dfb2eaae353566f80644da9950d582d7cfa52/-1:-1",
+            "targetVariableName": "blue/50",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.11372549086809158,
+            0.30588236451148987,
+            0.8470588326454163
+          ],
+          "alpha": 1,
+          "hex": "#1D4ED8"
+        },
+        "$description": "Peran feedback/info/foreground untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:135",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:af09b28e71111e4e7285aef086ffa29245a31cdb/-1:-1",
+            "targetVariableName": "blue/700",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7490196228027344,
+            0.8588235378265381,
+            0.9960784316062927
+          ],
+          "alpha": 1,
+          "hex": "#BFDBFE"
+        },
+        "$description": "Peran feedback/info/border untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:137",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:a911e33c2e51932a1973578cec86bd430edbcbd8/-1:-1",
+            "targetVariableName": "blue/200",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      }
+    },
+    "success": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9411764740943909,
+            0.9921568632125854,
+            0.95686274766922
+          ],
+          "alpha": 1,
+          "hex": "#F0FDF4"
+        },
+        "$description": "Peran feedback/success/background untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:139",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:23ae6783956492b9edbcede51a2c15b0354f4061/-1:-1",
+            "targetVariableName": "green/50",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.08235294371843338,
+            0.501960813999176,
+            0.239215686917305
+          ],
+          "alpha": 1,
+          "hex": "#15803D"
+        },
+        "$description": "Peran feedback/success/foreground untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:141",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:803c144ad2115d46f73eb9b7fda94b2104c7c723/-1:-1",
+            "targetVariableName": "green/700",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7333333492279053,
+            0.9686274528503418,
+            0.8156862854957581
+          ],
+          "alpha": 1,
+          "hex": "#BBF7D0"
+        },
+        "$description": "Peran feedback/success/border untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:143",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:1b42409de69768c53db6cb011f9971aab1cc5ce7/-1:-1",
+            "targetVariableName": "green/200",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      }
+    },
+    "warning": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.9843137264251709,
+            0.9215686321258545
+          ],
+          "alpha": 1,
+          "hex": "#FFFBEB"
+        },
+        "$description": "Peran feedback/warning/background untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:145",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:08e0fbc20ce036c6f69d775e5b63afd576c3e822/-1:-1",
+            "targetVariableName": "amber/50",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7058823704719543,
+            0.32549020648002625,
+            0.03529411926865578
+          ],
+          "alpha": 1,
+          "hex": "#B45309"
+        },
+        "$description": "Peran feedback/warning/foreground untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:147",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:376a387005c415a803bdee4851e7a942695fc703/-1:-1",
+            "targetVariableName": "amber/700",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9921568632125854,
+            0.9019607901573181,
+            0.5411764979362488
+          ],
+          "alpha": 1,
+          "hex": "#FDE68A"
+        },
+        "$description": "Peran feedback/warning/border untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:149",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:c19eb6941e865f35a72b1164d7cd0e34f1e2b34c/-1:-1",
+            "targetVariableName": "amber/200",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      }
+    },
+    "error": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9960784316062927,
+            0.9490196108818054,
+            0.9490196108818054
+          ],
+          "alpha": 1,
+          "hex": "#FEF2F2"
+        },
+        "$description": "Peran feedback/error/background untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:151",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:123318beb7a0a20236a05ef963087694a10ae5ce/-1:-1",
+            "targetVariableName": "red/50",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7254902124404907,
+            0.10980392247438431,
+            0.10980392247438431
+          ],
+          "alpha": 1,
+          "hex": "#B91C1C"
+        },
+        "$description": "Peran feedback/error/foreground untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:153",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:aee8c1b121fc21d14323c5d6b18efed8d57a24a6/-1:-1",
+            "targetVariableName": "red/700",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9960784316062927,
+            0.7921568751335144,
+            0.7921568751335144
+          ],
+          "alpha": 1,
+          "hex": "#FECACA"
+        },
+        "$description": "Peran feedback/error/border untuk tema terang.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:27:155",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:b3f87c5d71b92547cf59a31ade6e6675a6893409/-1:-1",
+            "targetVariableName": "red/200",
+            "targetVariableSetId": "VariableCollectionId:49caf2ddfddb62116a9fbbe5438ea14bfcf982d2/-1:-1",
+            "targetVariableSetName": "01 · Color Primitives"
+          }
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Light"
+  }
+}
