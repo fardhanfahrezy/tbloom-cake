@@ -14,29 +14,57 @@ class LandingPageController extends Controller
 {
     public function index(): View
     {
-        $products = Product::query()
+        $baseQuery = fn () => Product::query()
             ->where('is_active', true)
             ->whereNull('archived_at')
             ->whereHas('variants', fn (Builder $query) => $query->where('is_active', true))
             ->with([
                 'variants' => fn (HasMany $query) => $query->where('is_active', true)->orderBy('price')->orderBy('id'),
-                'images',
-            ])
+                'primaryImage',
+            ]);
+
+        $categoryDefinitions = [
+            ['value' => ProductCategory::Simple->value, 'enum' => ProductCategory::Simple, 'name' => 'Simple Cake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
+            ['value' => ProductCategory::Cupcake->value, 'enum' => ProductCategory::Cupcake, 'name' => 'Cupcake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
+            ['value' => ProductCategory::Bento->value, 'enum' => ProductCategory::Bento, 'name' => 'Bento Cake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
+        ];
+
+        // Select a representative product for each category before applying global product limit.
+        // Prioritize image-bearing products so categories and hero do not lose imagery.
+        $categoryRepresentatives = collect($categoryDefinitions)->mapWithKeys(function (array $def) use ($baseQuery) {
+            $product = (clone $baseQuery())
+                ->where('category', $def['enum'])
+                ->whereHas('primaryImage')
+                ->orderBy('name')
+                ->orderBy('id')
+                ->first()
+                ?? (clone $baseQuery())
+                    ->where('category', $def['enum'])
+                    ->orderBy('name')
+                    ->orderBy('id')
+                    ->first();
+
+            return [$def['value'] => $product];
+        });
+
+        $categories = collect($categoryDefinitions)->map(fn (array $category): array => [
+            'value' => $category['value'],
+            'name' => $category['name'],
+            'description' => $category['description'],
+            'product' => $categoryRepresentatives->get($category['value']),
+        ]);
+
+        $products = (clone $baseQuery())
             ->orderBy('name')
             ->orderBy('id')
             ->limit(6)
-            ->get();
+            ->get()
+            ->filter(fn (Product $product): bool => $product->variants->isNotEmpty())
+            ->values();
 
-        $productsByCategory = $products->keyBy(fn (Product $product): string => $product->category->value);
-
-        $categories = collect([
-            ['value' => ProductCategory::Simple->value, 'name' => 'Simple Cake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
-            ['value' => ProductCategory::Cupcake->value, 'name' => 'Cupcake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
-            ['value' => ProductCategory::Bento->value, 'name' => 'Bento Cake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
-        ])->map(fn (array $category): array => [
-            ...$category,
-            'product' => $productsByCategory->get($category['value']),
-        ]);
+        $heroProduct = $products->first(fn (Product $p) => $p->primaryImage !== null)
+            ?? $categoryRepresentatives->filter(fn (?Product $p) => $p?->primaryImage !== null)->first()
+            ?? (clone $baseQuery())->whereHas('primaryImage')->orderBy('name')->orderBy('id')->first();
 
         $testimonials = Testimonial::query()
             ->where('publication_status', TestimonialPublicationStatus::Published)
@@ -45,6 +73,6 @@ class LandingPageController extends Controller
             ->limit(3)
             ->get();
 
-        return view('welcome', compact('products', 'categories', 'testimonials'));
+        return view('welcome', compact('products', 'categories', 'testimonials', 'heroProduct'));
     }
 }

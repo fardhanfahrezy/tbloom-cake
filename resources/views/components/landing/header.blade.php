@@ -1,3 +1,4 @@
+@props(['testimonials' => collect()])
 <header class="sticky top-0 z-50 border-b border-[#D6C6B9] bg-[#FAF5EF]/95 backdrop-blur-sm">
     <div class="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-6 px-5 sm:px-8 xl:px-16">
         <a href="{{ route('home') }}" aria-label="TBloom Cake, beranda" class="shrink-0 rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">
@@ -6,7 +7,7 @@
         <nav aria-label="Navigasi utama" class="hidden items-center gap-7 text-sm font-medium lg:flex">
             <a href="{{ route('catalog.index') }}" class="hover:text-[#7B3547] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">Katalog</a>
             <a href="#how-to-order" class="hover:text-[#7B3547] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">Cara Pemesanan</a>
-            @if ($testimonials->isNotEmpty())
+            @if ($testimonials && $testimonials->isNotEmpty())
                 <a href="#testimonials" class="hover:text-[#7B3547] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">Testimoni</a>
             @endif
             <a href="#store-information" class="hover:text-[#7B3547] focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">Tentang Toko</a>
@@ -38,7 +39,7 @@
             <nav aria-label="Navigasi mobile" class="absolute right-0 top-[calc(100%+12px)] flex w-[min(86vw,340px)] flex-col gap-1 rounded-2xl border border-[#D6C6B9] bg-[#FFFCF8] p-3 text-sm shadow-xl">
                 <a href="{{ route('catalog.index') }}" class="rounded-lg px-4 py-3 hover:bg-[#F7E3DF]">Katalog</a>
                 <a href="#how-to-order" class="rounded-lg px-4 py-3 hover:bg-[#F7E3DF]">Cara Pemesanan</a>
-                @if ($testimonials->isNotEmpty())
+                @if ($testimonials && $testimonials->isNotEmpty())
                     <a href="#testimonials" class="rounded-lg px-4 py-3 hover:bg-[#F7E3DF]">Testimoni</a>
                 @endif
                 <a href="#store-information" class="rounded-lg px-4 py-3 hover:bg-[#F7E3DF]">Tentang Toko</a>

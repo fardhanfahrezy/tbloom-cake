@@ -1,4 +1,4 @@
-@props(['title' => 'Beranda', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'])
+@props(['title' => 'Beranda', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'testimonials' => null])
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -19,7 +19,7 @@
 </head>
 <body class="min-h-screen bg-[#FAF5EF] font-rubik text-[#38271F] antialiased">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-[#251306] focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-white">Lewati ke konten</a>
-    @include('components.landing.header')
+    @include('components.landing.header', ['testimonials' => $testimonials ?? collect()])
     <main id="main-content" tabindex="-1" class="focus:outline-none">{{ $slot }}</main>
     @include('components.landing.footer')
 </body>

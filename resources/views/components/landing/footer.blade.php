@@ -10,8 +10,10 @@
             <h2 class="font-lufga text-lg font-semibold">Jelajahi</h2>
             <ul class="mt-4 space-y-3 text-sm text-[#E7D9CD]">
                 <li><a href="{{ route('catalog.index') }}" class="hover:text-white hover:underline">Katalog</a></li>
-                <li><a href="{{ route('custom-requests.create') }}" class="hover:text-white hover:underline">Custom Cake</a></li>
-                <li><a href="{{ route('pickup.show') }}" class="hover:text-white hover:underline">Informasi Pengambilan</a></li>
+                @if (!auth()->check() || auth()->user()->role === \App\Models\UserRole::Customer)
+                    <li><a href="{{ route('custom-requests.create') }}" class="hover:text-white hover:underline">Custom Cake</a></li>
+                @endif
+                <li><a href="{{ route('pickup.show').'#policies' }}" class="hover:text-white hover:underline">Informasi Pengambilan</a></li>
                 <li><a href="#how-to-order" class="hover:text-white hover:underline">Cara Pemesanan</a></li>
             </ul>
         </div>

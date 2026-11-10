@@ -1,6 +1,6 @@
-<x-landing-layout title="Beranda TBloom Cake">
+<x-landing-layout title="Beranda TBloom Cake" :testimonials="$testimonials">
     @php
-        $heroProduct = $products->first(fn ($product) => $product->images->isNotEmpty());
+        $heroProduct = $heroProduct ?? $products->first(fn ($product) => $product->primaryImage !== null);
     @endphp
 
     <section aria-labelledby="hero-heading" class="overflow-hidden">
@@ -18,7 +18,9 @@
                 </p>
                 <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
                     <a href="{{ route('catalog.index') }}" class="inline-flex min-h-14 items-center justify-center rounded-full bg-[#512323] px-7 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#251306] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">Lihat Katalog <span aria-hidden="true" class="ml-3 text-lg">↗</span></a>
-                    <a href="{{ route('custom-requests.create') }}" class="inline-flex min-h-14 items-center justify-center rounded-full border border-[#C3B59C] px-7 py-4 text-sm font-semibold text-[#512323] transition-colors hover:bg-[#F7E3DF] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">Pesan Custom Cake</a>
+                    @if (!auth()->check() || auth()->user()->role === \App\Models\UserRole::Customer)
+                        <a href="{{ route('custom-requests.create') }}" class="inline-flex min-h-14 items-center justify-center rounded-full border border-[#C3B59C] px-7 py-4 text-sm font-semibold text-[#512323] transition-colors hover:bg-[#F7E3DF] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">Pesan Custom Cake</a>
+                    @endif
                 </div>
                 <p class="mt-8 text-xs font-medium tracking-wide text-[#6F594C]">SIMPLE CAKE <span class="mx-2 text-[#C3B59C]">/</span> CUPCAKE <span class="mx-2 text-[#C3B59C]">/</span> BENTO CAKE</p>
             </div>
@@ -26,8 +28,8 @@
             <div class="relative mx-auto w-full max-w-[590px] lg:ml-auto">
                 <div class="absolute -right-4 top-10 h-[78%] w-[78%] rounded-t-[15rem] border border-[#C3B59C] sm:-right-7 sm:top-12" aria-hidden="true"></div>
                 <div class="relative min-h-[390px] overflow-hidden rounded-t-[15rem] bg-[#726251] sm:min-h-[520px]">
-                    @if ($heroProduct && $heroProduct->images->first())
-                        <img src="{{ Storage::disk('public')->url($heroProduct->images->first()->path) }}" alt="{{ $heroProduct->images->first()->alt_text }}" width="900" height="1100" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover">
+                    @if ($heroProduct && $heroProduct->primaryImage)
+                        <img src="{{ Storage::disk('public')->url($heroProduct->primaryImage->path) }}" alt="{{ $heroProduct->primaryImage->alt_text }}" width="900" height="1100" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover">
                         <div class="absolute inset-0 bg-[#251306]/10" aria-hidden="true"></div>
                     @else
                         <div class="absolute inset-0 flex flex-col items-center justify-center px-8 text-center text-[#FAF5EF]">
@@ -58,8 +60,8 @@
                 @foreach ($categories as $category)
                     <a href="{{ route('catalog.index', ['category' => $category['value']]) }}" class="group block focus-visible:rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">
                         <div class="relative aspect-[5/4] overflow-hidden rounded-t-[9rem] bg-[#F7E3DF]">
-                            @if ($category['product'] && $category['product']->images->first())
-                                <img src="{{ Storage::disk('public')->url($category['product']->images->first()->path) }}" alt="{{ $category['product']->images->first()->alt_text }}" loading="lazy" width="640" height="512" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+                            @if ($category['product'] && $category['product']->primaryImage)
+                                <img src="{{ Storage::disk('public')->url($category['product']->primaryImage->path) }}" alt="{{ $category['product']->primaryImage->alt_text }}" loading="lazy" width="640" height="512" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
                             @else
                                 <div class="flex h-full items-center justify-center px-6 text-center font-lufga text-3xl font-medium text-[#726251]">{{ $category['name'] }}</div>
                             @endif
@@ -91,29 +93,31 @@
             <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($products->take(6) as $product)
                     @php
-                        $productImage = $product->images->first();
+                        $productImage = $product->primaryImage;
                         $startingVariant = $product->variants->first();
                     @endphp
-                    <article class="group min-w-0">
-                        <a href="{{ route('catalog.show', $product->slug) }}" class="block overflow-hidden rounded-xl bg-[#F7E3DF] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">
-                            @if ($productImage)
-                                <img src="{{ Storage::disk('public')->url($productImage->path) }}" alt="{{ $productImage->alt_text }}" width="640" height="480" loading="lazy" class="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
-                            @else
-                                <div class="flex aspect-[4/3] items-center justify-center px-6 text-center font-lufga text-2xl text-[#726251]">{{ $product->name }}</div>
-                            @endif
-                        </a>
-                        <div class="flex items-start justify-between gap-4 pt-4">
-                            <div class="min-w-0">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B3547]">{{ match ($product->category) { \App\Models\ProductCategory::Simple => 'Simple Cake', \App\Models\ProductCategory::Cupcake => 'Cupcake', \App\Models\ProductCategory::Bento => 'Bento Cake' } }}</p>
-                                <h3 class="mt-2 font-lufga text-xl font-semibold text-[#251306]"><a href="{{ route('catalog.show', $product->slug) }}" class="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#512323]">{{ $product->name }}</a></h3>
-                                <p class="mt-2 text-sm text-[#6F594C]">{{ $product->sales_unit_label }}</p>
+                    @if ($startingVariant)
+                        <article class="group min-w-0">
+                            <a href="{{ route('catalog.show', $product->slug) }}" class="block overflow-hidden rounded-xl bg-[#F7E3DF] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#512323]">
+                                @if ($productImage)
+                                    <img src="{{ Storage::disk('public')->url($productImage->path) }}" alt="{{ $productImage->alt_text }}" width="640" height="480" loading="lazy" class="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+                                @else
+                                    <div class="flex aspect-[4/3] items-center justify-center px-6 text-center font-lufga text-2xl text-[#726251]">{{ $product->name }}</div>
+                                @endif
+                            </a>
+                            <div class="flex items-start justify-between gap-4 pt-4">
+                                <div class="min-w-0">
+                                    <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B3547]">{{ match ($product->category) { \App\Models\ProductCategory::Simple => 'Simple Cake', \App\Models\ProductCategory::Cupcake => 'Cupcake', \App\Models\ProductCategory::Bento => 'Bento Cake' } }}</p>
+                                    <h3 class="mt-2 font-lufga text-xl font-semibold text-[#251306]"><a href="{{ route('catalog.show', $product->slug) }}" class="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#512323]">{{ $product->name }}</a></h3>
+                                    <p class="mt-2 text-sm text-[#6F594C]">{{ $product->sales_unit_label }}</p>
+                                </div>
+                                <div class="shrink-0 text-right">
+                                    <p class="text-[10px] uppercase tracking-wide text-[#6F594C]">Mulai dari</p>
+                                    <p class="mt-1 text-sm font-semibold text-[#512323]">Rp{{ number_format($startingVariant->price, 0, ',', '.') }}</p>
+                                </div>
                             </div>
-                            <div class="shrink-0 text-right">
-                                <p class="text-[10px] uppercase tracking-wide text-[#6F594C]">Mulai dari</p>
-                                <p class="mt-1 text-sm font-semibold text-[#512323]">Rp{{ number_format($startingVariant->price, 0, ',', '.') }}</p>
-                            </div>
-                        </div>
-                    </article>
+                        </article>
+                    @endif
                 @endforeach
             </div>
         @else
@@ -131,7 +135,11 @@
                 <h2 id="custom-heading" class="mt-4 max-w-[13ch] font-lufga text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">Lorem ipsum dolor sit amet.</h2>
                 <p class="mt-6 max-w-xl text-base leading-8 text-[#F7E3DF]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur.</p>
                 <p class="mt-5 text-sm leading-7 text-[#FAF5EF]">Request desain standar memerlukan H-3. Untuk edible print, pengajuan dilakukan minimal H-7 sebelum tanggal pengambilan.</p>
-                <a href="{{ route('custom-requests.create') }}" class="mt-8 inline-flex min-h-14 items-center justify-center rounded-full bg-[#F7E3DF] px-7 py-4 text-sm font-semibold text-[#512323] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Ajukan Custom Cake <span aria-hidden="true" class="ml-3 text-lg">↗</span></a>
+                @if (!auth()->check() || auth()->user()->role === \App\Models\UserRole::Customer)
+                    <a href="{{ route('custom-requests.create') }}" class="mt-8 inline-flex min-h-14 items-center justify-center rounded-full bg-[#F7E3DF] px-7 py-4 text-sm font-semibold text-[#512323] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Ajukan Custom Cake <span aria-hidden="true" class="ml-3 text-lg">↗</span></a>
+                @else
+                    <a href="{{ route('catalog.index') }}" class="mt-8 inline-flex min-h-14 items-center justify-center rounded-full bg-[#F7E3DF] px-7 py-4 text-sm font-semibold text-[#512323] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Lihat Katalog <span aria-hidden="true" class="ml-3 text-lg">↗</span></a>
+                @endif
             </div>
             <div class="relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-t-[13rem] border border-[#C3B59C]/70 bg-[#512323] px-8 py-12 text-center sm:min-h-[420px]">
                 <div class="absolute inset-x-8 top-8 h-px bg-[#C3B59C]/50" aria-hidden="true"></div>
@@ -181,7 +189,13 @@
                 <p class="mt-6 border-l-2 border-[#7B3547] pl-4 text-xs leading-6 text-[#6F594C]">Custom Cake merupakan request. Negosiasi dan DP 50% dilakukan di luar sistem melalui WhatsApp.</p>
             </div>
         </div>
-        <a href="{{ route('pickup.show') }}" class="mt-10 inline-flex text-sm font-semibold text-[#512323] underline decoration-[#C3B59C] underline-offset-4 hover:decoration-[#512323]">Baca kebijakan pemesanan dan pengambilan <span aria-hidden="true" class="ml-2">↗</span></a>
+        <div class="mt-10 rounded-2xl border border-[#C3B59C] bg-[#FFFCF8] p-6 text-sm leading-7 text-[#6F594C]">
+            <h4 class="font-lufga text-lg font-semibold text-[#251306]">Ketentuan Batas Waktu Pemesanan &amp; Pengambilan</h4>
+            <p class="mt-2">Batas tanggal pengambilan Simple Cake dihitung saat pembayaran berhasil: transaksi pukul 00.00.00–17.00.00 WIB paling cepat diambil besok (H+1), sedangkan transaksi pukul 17.00.01 WIB–23.59.59 WIB paling cepat diambil lusa (H+2). Untuk Custom Cake, pengajuan memerlukan waktu H-3 untuk desain standar dan H-7 untuk edible print.</p>
+            <p class="mt-2">{{ config('store.courier_instructions') }}</p>
+            <p class="mt-3"><a href="{{ route('pickup.show').'#policies' }}" class="inline-flex font-semibold text-[#512323] underline decoration-[#C3B59C] underline-offset-4 hover:decoration-[#512323]">Baca syarat &amp; ketentuan kebijakan lengkap <span aria-hidden="true" class="ml-2">↗</span></a></p>
+        </div>
+        <a href="{{ route('pickup.show').'#policies' }}" class="mt-8 inline-flex text-sm font-semibold text-[#512323] underline decoration-[#C3B59C] underline-offset-4 hover:decoration-[#512323]">Baca kebijakan pemesanan dan pengambilan <span aria-hidden="true" class="ml-2">↗</span></a>
     </section>
 
     @if ($testimonials->isNotEmpty())
@@ -218,7 +232,7 @@
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Lorem ipsum</p>
             <h2 id="store-heading" class="mt-3 font-lufga text-3xl font-semibold tracking-tight text-[#251306] sm:text-4xl">Kunjungi TBloom</h2>
             <p class="mt-5 max-w-md text-sm leading-7 text-[#6F594C]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed posuere consectetur est at lobortis.</p>
-            <a href="{{ route('pickup.show') }}" class="mt-7 inline-flex text-sm font-semibold text-[#512323] underline decoration-[#C3B59C] underline-offset-4 hover:decoration-[#512323]">Informasi pengambilan <span aria-hidden="true" class="ml-2">↗</span></a>
+            <a href="{{ route('pickup.show').'#policies' }}" class="mt-7 inline-flex text-sm font-semibold text-[#512323] underline decoration-[#C3B59C] underline-offset-4 hover:decoration-[#512323]">Informasi pengambilan <span aria-hidden="true" class="ml-2">↗</span></a>
         </div>
         <div class="grid gap-8 border-t border-[#C3B59C] pt-6 sm:grid-cols-2">
             <div>
