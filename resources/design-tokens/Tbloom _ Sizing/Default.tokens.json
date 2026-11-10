@@ -260,6 +260,58 @@
           "WIDTH_HEIGHT"
         ]
       }
+    },
+    "auth": {
+      "$type": "number",
+      "$value": 1440,
+      "$description": "Lebar maksimum acuan container autentikasi 1440 px.",
+      "$extensions": {
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "auth": {
+    "form-width": {
+      "$type": "number",
+      "$value": 520,
+      "$description": "Lebar maksimum form autentikasi 520 px.",
+      "$extensions": {
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "brand-width": {
+      "$type": "number",
+      "$value": 520,
+      "$description": "Lebar maksimum panel brand autentikasi 520 px.",
+      "$extensions": {
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "brand-height-min": {
+      "$type": "number",
+      "$value": 760,
+      "$description": "Tinggi minimum panel brand autentikasi 760 px.",
+      "$extensions": {
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "brand-height-max": {
+      "$type": "number",
+      "$value": 840,
+      "$description": "Tinggi target panel brand autentikasi 840 px.",
+      "$extensions": {
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
     }
   },
   "$extensions": {

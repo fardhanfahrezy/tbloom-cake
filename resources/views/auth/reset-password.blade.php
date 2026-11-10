@@ -5,7 +5,7 @@
     heading-tone="neutral"
     mobile-heading-size="md"
 >
-    <p class="mb-[28px] text-center font-rubik text-[16px] font-normal leading-[1.4] tracking-[0.2px] text-[#6f594c] lg:mb-[36px] lg:text-[20px] lg:text-[#757575]">
+    <p class="mb-token-20 text-center font-body text-xs font-normal leading-[1.4] tracking-[0.2px] text-auth-muted lg:mb-token-24 lg:text-[14px]">
         Masukkan kata sandi baru untuk akun Anda (minimal 8 karakter).
     </p>
 
@@ -13,7 +13,7 @@
         @csrf
         <input type="hidden" name="token" value="{{ $token }}">
 
-        <div class="flex flex-col gap-[24px] lg:gap-[28px]">
+        <div class="flex flex-col gap-token-20 lg:gap-token-24">
             <x-auth-input
                 name="email"
                 label="Email"
@@ -57,15 +57,15 @@
             type="submit"
             data-auth-submit
             data-loading-text="Menyimpan kata sandi..."
-            class="mt-[28px] w-full cursor-pointer rounded-full bg-[#726251] px-[10px] py-[12px] text-center font-rubik text-[16px] font-semibold leading-[1.4] tracking-[0.2px] text-[#f7e3df] transition hover:bg-[#5b4639] active:bg-[#38271f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#726251] disabled:cursor-not-allowed disabled:opacity-60 lg:mt-[36px] lg:py-[20px] lg:text-[24px]"
+            class="mt-token-24 inline-flex min-h-[52px] w-full cursor-pointer items-center justify-center rounded-full bg-auth-panel px-6 py-3 text-center font-body text-base font-semibold leading-[1.4] tracking-[0.2px] text-auth-foreground transition-colors hover:bg-auth-panel-hover active:bg-auth-panel-pressed focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-auth-focus disabled:cursor-not-allowed disabled:opacity-60 lg:mt-token-28 lg:min-h-[56px] lg:py-3.5 lg:text-[18px]"
         >
             Simpan password baru
         </button>
 
-        <div class="mt-[24px] text-center lg:mt-[32px]">
+        <div class="mt-token-20 text-center lg:mt-token-24">
             <a
                 href="{{ route('login') }}"
-                class="inline-block font-rubik text-[12px] font-semibold leading-[1.4] tracking-[0.2px] text-[#38271f] transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f] lg:text-[20px]"
+                class="inline-block font-body text-xs font-semibold leading-[1.4] tracking-[0.2px] text-auth-ink transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-auth-focus lg:text-[14px]"
             >
                 Kembali ke halaman login
             </a>

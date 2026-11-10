@@ -2,7 +2,7 @@
     <form method="POST" action="{{ route('register.store') }}" data-auth-form class="flex w-full flex-col">
         @csrf
 
-        <div class="flex flex-col gap-[22px] lg:gap-[26px]">
+        <div class="flex flex-col gap-token-20 lg:gap-token-24">
             <x-auth-input
                 name="name"
                 label="Nama lengkap"
@@ -63,8 +63,8 @@
             />
         </div>
 
-        <div class="mt-[16px] flex flex-col lg:mt-[20px]">
-            <div class="flex items-start gap-[10px]">
+        <div class="mt-token-16 flex flex-col">
+            <div class="flex items-start gap-2.5">
                 <input
                     id="terms"
                     name="terms"
@@ -76,16 +76,16 @@
                         aria-invalid="true"
                         aria-describedby="terms-error"
                     @enderror
-                    class="mt-1 size-[14px] shrink-0 cursor-pointer rounded-[2px] border border-[#6f594c] accent-[#726251] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251] lg:size-[20px]"
+                    class="mt-1 size-4 shrink-0 cursor-pointer rounded-token-xs border border-auth-muted accent-auth-panel focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-auth-focus lg:size-[18px]"
                 >
                 <label
                     for="terms"
-                    class="cursor-pointer font-rubik text-[12px] font-normal leading-[1.4] tracking-[0.2px] text-[#38271f] lg:text-[18px]"
+                    class="cursor-pointer font-body text-xs font-normal leading-[1.4] tracking-[0.2px] text-auth-ink lg:text-[14px]"
                 >
                     Saya menyetujui
                     <a
                         href="{{ route('pickup.show').'#policies' }}"
-                        class="font-semibold text-[#38271f] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f]"
+                        class="font-semibold text-auth-ink hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-auth-focus"
                     >
                         Syarat &amp; Ketentuan
                     </a>
@@ -94,7 +94,7 @@
             </div>
 
             @error('terms')
-                <p id="terms-error" role="alert" class="mt-2 pl-6 font-rubik text-sm font-medium text-red-700 lg:text-base">
+                <p id="terms-error" role="alert" class="mt-2 pl-6 font-body text-xs font-medium text-red-700 lg:text-sm">
                     {{ $message }}
                 </p>
             @enderror
@@ -104,51 +104,19 @@
             type="submit"
             data-auth-submit
             data-loading-text="Mendaftarkan akun..."
-            class="mt-[24px] w-full cursor-pointer rounded-full bg-[#726251] px-[10px] py-[12px] text-center font-rubik text-[16px] font-semibold leading-[1.4] tracking-[0.2px] text-[#f7e3df] transition hover:bg-[#5b4639] active:bg-[#38271f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#726251] disabled:cursor-not-allowed disabled:opacity-60 lg:mt-[32px] lg:py-[20px] lg:text-[24px]"
+            class="mt-token-24 inline-flex min-h-[52px] w-full cursor-pointer items-center justify-center rounded-full bg-auth-panel px-6 py-3 text-center font-body text-base font-semibold leading-[1.4] tracking-[0.2px] text-auth-foreground transition-colors hover:bg-auth-panel-hover active:bg-auth-panel-pressed focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-auth-focus disabled:cursor-not-allowed disabled:opacity-60 lg:mt-token-28 lg:min-h-[56px] lg:py-3.5 lg:text-[18px]"
         >
             Sign up
         </button>
 
-        <div class="mt-[24px] flex flex-col items-center gap-[20px] lg:mt-[32px] lg:gap-[24px]">
-            <p class="text-center font-rubik text-[14px] font-medium leading-[1.4] tracking-[0.2px] text-[#6f594c] lg:text-[20px]">
-                - atau -
-            </p>
+        <div class="mt-token-20 flex flex-col items-center gap-token-16 lg:mt-token-24 lg:gap-token-20">
+            <x-auth-social-providers />
 
-            <div class="flex items-center justify-center gap-[24px]" role="group" aria-label="Metode daftar alternatif">
-                <button
-                    type="button"
-                    disabled
-                    aria-label="Sign up dengan Google (segera hadir)"
-                    title="Sign up dengan Google (segera hadir)"
-                    class="inline-flex cursor-not-allowed items-center justify-center rounded-full p-1 opacity-85 transition hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251]"
-                >
-                    <img src="{{ asset('assets/Google_icon.svg') }}" alt="" aria-hidden="true" width="32" height="32" class="size-[24px] object-contain lg:size-[32px]">
-                </button>
-                <button
-                    type="button"
-                    disabled
-                    aria-label="Sign up dengan Facebook (segera hadir)"
-                    title="Sign up dengan Facebook (segera hadir)"
-                    class="inline-flex cursor-not-allowed items-center justify-center rounded-full p-1 opacity-85 transition hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251]"
-                >
-                    <img src="{{ asset('assets/Facebook_icon.svg') }}" alt="" aria-hidden="true" width="32" height="32" class="size-[24px] object-contain lg:size-[32px]">
-                </button>
-                <button
-                    type="button"
-                    disabled
-                    aria-label="Sign up dengan Apple (segera hadir)"
-                    title="Sign up dengan Apple (segera hadir)"
-                    class="inline-flex cursor-not-allowed items-center justify-center rounded-full p-1 opacity-85 transition hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251]"
-                >
-                    <img src="{{ asset('assets/Apple_logo_black.svg') }}" alt="" aria-hidden="true" width="27" height="32" class="h-[24px] w-[20px] object-contain lg:h-[32px] lg:w-[27px]">
-                </button>
-            </div>
-
-            <p class="text-center font-rubik text-[12px] font-normal leading-[1.4] tracking-[0.2px] text-[#6f594c] lg:text-[20px]">
+            <p class="text-center font-body text-xs font-normal leading-[1.4] tracking-[0.2px] text-auth-muted lg:text-[14px]">
                 Sudah punya akun?
                 <a
                     href="{{ route('login') }}"
-                    class="font-semibold text-[#38271f] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f]"
+                    class="font-semibold text-auth-ink hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-auth-focus"
                 >
                     Login
                 </a>

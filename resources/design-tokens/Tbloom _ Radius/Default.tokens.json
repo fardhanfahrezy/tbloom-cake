@@ -98,6 +98,16 @@
           "CORNER_RADIUS"
         ]
       }
+    },
+    "auth-panel": {
+      "$type": "number",
+      "$value": 300,
+      "$description": "Border radius sudut organik panel autentikasi (280-320 px).",
+      "$extensions": {
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ]
+      }
     }
   },
   "$extensions": {

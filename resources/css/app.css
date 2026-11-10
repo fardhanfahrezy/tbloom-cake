@@ -3,18 +3,100 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+/*
+ * Tailwind token bridge.
+ * Keep these values aligned with resources/design-tokens/*.tokens.json.
+ * Auth-specific aliases preserve the existing Login reference palette where
+ * the current screen intentionally differs from the newer semantic palette.
+ */
 @theme {
+    /* Existing TBloom brand palette. */
     --color-brand-dark: #251306;
     --color-brand-burgundy: #512323;
     --color-brand-brown: #442818;
     --color-brand-taupe: #726251;
     --color-brand-beige: #C3B59C;
     --color-brand-pink: #F7E3DF;
+
+    /* Semantic color tokens. */
+    --color-canvas: #FAF5EF;
+    --color-paper: #FFFCF8;
+    --color-ink: #38271F;
+    --color-muted: #6F594C;
+    --color-accent: #6B283B;
+    --color-blush: #EDDCD5;
+    --color-line: #D6C6B9;
+    --color-inverse: #FFF7EE;
+    --color-brown: #5B4639;
+    --color-action-primary-hover: #562030;
+    --color-action-primary-pressed: #421724;
+    --color-status-error: #A33328;
+
+    /* Auth aliases: intentionally preserve the existing reference colors. */
     --color-auth-canvas: #FEF6EF;
     --color-auth-ink: #38271F;
     --color-auth-muted: #6F594C;
     --color-auth-neutral: #757575;
     --color-auth-heading: #424242;
+    --color-auth-panel: #726251;
+    --color-auth-panel-hover: #5B4639;
+    --color-auth-panel-pressed: #38271F;
+    --color-auth-foreground: #F7E3DF;
+    --color-auth-blush: #F7E3DF;
+    --color-auth-focus: #726251;
+    --color-auth-icon: #9E9E9E;
+    --color-auth-placeholder-neutral: #616161;
+
+    /* Auth layout & dimensional tokens aligned with resources/design-tokens. */
+    --container-auth: 1440px;
+    --width-auth-form: 520px;
+    --width-auth-brand: 520px;
+    --height-auth-brand-min: 760px;
+    --height-auth-brand-max: 840px;
+    --spacing-auth-section: 24px;
+
+    /* Spacing tokens (px), mapped to Tailwind's spacing namespace. */
+    --spacing-token-0: 0px;
+    --spacing-token-2: 2px;
+    --spacing-token-4: 4px;
+    --spacing-token-6: 6px;
+    --spacing-token-8: 8px;
+    --spacing-token-12: 12px;
+    --spacing-token-16: 16px;
+    --spacing-token-20: 20px;
+    --spacing-token-24: 24px;
+    --spacing-token-28: 28px;
+    --spacing-token-32: 32px;
+    --spacing-token-40: 40px;
+    --spacing-token-48: 48px;
+    --spacing-token-56: 56px;
+    --spacing-token-64: 64px;
+    --spacing-token-72: 72px;
+    --spacing-token-80: 80px;
+    --spacing-token-96: 96px;
+    --spacing-token-120: 120px;
+    --spacing-token-128: 128px;
+    --spacing-token-160: 160px;
+    --spacing-token-192: 192px;
+
+    /* Radius tokens. */
+    --radius-token-none: 0px;
+    --radius-token-xs: 2px;
+    --radius-token-sm: 4px;
+    --radius-token-md: 8px;
+    --radius-token-lg: 12px;
+    --radius-token-xl: 16px;
+    --radius-token-2xl: 24px;
+    --radius-token-3xl: 32px;
+    --radius-token-auth-panel: 300px;
+    --radius-token-full: 9999px;
+
+    /* Typography tokens. */
+    --font-body: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Lufga', ui-sans-serif, system-ui, sans-serif;
+
+    /* Backward-compatible font aliases used by existing Blade views. */
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
     --font-lufga: 'Lufga', ui-sans-serif, system-ui, sans-serif;
