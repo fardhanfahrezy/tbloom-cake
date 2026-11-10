@@ -37,7 +37,7 @@
                     @endif
                     <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 border-t border-white/50 pt-4 text-white sm:bottom-7 sm:left-7 sm:right-7">
                         <span class="font-lufga text-lg">TBloom Cake</span>
-                        <span class="text-[10px] font-semibold uppercase tracking-[0.18em]">Made for moments</span>
+                        <span class="text-[10px] font-semibold uppercase tracking-[0.18em]">Lorem ipsum</span>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
         <div class="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 lg:py-24 xl:px-16">
             <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Explore our collection</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Lorem ipsum</p>
                     <h2 id="categories-heading" class="mt-3 font-lufga text-3xl font-semibold tracking-tight text-[#251306] sm:text-4xl">Temukan Pilihan Kue</h2>
                 </div>
                 <a href="{{ route('catalog.index') }}" class="text-sm font-semibold text-[#512323] underline decoration-[#C3B59C] underline-offset-4 hover:decoration-[#512323]">Semua produk <span aria-hidden="true">↗</span></a>
@@ -80,7 +80,7 @@
     <section aria-labelledby="products-heading" class="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 lg:py-24 xl:px-16">
         <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">A little something special</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Lorem ipsum</p>
                 <h2 id="products-heading" class="mt-3 font-lufga text-3xl font-semibold tracking-tight text-[#251306] sm:text-4xl">Pilihan dari TBloom</h2>
                 <p class="mt-3 max-w-xl text-sm leading-7 text-[#6F594C]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed odio dui.</p>
             </div>
@@ -127,8 +127,8 @@
     <section aria-labelledby="custom-heading" class="bg-[#726251] text-[#FAF5EF]">
         <div class="mx-auto grid max-w-[1440px] items-center gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_.8fr] lg:gap-20 lg:py-24 xl:px-16">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#F7E3DF]">Made just for you</p>
-                <h2 id="custom-heading" class="mt-4 max-w-[13ch] font-lufga text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">Custom Cake untuk momen istimewa.</h2>
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#F7E3DF]">Lorem ipsum</p>
+                <h2 id="custom-heading" class="mt-4 max-w-[13ch] font-lufga text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">Lorem ipsum dolor sit amet.</h2>
                 <p class="mt-6 max-w-xl text-base leading-8 text-[#F7E3DF]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur.</p>
                 <p class="mt-5 text-sm leading-7 text-[#FAF5EF]">Request desain standar memerlukan H-3. Untuk edible print, pengajuan dilakukan minimal H-7 sebelum tanggal pengambilan.</p>
                 <a href="{{ route('custom-requests.create') }}" class="mt-8 inline-flex min-h-14 items-center justify-center rounded-full bg-[#F7E3DF] px-7 py-4 text-sm font-semibold text-[#512323] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Ajukan Custom Cake <span aria-hidden="true" class="ml-3 text-lg">↗</span></a>
@@ -146,7 +146,7 @@
 
     <section id="how-to-order" aria-labelledby="how-to-order-heading" class="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 lg:py-24 xl:px-16">
         <div class="max-w-2xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Simple steps</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Lorem ipsum</p>
             <h2 id="how-to-order-heading" class="mt-3 font-lufga text-3xl font-semibold tracking-tight text-[#251306] sm:text-4xl">Cara Pemesanan</h2>
             <p class="mt-4 text-sm leading-7 text-[#6F594C]">Pilih alur yang sesuai dengan kue yang ingin Anda pesan.</p>
         </div>
@@ -188,7 +188,7 @@
         <section id="testimonials" aria-labelledby="testimonials-heading" class="border-y border-[#E5D8CC] bg-[#FFFCF8]">
             <div class="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 lg:py-24 xl:px-16">
                 <div class="mb-10 max-w-2xl">
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Kind words</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Lorem ipsum</p>
                     <h2 id="testimonials-heading" class="mt-3 font-lufga text-3xl font-semibold tracking-tight text-[#251306] sm:text-4xl">Cerita dari Pelanggan</h2>
                 </div>
                 <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -215,7 +215,7 @@
 
     <section id="store-information" aria-labelledby="store-heading" class="mx-auto grid max-w-[1440px] gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[.9fr_1.1fr] lg:gap-20 lg:py-24 xl:px-16">
         <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Find us</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">Lorem ipsum</p>
             <h2 id="store-heading" class="mt-3 font-lufga text-3xl font-semibold tracking-tight text-[#251306] sm:text-4xl">Kunjungi TBloom</h2>
             <p class="mt-5 max-w-md text-sm leading-7 text-[#6F594C]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed posuere consectetur est at lobortis.</p>
             <a href="{{ route('pickup.show') }}" class="mt-7 inline-flex text-sm font-semibold text-[#512323] underline decoration-[#C3B59C] underline-offset-4 hover:decoration-[#512323]">Informasi pengambilan <span aria-hidden="true" class="ml-2">↗</span></a>
