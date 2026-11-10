@@ -160,7 +160,7 @@ Tidak ada role atau akun Guest. Halaman publik tetap dapat dibaca pengunjung tan
 
 ### 3.1 Akun dan keamanan akses
 
-- Registrasi: nama 2–100 karakter, email valid maksimal 254 karakter, nomor WhatsApp valid yang dinormalisasi, password minimal 12 karakter dan konfirmasi password.
+- Registrasi: nama 2–100 karakter, email valid maksimal 254 karakter, nomor WhatsApp valid yang dinormalisasi, password minimal 8 karakter dan konfirmasi password.
 - Email dan nomor WhatsApp normalized unik per akun sebagai default MVP. Registrasi publik selalu menghasilkan role Customer; payload role dari browser diabaikan.
 - Akun langsung aktif. `email_verified_at` dapat disediakan, tetapi tidak menjadi syarat checkout. Sistem tidak boleh mengklaim email/WhatsApp telah terverifikasi.
 - Password disimpan menggunakan hashing Laravel. Session diregenerasi setelah login; logout mengakhiri session. Reset password memakai token berumur terbatas via email dan pesan respons yang tidak membocorkan keberadaan akun.

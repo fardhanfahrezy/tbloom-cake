@@ -11,13 +11,13 @@ class NewPasswordRequest extends PasswordResetLinkRequest
     {
         return array_merge(parent::rules(), [
             'token' => ['required', 'string', 'max:255'],
-            'password' => ['bail', 'required', 'string', 'min:12', 'confirmed', new AccountPassword],
+            'password' => ['bail', 'required', 'string', 'min:8', 'confirmed', new AccountPassword],
         ]);
     }
 
     /** @return array<string, string> */
     public function messages(): array
     {
-        return ['password.min' => 'Password minimal 12 karakter.', 'password.confirmed' => 'Konfirmasi password tidak cocok.'];
+        return ['password.min' => 'Password minimal 8 karakter.', 'password.confirmed' => 'Konfirmasi password tidak cocok.'];
     }
 }

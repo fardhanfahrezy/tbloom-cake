@@ -1,5 +1,6 @@
 *.log
 .DS_Store
+variabel.json
 .env
 .env.example
 .env.backup
@@ -15,6 +16,7 @@
 /.zed
 /auth.json
 /node_modules
+/graphify-out
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot

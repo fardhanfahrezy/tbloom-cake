@@ -1,0 +1,86 @@
+{
+  "width": {
+    "none": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Ketebalan border 0 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:208",
+        "com.figma.scopes": [
+          "STROKE_FLOAT"
+        ]
+      }
+    },
+    "hairline": {
+      "$type": "number",
+      "$value": 0.5,
+      "$description": "Ketebalan border 0.5 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:209",
+        "com.figma.scopes": [
+          "STROKE_FLOAT"
+        ]
+      }
+    },
+    "default": {
+      "$type": "number",
+      "$value": 1,
+      "$description": "Ketebalan border 1 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:210",
+        "com.figma.scopes": [
+          "STROKE_FLOAT"
+        ]
+      }
+    },
+    "strong": {
+      "$type": "number",
+      "$value": 2,
+      "$description": "Ketebalan border 2 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:211",
+        "com.figma.scopes": [
+          "STROKE_FLOAT"
+        ]
+      }
+    },
+    "heavy": {
+      "$type": "number",
+      "$value": 4,
+      "$description": "Ketebalan border 4 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:212",
+        "com.figma.scopes": [
+          "STROKE_FLOAT"
+        ]
+      }
+    }
+  },
+  "focus": {
+    "ring-width": {
+      "$type": "number",
+      "$value": 2,
+      "$description": "Ketebalan focus ring 2 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:213",
+        "com.figma.scopes": [
+          "STROKE_FLOAT"
+        ]
+      }
+    },
+    "ring-offset": {
+      "$type": "number",
+      "$value": 2,
+      "$description": "Jarak focus ring 2 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:214",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Default"
+  }
+}

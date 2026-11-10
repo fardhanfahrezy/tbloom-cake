@@ -40,10 +40,6 @@
 
     <div class="mx-auto flex w-full max-w-[1728px] flex-1 flex-col items-center justify-between px-6 sm:px-10 lg:flex-row lg:items-stretch lg:gap-12 lg:px-[100px] xl:px-[183px]">
         <main id="main-content" tabindex="-1" class="mx-auto flex w-full max-w-[360px] flex-1 flex-col justify-center pt-[44px] pb-[48px] focus:outline-none sm:max-w-[440px] lg:mx-0 lg:max-w-[540px] lg:py-[72px]">
-            <nav aria-label="Navigasi toko" class="mb-6 flex items-center justify-between text-xs font-medium text-[#6f594c] lg:mb-8">
-                <a href="{{ route('home') }}" class="hover:text-[#38271f] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251]">Beranda</a>
-                <a href="{{ route('catalog.index') }}" class="hover:text-[#38271f] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251]">Katalog</a>
-            </nav>
 
             <h1 class="sr-only lg:not-sr-only lg:mb-[52px] text-center font-rubik text-[48px] font-bold leading-[1.1] {{ $headingClasses }}">
                 {{ $heading }}

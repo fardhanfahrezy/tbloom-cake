@@ -85,7 +85,7 @@ test('rejects invalid registration data without creating or authenticating an ac
     'long E164' => [['whatsapp_number' => '+1234567890123456'], 'whatsapp_number'],
     'zero country' => [['whatsapp_number' => '+0123456789'], 'whatsapp_number'],
     'missing number' => [['whatsapp_number' => ''], 'whatsapp_number'],
-    'short password' => [['password' => '12345678901', 'password_confirmation' => '12345678901'], 'password'],
+    'short password' => [['password' => '1234567', 'password_confirmation' => '1234567'], 'password'],
     'mismatched confirmation' => [['password_confirmation' => 'different-pass'], 'password'],
     'missing confirmation' => [['password_confirmation' => null], 'password'],
     'too many bcrypt bytes' => [['password' => str_repeat('a', 73), 'password_confirmation' => str_repeat('a', 73)], 'password'],
@@ -96,10 +96,10 @@ test('rejects invalid registration data without creating or authenticating an ac
     'unaccepted terms' => [['terms' => '0'], 'terms'],
 ]);
 
-test('accepts the documented account field boundaries and twelve character password', function () {
+test('accepts the documented account field boundaries and eight character password', function () {
     $email = str_repeat('x', 64).'@'.str_repeat('a', 62).'.'.str_repeat('b', 62).'.'.str_repeat('c', 58).'.test';
     $this->post('/register', registrationPayload(['name' => str_repeat('a', 100), 'email' => $email,
-        'whatsapp_number' => '+123456789012345', 'password' => '123456789012', 'password_confirmation' => '123456789012',
+        'whatsapp_number' => '+123456789012345', 'password' => '12345678', 'password_confirmation' => '12345678',
     ]))->assertRedirect('/')->assertSessionHasNoErrors();
     $this->assertDatabaseHas('users', ['name' => str_repeat('a', 100), 'email' => $email]);
 });

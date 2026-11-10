@@ -48,7 +48,7 @@
             @if (Route::has('password.request'))
                 <a
                     href="{{ route('password.request') }}"
-                    class="font-rubik text-[12px] font-semibold leading-[1.4] tracking-[0.2px] text-[#6b283b] transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6b283b] lg:text-[20px]"
+                    class="font-rubik text-[12px] font-semibold leading-[1.4] tracking-[0.2px] text-[#38271f] transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f] lg:text-[20px]"
                 >
                     Lupa kata sandi?
                 </a>
@@ -103,7 +103,7 @@
                 Belum punya akun?
                 <a
                     href="{{ route('register') }}"
-                    class="font-semibold text-[#6b283b] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6b283b]"
+                    class="font-semibold text-[#38271f] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f]"
                 >
                     Sign up
                 </a>

@@ -1,0 +1,238 @@
+{
+  "space": {
+    "0": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Jarak 0 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:186",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "2": {
+      "$type": "number",
+      "$value": 2,
+      "$description": "Jarak 2 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:187",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "4": {
+      "$type": "number",
+      "$value": 4,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:649",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "6": {
+      "$type": "number",
+      "$value": 6,
+      "$description": "Jarak 6 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:188",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "8": {
+      "$type": "number",
+      "$value": 8,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:650",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "12": {
+      "$type": "number",
+      "$value": 12,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:651",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "16": {
+      "$type": "number",
+      "$value": 16,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:652",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "20": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "Jarak 20 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:189",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "24": {
+      "$type": "number",
+      "$value": 24,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:653",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "28": {
+      "$type": "number",
+      "$value": 28,
+      "$description": "Jarak 28 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:190",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "32": {
+      "$type": "number",
+      "$value": 32,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:654",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "40": {
+      "$type": "number",
+      "$value": 40,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:655",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "48": {
+      "$type": "number",
+      "$value": 48,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:656",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "56": {
+      "$type": "number",
+      "$value": 56,
+      "$description": "Jarak 56 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:191",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "64": {
+      "$type": "number",
+      "$value": 64,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:657",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "72": {
+      "$type": "number",
+      "$value": 72,
+      "$description": "Jarak 72 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:192",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "80": {
+      "$type": "number",
+      "$value": 80,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:658",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "96": {
+      "$type": "number",
+      "$value": 96,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:1:659",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "120": {
+      "$type": "number",
+      "$value": 120,
+      "$description": "Jarak 120 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:193",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "128": {
+      "$type": "number",
+      "$value": 128,
+      "$description": "Jarak 128 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:194",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "160": {
+      "$type": "number",
+      "$value": 160,
+      "$description": "Jarak 160 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:195",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    },
+    "192": {
+      "$type": "number",
+      "$value": 192,
+      "$description": "Jarak 192 px; memperluas skala spacing yang ada.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:196",
+        "com.figma.scopes": [
+          "GAP"
+        ]
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Mode 1"
+  }
+}

@@ -1,0 +1,482 @@
+{
+  "family": {
+    "body": {
+      "$type": "string",
+      "$value": "Rubik",
+      "$description": "Keluarga font teks sesuai desain saat ini.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:225",
+        "com.figma.scopes": [
+          "FONT_FAMILY"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "heading": {
+      "$type": "string",
+      "$value": "Rubik",
+      "$description": "Keluarga font judul utama sesuai desain desktop saat ini.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:226",
+        "com.figma.scopes": [
+          "FONT_FAMILY"
+        ],
+        "com.figma.type": "string"
+      }
+    },
+    "display": {
+      "$type": "string",
+      "$value": "Lufga",
+      "$description": "Keluarga font display yang digunakan di judul mobile.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:227",
+        "com.figma.scopes": [
+          "FONT_FAMILY"
+        ],
+        "com.figma.type": "string"
+      }
+    }
+  },
+  "weight": {
+    "regular": {
+      "$type": "number",
+      "$value": 400,
+      "$description": "Bobot font 400.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:228",
+        "com.figma.scopes": [
+          "FONT_STYLE"
+        ]
+      }
+    },
+    "medium": {
+      "$type": "number",
+      "$value": 500,
+      "$description": "Bobot font 500.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:229",
+        "com.figma.scopes": [
+          "FONT_STYLE"
+        ]
+      }
+    },
+    "semibold": {
+      "$type": "number",
+      "$value": 600,
+      "$description": "Bobot font 600.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:230",
+        "com.figma.scopes": [
+          "FONT_STYLE"
+        ]
+      }
+    },
+    "bold": {
+      "$type": "number",
+      "$value": 700,
+      "$description": "Bobot font 700.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:231",
+        "com.figma.scopes": [
+          "FONT_STYLE"
+        ]
+      }
+    }
+  },
+  "size": {
+    "12": {
+      "$type": "number",
+      "$value": 12,
+      "$description": "Ukuran font 12 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:232",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "14": {
+      "$type": "number",
+      "$value": 14,
+      "$description": "Ukuran font 14 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:233",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "16": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "Ukuran font 16 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:234",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "18": {
+      "$type": "number",
+      "$value": 18,
+      "$description": "Ukuran font 18 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:235",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "20": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "Ukuran font 20 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:236",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "22": {
+      "$type": "number",
+      "$value": 22,
+      "$description": "Ukuran font 22 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:237",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "24": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "Ukuran font 24 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:238",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "28": {
+      "$type": "number",
+      "$value": 28,
+      "$description": "Ukuran font 28 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:239",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "32": {
+      "$type": "number",
+      "$value": 32,
+      "$description": "Ukuran font 32 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:240",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "40": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Ukuran font 40 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:241",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "48": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Ukuran font 48 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:242",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "56": {
+      "$type": "number",
+      "$value": 56,
+      "$description": "Ukuran font 56 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:243",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "64": {
+      "$type": "number",
+      "$value": 64,
+      "$description": "Ukuran font 64 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:244",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    },
+    "72": {
+      "$type": "number",
+      "$value": 72,
+      "$description": "Ukuran font 72 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:245",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ]
+      }
+    }
+  },
+  "line-height": {
+    "16": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "Line height 16 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:246",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "20": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "Line height 20 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:247",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "24": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "Line height 24 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:248",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "28": {
+      "$type": "number",
+      "$value": 28,
+      "$description": "Line height 28 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:249",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "32": {
+      "$type": "number",
+      "$value": 32,
+      "$description": "Line height 32 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:250",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "36": {
+      "$type": "number",
+      "$value": 36,
+      "$description": "Line height 36 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:251",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "40": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Line height 40 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:252",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "48": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Line height 48 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:253",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "56": {
+      "$type": "number",
+      "$value": 56,
+      "$description": "Line height 56 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:254",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "64": {
+      "$type": "number",
+      "$value": 64,
+      "$description": "Line height 64 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:255",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "72": {
+      "$type": "number",
+      "$value": 72,
+      "$description": "Line height 72 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:256",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    },
+    "80": {
+      "$type": "number",
+      "$value": 80,
+      "$description": "Line height 80 px, bukan persen.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:257",
+        "com.figma.scopes": [
+          "LINE_HEIGHT"
+        ]
+      }
+    }
+  },
+  "letter-spacing": {
+    "tight": {
+      "$type": "number",
+      "$value": -1,
+      "$description": "Letter spacing -1 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:258",
+        "com.figma.scopes": [
+          "LETTER_SPACING"
+        ]
+      }
+    },
+    "normal": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Letter spacing 0 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:259",
+        "com.figma.scopes": [
+          "LETTER_SPACING"
+        ]
+      }
+    },
+    "wide": {
+      "$type": "number",
+      "$value": 1,
+      "$description": "Letter spacing 1 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:260",
+        "com.figma.scopes": [
+          "LETTER_SPACING"
+        ]
+      }
+    },
+    "wider": {
+      "$type": "number",
+      "$value": 2,
+      "$description": "Letter spacing 2 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:261",
+        "com.figma.scopes": [
+          "LETTER_SPACING"
+        ]
+      }
+    }
+  },
+  "paragraph-spacing": {
+    "0": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Jarak antar paragraf 0 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:262",
+        "com.figma.scopes": [
+          "PARAGRAPH_SPACING"
+        ]
+      }
+    },
+    "8": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "Jarak antar paragraf 8 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:263",
+        "com.figma.scopes": [
+          "PARAGRAPH_SPACING"
+        ]
+      }
+    },
+    "12": {
+      "$type": "number",
+      "$value": 12,
+      "$description": "Jarak antar paragraf 12 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:264",
+        "com.figma.scopes": [
+          "PARAGRAPH_SPACING"
+        ]
+      }
+    },
+    "16": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "Jarak antar paragraf 16 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:265",
+        "com.figma.scopes": [
+          "PARAGRAPH_SPACING"
+        ]
+      }
+    },
+    "24": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "Jarak antar paragraf 24 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:266",
+        "com.figma.scopes": [
+          "PARAGRAPH_SPACING"
+        ]
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Default"
+  }
+}

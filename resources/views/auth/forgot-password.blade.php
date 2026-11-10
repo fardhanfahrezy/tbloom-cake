@@ -41,7 +41,7 @@
         <div class="mt-[24px] text-center lg:mt-[32px]">
             <a
                 href="{{ route('login') }}"
-                class="inline-block font-rubik text-[12px] font-semibold leading-[1.4] tracking-[0.2px] text-[#6b283b] transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6b283b] lg:text-[20px]"
+                class="inline-block font-rubik text-[12px] font-semibold leading-[1.4] tracking-[0.2px] text-[#38271f] transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f] lg:text-[20px]"
             >
                 Kembali ke halaman login
             </a>

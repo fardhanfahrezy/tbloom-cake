@@ -1,0 +1,1642 @@
+{
+  "canvas": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.9803921580314636,
+        0.9607843160629272,
+        0.9372549057006836
+      ],
+      "alpha": 1,
+      "hex": "#FAF5EF"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:639",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "paper": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        1,
+        0.9882352948188782,
+        0.9725490212440491
+      ],
+      "alpha": 1,
+      "hex": "#FFFCF8"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:640",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "ink": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.21960784494876862,
+        0.15294118225574493,
+        0.12156862765550613
+      ],
+      "alpha": 1,
+      "hex": "#38271F"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:641",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "muted": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.43529412150382996,
+        0.3490196168422699,
+        0.2980392277240753
+      ],
+      "alpha": 1,
+      "hex": "#6F594C"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:642",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "accent": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.41960784792900085,
+        0.1568627506494522,
+        0.23137255012989044
+      ],
+      "alpha": 1,
+      "hex": "#6B283B"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:643",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "blush": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.929411768913269,
+        0.8627451062202454,
+        0.8352941274642944
+      ],
+      "alpha": 1,
+      "hex": "#EDDCD5"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:644",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "line": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.8392156958580017,
+        0.7764706015586853,
+        0.7254902124404907
+      ],
+      "alpha": 1,
+      "hex": "#D6C6B9"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:645",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "inverse": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        1,
+        0.9686274528503418,
+        0.9333333373069763
+      ],
+      "alpha": 1,
+      "hex": "#FFF7EE"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:646",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "brown": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.35686275362968445,
+        0.27450981736183167,
+        0.2235294133424759
+      ],
+      "alpha": 1,
+      "hex": "#5B4639"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:1:647",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "background": {
+    "default": {
+      "$type": "color",
+      "$value": "{canvas}",
+      "$description": "Warna background/default; alias ke canvas.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:118",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "subtle": {
+      "$type": "color",
+      "$value": "{blush}",
+      "$description": "Warna background/subtle; alias ke blush.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:119",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{ink}",
+      "$description": "Warna background/inverse; alias ke ink.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:120",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "surface": {
+    "default": {
+      "$type": "color",
+      "$value": "{paper}",
+      "$description": "Warna surface/default; alias ke paper.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:121",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "raised": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Warna surface/raised; alias ke neutral/0.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:122",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:15a4e541a6dd136e7edf9890c1d4556951875fba/-1:-1",
+          "targetVariableName": "neutral/0",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "sunken": {
+      "$type": "color",
+      "$value": "{canvas}",
+      "$description": "Warna surface/sunken; alias ke canvas.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:123",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "disabled": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.929411768913269,
+          0.8627451062202454,
+          0.8352941274642944
+        ],
+        "alpha": 1,
+        "hex": "#EDDCD5"
+      },
+      "$description": "Warna surface/disabled; alias ke neutral/200.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:124",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:5edfeec965649ab09155526a2f5f1a8ff56c9240/-1:-1",
+          "targetVariableName": "neutral/200",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    }
+  },
+  "text": {
+    "primary": {
+      "$type": "color",
+      "$value": "{ink}",
+      "$description": "Warna text/primary; alias ke ink.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:125",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "secondary": {
+      "$type": "color",
+      "$value": "{muted}",
+      "$description": "Warna text/secondary; alias ke muted.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:126",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "tertiary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5490196347236633,
+          0.45098039507865906,
+          0.38823530077934265
+        ],
+        "alpha": 1,
+        "hex": "#8C7363"
+      },
+      "$description": "Warna text/tertiary; alias ke neutral/500.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:127",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:7dd1a8d14ca704bc4a71b2b0f20996302f1c9d93/-1:-1",
+          "targetVariableName": "neutral/500",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "placeholder": {
+      "$type": "color",
+      "$value": "{muted}",
+      "$description": "Warna text/placeholder; alias ke muted.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:128",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "disabled": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5490196347236633,
+          0.45098039507865906,
+          0.38823530077934265
+        ],
+        "alpha": 1,
+        "hex": "#8C7363"
+      },
+      "$description": "Warna text/disabled; alias ke neutral/500.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:129",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:7dd1a8d14ca704bc4a71b2b0f20996302f1c9d93/-1:-1",
+          "targetVariableName": "neutral/500",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{inverse}",
+      "$description": "Warna text/inverse; alias ke inverse.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:130",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "brand": {
+      "$type": "color",
+      "$value": "{accent}",
+      "$description": "Warna text/brand; alias ke accent.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:131",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "icon": {
+    "default": {
+      "$type": "color",
+      "$value": "{brown}",
+      "$description": "Warna icon/default; alias ke brown.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:132",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "subtle": {
+      "$type": "color",
+      "$value": "{muted}",
+      "$description": "Warna icon/subtle; alias ke muted.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:133",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "disabled": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7098039388656616,
+          0.6039215922355652,
+          0.5333333611488342
+        ],
+        "alpha": 1,
+        "hex": "#B59A88"
+      },
+      "$description": "Warna icon/disabled; alias ke neutral/400.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:134",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:55906bbd9328cd940c449ac963980f5d26075c43/-1:-1",
+          "targetVariableName": "neutral/400",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "{inverse}",
+      "$description": "Warna icon/inverse; alias ke inverse.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:135",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "border": {
+    "default": {
+      "$type": "color",
+      "$value": "{line}",
+      "$description": "Warna border/default; alias ke line.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:136",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "subtle": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.929411768913269,
+          0.8627451062202454,
+          0.8352941274642944
+        ],
+        "alpha": 1,
+        "hex": "#EDDCD5"
+      },
+      "$description": "Warna border/subtle; alias ke neutral/200.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:137",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:5edfeec965649ab09155526a2f5f1a8ff56c9240/-1:-1",
+          "targetVariableName": "neutral/200",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "strong": {
+      "$type": "color",
+      "$value": "{muted}",
+      "$description": "Warna border/strong; alias ke muted.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:138",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "focus": {
+      "$type": "color",
+      "$value": "{accent}",
+      "$description": "Warna border/focus; alias ke accent.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:139",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "disabled": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8392156958580017,
+          0.7764706015586853,
+          0.7254902124404907
+        ],
+        "alpha": 1,
+        "hex": "#D6C6B9"
+      },
+      "$description": "Warna border/disabled; alias ke neutral/300.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:140",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:3611f6ad6728045ebe2ab4d7668e70e1ec4a6aa4/-1:-1",
+          "targetVariableName": "neutral/300",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    }
+  },
+  "link": {
+    "default": {
+      "$type": "color",
+      "$value": "{accent}",
+      "$description": "Warna link/default; alias ke accent.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:141",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.33725491166114807,
+          0.125490203499794,
+          0.1882352977991104
+        ],
+        "alpha": 1,
+        "hex": "#562030"
+      },
+      "$description": "Warna link/hover; alias ke brand/700.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:142",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:581ed52845e0439915c1b5b86daffd6ae9fd9b80/-1:-1",
+          "targetVariableName": "brand/700",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "pressed": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.25882354378700256,
+          0.09019608050584793,
+          0.1411764770746231
+        ],
+        "alpha": 1,
+        "hex": "#421724"
+      },
+      "$description": "Warna link/pressed; alias ke brand/800.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:143",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:3da7ee48a71b89d5299d2d7b2fbaba775d5944f9/-1:-1",
+          "targetVariableName": "brand/800",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    }
+  },
+  "focus": {
+    "ring": {
+      "$type": "color",
+      "$value": "{accent}",
+      "$description": "Warna focus/ring; alias ke accent.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:144",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "action": {
+    "primary": {
+      "default": {
+        "$type": "color",
+        "$value": "{accent}",
+        "$description": "Warna action/primary/default; alias ke accent.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:145",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ]
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.33725491166114807,
+            0.125490203499794,
+            0.1882352977991104
+          ],
+          "alpha": 1,
+          "hex": "#562030"
+        },
+        "$description": "Warna action/primary/hover; alias ke brand/700.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:146",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:581ed52845e0439915c1b5b86daffd6ae9fd9b80/-1:-1",
+            "targetVariableName": "brand/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.25882354378700256,
+            0.09019608050584793,
+            0.1411764770746231
+          ],
+          "alpha": 1,
+          "hex": "#421724"
+        },
+        "$description": "Warna action/primary/pressed; alias ke brand/800.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:147",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:3da7ee48a71b89d5299d2d7b2fbaba775d5944f9/-1:-1",
+            "targetVariableName": "brand/800",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": "{inverse}",
+        "$description": "Warna action/primary/foreground; alias ke inverse.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:148",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ]
+        }
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.929411768913269,
+            0.8627451062202454,
+            0.8352941274642944
+          ],
+          "alpha": 1,
+          "hex": "#EDDCD5"
+        },
+        "$description": "Warna action/primary/disabled; alias ke neutral/200.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:149",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:5edfeec965649ab09155526a2f5f1a8ff56c9240/-1:-1",
+            "targetVariableName": "neutral/200",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "disabled-foreground": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.43529412150382996,
+            0.3490196168422699,
+            0.2980392277240753
+          ],
+          "alpha": 1,
+          "hex": "#6F594C"
+        },
+        "$description": "Warna action/primary/disabled-foreground; alias ke neutral/600.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:150",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:4caca76df873bc8eaa25dc7bb7a39f13c3a7f779/-1:-1",
+            "targetVariableName": "neutral/600",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      }
+    },
+    "secondary": {
+      "default": {
+        "$type": "color",
+        "$value": "{paper}",
+        "$description": "Warna action/secondary/default; alias ke paper.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:151",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ]
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": "{canvas}",
+        "$description": "Warna action/secondary/hover; alias ke canvas.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:152",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ]
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": "{blush}",
+        "$description": "Warna action/secondary/pressed; alias ke blush.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:153",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ]
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": "{accent}",
+        "$description": "Warna action/secondary/foreground; alias ke accent.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:154",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ]
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{accent}",
+        "$description": "Warna action/secondary/border; alias ke accent.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:155",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ]
+        }
+      }
+    },
+    "ghost": {
+      "hover": {
+        "$type": "color",
+        "$value": "{blush}",
+        "$description": "Warna action/ghost/hover; alias ke blush.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:156",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ]
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8392156958580017,
+            0.7764706015586853,
+            0.7254902124404907
+          ],
+          "alpha": 1,
+          "hex": "#D6C6B9"
+        },
+        "$description": "Warna action/ghost/pressed; alias ke neutral/300.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:157",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:3611f6ad6728045ebe2ab4d7668e70e1ec4a6aa4/-1:-1",
+            "targetVariableName": "neutral/300",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      }
+    }
+  },
+  "input": {
+    "background": {
+      "$type": "color",
+      "$value": "{paper}",
+      "$description": "Warna input/background; alias ke paper.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:158",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "text": {
+      "$type": "color",
+      "$value": "{ink}",
+      "$description": "Warna input/text; alias ke ink.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:159",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "placeholder": {
+      "$type": "color",
+      "$value": "{muted}",
+      "$description": "Warna input/placeholder; alias ke muted.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:160",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "border": {
+      "$type": "color",
+      "$value": "{line}",
+      "$description": "Warna input/border; alias ke line.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:161",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "border-hover": {
+      "$type": "color",
+      "$value": "{brown}",
+      "$description": "Warna input/border-hover; alias ke brown.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:162",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "border-focus": {
+      "$type": "color",
+      "$value": "{accent}",
+      "$description": "Warna input/border-focus; alias ke accent.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:163",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "background-disabled": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.929411768913269,
+          0.8627451062202454,
+          0.8352941274642944
+        ],
+        "alpha": 1,
+        "hex": "#EDDCD5"
+      },
+      "$description": "Warna input/background-disabled; alias ke neutral/200.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:164",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:5edfeec965649ab09155526a2f5f1a8ff56c9240/-1:-1",
+          "targetVariableName": "neutral/200",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "text-disabled": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.43529412150382996,
+          0.3490196168422699,
+          0.2980392277240753
+        ],
+        "alpha": 1,
+        "hex": "#6F594C"
+      },
+      "$description": "Warna input/text-disabled; alias ke neutral/600.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:165",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:4caca76df873bc8eaa25dc7bb7a39f13c3a7f779/-1:-1",
+          "targetVariableName": "neutral/600",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "border-error": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6392157077789307,
+          0.20000000298023224,
+          0.1568627506494522
+        ],
+        "alpha": 1,
+        "hex": "#A33328"
+      },
+      "$description": "Warna input/border-error; alias ke error/700.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:166",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:5ba56df19b5eee0735f5e05279bf6087b4a63f35/-1:-1",
+          "targetVariableName": "error/700",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    }
+  },
+  "selection": {
+    "background": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9647058844566345,
+          0.8784313797950745,
+          0.9019607901573181
+        ],
+        "alpha": 1,
+        "hex": "#F6E0E6"
+      },
+      "$description": "Warna selection/background; alias ke brand/100.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:167",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:48b7ac2821bf81e5c1a8d9401df148e20e09e1f7/-1:-1",
+          "targetVariableName": "brand/100",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    },
+    "foreground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.25882354378700256,
+          0.09019608050584793,
+          0.1411764770746231
+        ],
+        "alpha": 1,
+        "hex": "#421724"
+      },
+      "$description": "Warna selection/foreground; alias ke brand/800.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:168",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:3da7ee48a71b89d5299d2d7b2fbaba775d5944f9/-1:-1",
+          "targetVariableName": "brand/800",
+          "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+          "targetVariableSetName": "Tbloom / Primitives"
+        }
+      }
+    }
+  },
+  "status": {
+    "success": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.929411768913269,
+            0.9686274528503418,
+            0.9411764740943909
+          ],
+          "alpha": 1,
+          "hex": "#EDF7F0"
+        },
+        "$description": "Status success: background.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:169",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:be644c025d21a5b4c0032aef67014ac0f1305fd2/-1:-1",
+            "targetVariableName": "success/50",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7137255072593689,
+            0.8627451062202454,
+            0.7568627595901489
+          ],
+          "alpha": 1,
+          "hex": "#B6DCC1"
+        },
+        "$description": "Status success: border.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:170",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:1f77fb060c8d49ff6c2b35ce0fd8ee19a948ec5f/-1:-1",
+            "targetVariableName": "success/200",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1568627506494522,
+            0.3921568691730499,
+            0.239215686917305
+          ],
+          "alpha": 1,
+          "hex": "#28643D"
+        },
+        "$description": "Status success: text.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:171",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:4a5ece70526a004f6d13975d06d09b1b69c7c5c9/-1:-1",
+            "targetVariableName": "success/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "icon": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1568627506494522,
+            0.3921568691730499,
+            0.239215686917305
+          ],
+          "alpha": 1,
+          "hex": "#28643D"
+        },
+        "$description": "Status success: icon.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:172",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:4a5ece70526a004f6d13975d06d09b1b69c7c5c9/-1:-1",
+            "targetVariableName": "success/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      }
+    },
+    "warning": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.9647058844566345,
+            0.8980392217636108
+          ],
+          "alpha": 1,
+          "hex": "#FFF6E5"
+        },
+        "$description": "Status warning: background.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:173",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:e203b772e3617c68bbfd30cb7e8df38098db8f5c/-1:-1",
+            "targetVariableName": "warning/50",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9490196108818054,
+            0.8313725590705872,
+            0.6039215922355652
+          ],
+          "alpha": 1,
+          "hex": "#F2D49A"
+        },
+        "$description": "Status warning: border.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:174",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:52c22b4a8dede6df3aec9dcb8a89501df0cd8eb7/-1:-1",
+            "targetVariableName": "warning/200",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.501960813999176,
+            0.3294117748737335,
+            0.06666667014360428
+          ],
+          "alpha": 1,
+          "hex": "#805411"
+        },
+        "$description": "Status warning: text.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:175",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:82c89a518c0526459ae7a0b90b9417a401978833/-1:-1",
+            "targetVariableName": "warning/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "icon": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.501960813999176,
+            0.3294117748737335,
+            0.06666667014360428
+          ],
+          "alpha": 1,
+          "hex": "#805411"
+        },
+        "$description": "Status warning: icon.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:176",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:82c89a518c0526459ae7a0b90b9417a401978833/-1:-1",
+            "targetVariableName": "warning/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      }
+    },
+    "error": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.9411764740943909,
+            0.929411768913269
+          ],
+          "alpha": 1,
+          "hex": "#FFF0ED"
+        },
+        "$description": "Status error: background.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:177",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:d394545d1988ba014b2742bff301d883f8f2b031/-1:-1",
+            "targetVariableName": "error/50",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9411764740943909,
+            0.7372549176216125,
+            0.6980392336845398
+          ],
+          "alpha": 1,
+          "hex": "#F0BCB2"
+        },
+        "$description": "Status error: border.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:178",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:bc47d1699eb99e00dc1fc43fd06df0a53d4ab46e/-1:-1",
+            "targetVariableName": "error/200",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6392157077789307,
+            0.20000000298023224,
+            0.1568627506494522
+          ],
+          "alpha": 1,
+          "hex": "#A33328"
+        },
+        "$description": "Status error: text.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:179",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:5ba56df19b5eee0735f5e05279bf6087b4a63f35/-1:-1",
+            "targetVariableName": "error/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "icon": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6392157077789307,
+            0.20000000298023224,
+            0.1568627506494522
+          ],
+          "alpha": 1,
+          "hex": "#A33328"
+        },
+        "$description": "Status error: icon.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:180",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:5ba56df19b5eee0735f5e05279bf6087b4a63f35/-1:-1",
+            "targetVariableName": "error/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      }
+    },
+    "info": {
+      "background": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.929411768913269,
+            0.95686274766922,
+            0.9882352948188782
+          ],
+          "alpha": 1,
+          "hex": "#EDF4FC"
+        },
+        "$description": "Status info: background.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:181",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:89728777cd375e71b0723a6c82caa9639f8e71d6/-1:-1",
+            "targetVariableName": "info/50",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7215686440467834,
+            0.8156862854957581,
+            0.9333333373069763
+          ],
+          "alpha": 1,
+          "hex": "#B8D0EE"
+        },
+        "$description": "Status info: border.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:182",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:055215f44907ba871fd8ff6d1e43a7f04932ca23/-1:-1",
+            "targetVariableName": "info/200",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1568627506494522,
+            0.3529411852359772,
+            0.5529412031173706
+          ],
+          "alpha": 1,
+          "hex": "#285A8D"
+        },
+        "$description": "Status info: text.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:183",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:6ec94fc9ff71b5babff6ed0a43ad266070ec8dc2/-1:-1",
+            "targetVariableName": "info/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      },
+      "icon": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1568627506494522,
+            0.3529411852359772,
+            0.5529412031173706
+          ],
+          "alpha": 1,
+          "hex": "#285A8D"
+        },
+        "$description": "Status info: icon.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:17:184",
+          "com.figma.scopes": [
+            "ALL_FILLS",
+            "STROKE",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:6ec94fc9ff71b5babff6ed0a43ad266070ec8dc2/-1:-1",
+            "targetVariableName": "info/700",
+            "targetVariableSetId": "VariableCollectionId:29c806cdd1cd7c233463cf27404252ea528b00ad/-1:-1",
+            "targetVariableSetName": "Tbloom / Primitives"
+          }
+        }
+      }
+    }
+  },
+  "overlay": {
+    "scrim": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.21960784494876862,
+          0.15294118225574493,
+          0.12156862765550613
+        ],
+        "alpha": 0.47999998927116394,
+        "hex": "#38271F"
+      },
+      "$description": "Overlay ink dengan opacity 48%.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:185",
+        "com.figma.scopes": [
+          "ALL_FILLS"
+        ],
+        "com.figma.composedColor": {
+          "colorArg": {
+            "type": "alias",
+            "alias": {
+              "targetVariableName": "ink"
+            }
+          },
+          "opacityArg": {
+            "type": "number",
+            "value": 48
+          }
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Mode 1"
+  }
+}

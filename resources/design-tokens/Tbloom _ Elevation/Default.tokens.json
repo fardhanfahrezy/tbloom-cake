@@ -1,0 +1,329 @@
+{
+  "sm": {
+    "x": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Parameter bayangan sm dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:292",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "y": {
+      "$type": "number",
+      "$value": 1,
+      "$description": "Parameter bayangan sm dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:293",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "blur": {
+      "$type": "number",
+      "$value": 2,
+      "$description": "Parameter bayangan sm dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:294",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "spread": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Parameter bayangan sm dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:295",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "color": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.21960784494876862,
+          0.15294118225574493,
+          0.12156862765550613
+        ],
+        "alpha": 0.07999999821186066,
+        "hex": "#38271F"
+      },
+      "$description": "Warna bayangan sm, opacity 8%.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:296",
+        "com.figma.scopes": [
+          "EFFECT_COLOR"
+        ],
+        "com.figma.composedColor": {
+          "colorArg": {
+            "type": "alias",
+            "alias": {
+              "targetVariableId": "VariableID:b3b930840bfc8b7b5a82026e28f87f7f74f2fbc9/-1:-1",
+              "targetVariableName": "ink",
+              "targetVariableSetId": "VariableCollectionId:06d600b1af836100828a1b3731f8049a06aec8a4/-1:-1",
+              "targetVariableSetName": "Tbloom / Semantic"
+            }
+          },
+          "opacityArg": {
+            "type": "number",
+            "value": 8
+          }
+        }
+      }
+    }
+  },
+  "md": {
+    "x": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Parameter bayangan md dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:297",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "y": {
+      "$type": "number",
+      "$value": 4,
+      "$description": "Parameter bayangan md dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:298",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "blur": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "Parameter bayangan md dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:299",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "spread": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Parameter bayangan md dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:300",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "color": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.21960784494876862,
+          0.15294118225574493,
+          0.12156862765550613
+        ],
+        "alpha": 0.10000000149011612,
+        "hex": "#38271F"
+      },
+      "$description": "Warna bayangan md, opacity 10%.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:301",
+        "com.figma.scopes": [
+          "EFFECT_COLOR"
+        ],
+        "com.figma.composedColor": {
+          "colorArg": {
+            "type": "alias",
+            "alias": {
+              "targetVariableId": "VariableID:b3b930840bfc8b7b5a82026e28f87f7f74f2fbc9/-1:-1",
+              "targetVariableName": "ink",
+              "targetVariableSetId": "VariableCollectionId:06d600b1af836100828a1b3731f8049a06aec8a4/-1:-1",
+              "targetVariableSetName": "Tbloom / Semantic"
+            }
+          },
+          "opacityArg": {
+            "type": "number",
+            "value": 10
+          }
+        }
+      }
+    }
+  },
+  "lg": {
+    "x": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Parameter bayangan lg dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:302",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "y": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "Parameter bayangan lg dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:303",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "blur": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "Parameter bayangan lg dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:304",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "spread": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Parameter bayangan lg dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:305",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "color": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.21960784494876862,
+          0.15294118225574493,
+          0.12156862765550613
+        ],
+        "alpha": 0.11999999731779099,
+        "hex": "#38271F"
+      },
+      "$description": "Warna bayangan lg, opacity 12%.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:306",
+        "com.figma.scopes": [
+          "EFFECT_COLOR"
+        ],
+        "com.figma.composedColor": {
+          "colorArg": {
+            "type": "alias",
+            "alias": {
+              "targetVariableId": "VariableID:b3b930840bfc8b7b5a82026e28f87f7f74f2fbc9/-1:-1",
+              "targetVariableName": "ink",
+              "targetVariableSetId": "VariableCollectionId:06d600b1af836100828a1b3731f8049a06aec8a4/-1:-1",
+              "targetVariableSetName": "Tbloom / Semantic"
+            }
+          },
+          "opacityArg": {
+            "type": "number",
+            "value": 12
+          }
+        }
+      }
+    }
+  },
+  "xl": {
+    "x": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Parameter bayangan xl dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:307",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "y": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "Parameter bayangan xl dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:308",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "blur": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Parameter bayangan xl dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:309",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "spread": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Parameter bayangan xl dalam px; perlu disusun menjadi effect.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:310",
+        "com.figma.scopes": [
+          "EFFECT_FLOAT"
+        ]
+      }
+    },
+    "color": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.21960784494876862,
+          0.15294118225574493,
+          0.12156862765550613
+        ],
+        "alpha": 0.1599999964237213,
+        "hex": "#38271F"
+      },
+      "$description": "Warna bayangan xl, opacity 16%.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:311",
+        "com.figma.scopes": [
+          "EFFECT_COLOR"
+        ],
+        "com.figma.composedColor": {
+          "colorArg": {
+            "type": "alias",
+            "alias": {
+              "targetVariableId": "VariableID:b3b930840bfc8b7b5a82026e28f87f7f74f2fbc9/-1:-1",
+              "targetVariableName": "ink",
+              "targetVariableSetId": "VariableCollectionId:06d600b1af836100828a1b3731f8049a06aec8a4/-1:-1",
+              "targetVariableSetName": "Tbloom / Semantic"
+            }
+          },
+          "opacityArg": {
+            "type": "number",
+            "value": 16
+          }
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Default"
+  }
+}

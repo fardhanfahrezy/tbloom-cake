@@ -1,0 +1,268 @@
+{
+  "icon": {
+    "12": {
+      "$type": "number",
+      "$value": 12,
+      "$description": "Ukuran ikon 12 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:268",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "16": {
+      "$type": "number",
+      "$value": 16,
+      "$description": "Ukuran ikon 16 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:269",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "20": {
+      "$type": "number",
+      "$value": 20,
+      "$description": "Ukuran ikon 20 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:270",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "24": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "Ukuran ikon 24 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:271",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "32": {
+      "$type": "number",
+      "$value": 32,
+      "$description": "Ukuran ikon 32 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:272",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "40": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Ukuran ikon 40 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:273",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "48": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Ukuran ikon 48 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:274",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "64": {
+      "$type": "number",
+      "$value": 64,
+      "$description": "Ukuran ikon 64 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:275",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "control-height": {
+    "sm": {
+      "$type": "number",
+      "$value": 32,
+      "$description": "Tinggi kontrol 32 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:276",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "md": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Tinggi kontrol 40 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:277",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Tinggi kontrol 48 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:278",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "xl": {
+      "$type": "number",
+      "$value": 56,
+      "$description": "Tinggi kontrol 56 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:279",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "avatar": {
+    "sm": {
+      "$type": "number",
+      "$value": 24,
+      "$description": "Ukuran avatar 24 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:280",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "md": {
+      "$type": "number",
+      "$value": 32,
+      "$description": "Ukuran avatar 32 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:281",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Ukuran avatar 40 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:282",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "xl": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Ukuran avatar 48 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:283",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "2xl": {
+      "$type": "number",
+      "$value": 64,
+      "$description": "Ukuran avatar 64 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:284",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "3xl": {
+      "$type": "number",
+      "$value": 96,
+      "$description": "Ukuran avatar 96 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:285",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "touch-target": {
+    "min": {
+      "$type": "number",
+      "$value": 44,
+      "$description": "Ukuran minimum target sentuh yang direkomendasikan 44 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:286",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "container": {
+    "sm": {
+      "$type": "number",
+      "$value": 320,
+      "$description": "Lebar acuan container 320 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:287",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "md": {
+      "$type": "number",
+      "$value": 400,
+      "$description": "Lebar acuan container 400 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:288",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 480,
+      "$description": "Lebar acuan container 480 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:289",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    },
+    "xl": {
+      "$type": "number",
+      "$value": 640,
+      "$description": "Lebar acuan container 640 px.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:290",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT"
+        ]
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Default"
+  }
+}

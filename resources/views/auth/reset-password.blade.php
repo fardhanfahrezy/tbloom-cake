@@ -6,7 +6,7 @@
     mobile-heading-size="md"
 >
     <p class="mb-[28px] text-center font-rubik text-[16px] font-normal leading-[1.4] tracking-[0.2px] text-[#6f594c] lg:mb-[36px] lg:text-[20px] lg:text-[#757575]">
-        Masukkan kata sandi baru untuk akun Anda (minimal 12 karakter).
+        Masukkan kata sandi baru untuk akun Anda (minimal 8 karakter).
     </p>
 
     <form method="POST" action="{{ route('password.update') }}" data-auth-form class="flex w-full flex-col">
@@ -33,11 +33,11 @@
                 label="Kata sandi baru"
                 type="password"
                 icon="lock"
-                placeholder="Minimal 12 karakter"
+                placeholder="Minimal 8 karakter"
                 autocomplete="new-password"
                 toggle-password
                 required
-                minlength="12"
+                minlength="8"
             />
 
             <x-auth-input
@@ -49,7 +49,7 @@
                 autocomplete="new-password"
                 toggle-password
                 required
-                minlength="12"
+                minlength="8"
             />
         </div>
 
@@ -65,7 +65,7 @@
         <div class="mt-[24px] text-center lg:mt-[32px]">
             <a
                 href="{{ route('login') }}"
-                class="inline-block font-rubik text-[12px] font-semibold leading-[1.4] tracking-[0.2px] text-[#6b283b] transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6b283b] lg:text-[20px]"
+                class="inline-block font-rubik text-[12px] font-semibold leading-[1.4] tracking-[0.2px] text-[#38271f] transition hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f] lg:text-[20px]"
             >
                 Kembali ke halaman login
             </a>

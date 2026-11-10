@@ -1,0 +1,103 @@
+{
+  "opacity": {
+    "transparent": {
+      "$type": "number",
+      "$value": 0,
+      "$description": "Opacity 0 persen (0–100).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:216",
+        "com.figma.scopes": [
+          "OPACITY",
+          "COLOR_OPACITY"
+        ]
+      }
+    },
+    "subtle": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "Opacity 8 persen (0–100).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:217",
+        "com.figma.scopes": [
+          "OPACITY",
+          "COLOR_OPACITY"
+        ]
+      }
+    },
+    "hover": {
+      "$type": "number",
+      "$value": 8,
+      "$description": "Opacity 8 persen (0–100).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:218",
+        "com.figma.scopes": [
+          "OPACITY",
+          "COLOR_OPACITY"
+        ]
+      }
+    },
+    "pressed": {
+      "$type": "number",
+      "$value": 12,
+      "$description": "Opacity 12 persen (0–100).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:219",
+        "com.figma.scopes": [
+          "OPACITY",
+          "COLOR_OPACITY"
+        ]
+      }
+    },
+    "muted": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "Opacity 40 persen (0–100).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:220",
+        "com.figma.scopes": [
+          "OPACITY",
+          "COLOR_OPACITY"
+        ]
+      }
+    },
+    "disabled": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Opacity 48 persen (0–100).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:221",
+        "com.figma.scopes": [
+          "OPACITY",
+          "COLOR_OPACITY"
+        ]
+      }
+    },
+    "overlay": {
+      "$type": "number",
+      "$value": 48,
+      "$description": "Opacity 48 persen (0–100).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:222",
+        "com.figma.scopes": [
+          "OPACITY",
+          "COLOR_OPACITY"
+        ]
+      }
+    },
+    "opaque": {
+      "$type": "number",
+      "$value": 100,
+      "$description": "Opacity 100 persen (0–100).",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:223",
+        "com.figma.scopes": [
+          "OPACITY",
+          "COLOR_OPACITY"
+        ]
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Default"
+  }
+}

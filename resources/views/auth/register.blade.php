@@ -47,7 +47,7 @@
                 autocomplete="new-password"
                 toggle-password
                 required
-                minlength="12"
+                minlength="8"
             />
 
             <x-auth-input
@@ -59,7 +59,7 @@
                 autocomplete="new-password"
                 toggle-password
                 required
-                minlength="12"
+                minlength="8"
             />
         </div>
 
@@ -85,7 +85,7 @@
                     Saya menyetujui
                     <a
                         href="{{ route('pickup.show').'#policies' }}"
-                        class="font-semibold text-[#6b283b] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6b283b]"
+                        class="font-semibold text-[#38271f] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f]"
                     >
                         Syarat &amp; Ketentuan
                     </a>
@@ -148,7 +148,7 @@
                 Sudah punya akun?
                 <a
                     href="{{ route('login') }}"
-                    class="font-semibold text-[#6b283b] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6b283b]"
+                    class="font-semibold text-[#38271f] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#38271f]"
                 >
                     Login
                 </a>

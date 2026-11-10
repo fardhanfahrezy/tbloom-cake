@@ -11,7 +11,7 @@
             <x-form-field name="name" label="Nama Admin" autocomplete="off" required minlength="2" maxlength="100" />
             <x-form-field name="email" label="Email Admin" type="email" autocomplete="off" required maxlength="254" />
             <x-form-field name="whatsapp_number" label="WhatsApp Admin" type="tel" autocomplete="off" required />
-            <x-form-field name="password" label="Password awal (minimal 12 karakter)" type="password" autocomplete="new-password" required minlength="12" />
+            <x-form-field name="password" label="Password awal (minimal 8 karakter)" type="password" autocomplete="new-password" required minlength="8" />
             <x-form-field name="password_confirmation" label="Ulangi password awal" type="password" autocomplete="new-password" required />
             <button class="rounded-lg bg-brand-burgundy px-5 py-3 font-semibold text-white hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-burgundy dark:bg-brand-beige dark:text-brand-dark dark:hover:bg-brand-pink">Buat akun Admin</button>
         </form>

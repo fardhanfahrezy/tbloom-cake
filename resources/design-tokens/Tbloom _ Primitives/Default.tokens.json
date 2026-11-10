@@ -1,0 +1,765 @@
+{
+  "neutral": {
+    "0": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$description": "Warna dasar neutral/0. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:84",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.9882352948188782,
+          0.9725490212440491
+        ],
+        "alpha": 1,
+        "hex": "#FFFCF8"
+      },
+      "$description": "Warna dasar neutral/50. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:85",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9803921580314636,
+          0.9607843160629272,
+          0.9372549057006836
+        ],
+        "alpha": 1,
+        "hex": "#FAF5EF"
+      },
+      "$description": "Warna dasar neutral/100. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:86",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.929411768913269,
+          0.8627451062202454,
+          0.8352941274642944
+        ],
+        "alpha": 1,
+        "hex": "#EDDCD5"
+      },
+      "$description": "Warna dasar neutral/200. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:87",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8392156958580017,
+          0.7764706015586853,
+          0.7254902124404907
+        ],
+        "alpha": 1,
+        "hex": "#D6C6B9"
+      },
+      "$description": "Warna dasar neutral/300. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:88",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7098039388656616,
+          0.6039215922355652,
+          0.5333333611488342
+        ],
+        "alpha": 1,
+        "hex": "#B59A88"
+      },
+      "$description": "Warna dasar neutral/400. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:89",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5490196347236633,
+          0.45098039507865906,
+          0.38823530077934265
+        ],
+        "alpha": 1,
+        "hex": "#8C7363"
+      },
+      "$description": "Warna dasar neutral/500. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:90",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.43529412150382996,
+          0.3490196168422699,
+          0.2980392277240753
+        ],
+        "alpha": 1,
+        "hex": "#6F594C"
+      },
+      "$description": "Warna dasar neutral/600. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:91",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.35686275362968445,
+          0.27450981736183167,
+          0.2235294133424759
+        ],
+        "alpha": 1,
+        "hex": "#5B4639"
+      },
+      "$description": "Warna dasar neutral/700. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:92",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.21960784494876862,
+          0.15294118225574493,
+          0.12156862765550613
+        ],
+        "alpha": 1,
+        "hex": "#38271F"
+      },
+      "$description": "Warna dasar neutral/800. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:93",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.14509804546833038,
+          0.10196078568696976,
+          0.08235294371843338
+        ],
+        "alpha": 1,
+        "hex": "#251A15"
+      },
+      "$description": "Warna dasar neutral/900. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:94",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0941176488995552,
+          0.05882352963089943,
+          0.04313725605607033
+        ],
+        "alpha": 1,
+        "hex": "#180F0B"
+      },
+      "$description": "Warna dasar neutral/950. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:95",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "brand": {
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9882352948188782,
+          0.9490196108818054,
+          0.95686274766922
+        ],
+        "alpha": 1,
+        "hex": "#FCF2F4"
+      },
+      "$description": "Warna dasar brand/50. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:96",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9647058844566345,
+          0.8784313797950745,
+          0.9019607901573181
+        ],
+        "alpha": 1,
+        "hex": "#F6E0E6"
+      },
+      "$description": "Warna dasar brand/100. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:97",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9137254953384399,
+          0.7372549176216125,
+          0.7882353067398071
+        ],
+        "alpha": 1,
+        "hex": "#E9BCC9"
+      },
+      "$description": "Warna dasar brand/200. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:98",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8392156958580017,
+          0.5647059082984924,
+          0.6470588445663452
+        ],
+        "alpha": 1,
+        "hex": "#D690A5"
+      },
+      "$description": "Warna dasar brand/300. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:99",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7254902124404907,
+          0.37254902720451355,
+          0.47843137383461
+        ],
+        "alpha": 1,
+        "hex": "#B95F7A"
+      },
+      "$description": "Warna dasar brand/400. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:100",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5882353186607361,
+          0.24705882370471954,
+          0.35686275362968445
+        ],
+        "alpha": 1,
+        "hex": "#963F5B"
+      },
+      "$description": "Warna dasar brand/500. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:101",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.41960784792900085,
+          0.1568627506494522,
+          0.23137255012989044
+        ],
+        "alpha": 1,
+        "hex": "#6B283B"
+      },
+      "$description": "Warna dasar brand/600. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:102",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.33725491166114807,
+          0.125490203499794,
+          0.1882352977991104
+        ],
+        "alpha": 1,
+        "hex": "#562030"
+      },
+      "$description": "Warna dasar brand/700. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:103",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.25882354378700256,
+          0.09019608050584793,
+          0.1411764770746231
+        ],
+        "alpha": 1,
+        "hex": "#421724"
+      },
+      "$description": "Warna dasar brand/800. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:104",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.18039216101169586,
+          0.062745101749897,
+          0.09803921729326248
+        ],
+        "alpha": 1,
+        "hex": "#2E1019"
+      },
+      "$description": "Warna dasar brand/900. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:105",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "success": {
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.929411768913269,
+          0.9686274528503418,
+          0.9411764740943909
+        ],
+        "alpha": 1,
+        "hex": "#EDF7F0"
+      },
+      "$description": "Warna dasar success/50. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:106",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7137255072593689,
+          0.8627451062202454,
+          0.7568627595901489
+        ],
+        "alpha": 1,
+        "hex": "#B6DCC1"
+      },
+      "$description": "Warna dasar success/200. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:107",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.1568627506494522,
+          0.3921568691730499,
+          0.239215686917305
+        ],
+        "alpha": 1,
+        "hex": "#28643D"
+      },
+      "$description": "Warna dasar success/700. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:108",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "warning": {
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.9647058844566345,
+          0.8980392217636108
+        ],
+        "alpha": 1,
+        "hex": "#FFF6E5"
+      },
+      "$description": "Warna dasar warning/50. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:109",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9490196108818054,
+          0.8313725590705872,
+          0.6039215922355652
+        ],
+        "alpha": 1,
+        "hex": "#F2D49A"
+      },
+      "$description": "Warna dasar warning/200. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:110",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.501960813999176,
+          0.3294117748737335,
+          0.06666667014360428
+        ],
+        "alpha": 1,
+        "hex": "#805411"
+      },
+      "$description": "Warna dasar warning/700. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:111",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "error": {
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.9411764740943909,
+          0.929411768913269
+        ],
+        "alpha": 1,
+        "hex": "#FFF0ED"
+      },
+      "$description": "Warna dasar error/50. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:112",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9411764740943909,
+          0.7372549176216125,
+          0.6980392336845398
+        ],
+        "alpha": 1,
+        "hex": "#F0BCB2"
+      },
+      "$description": "Warna dasar error/200. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:113",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6392157077789307,
+          0.20000000298023224,
+          0.1568627506494522
+        ],
+        "alpha": 1,
+        "hex": "#A33328"
+      },
+      "$description": "Warna dasar error/700. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:114",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "info": {
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.929411768913269,
+          0.95686274766922,
+          0.9882352948188782
+        ],
+        "alpha": 1,
+        "hex": "#EDF4FC"
+      },
+      "$description": "Warna dasar info/50. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:115",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7215686440467834,
+          0.8156862854957581,
+          0.9333333373069763
+        ],
+        "alpha": 1,
+        "hex": "#B8D0EE"
+      },
+      "$description": "Warna dasar info/200. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:116",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.1568627506494522,
+          0.3529411852359772,
+          0.5529412031173706
+        ],
+        "alpha": 1,
+        "hex": "#285A8D"
+      },
+      "$description": "Warna dasar info/700. Gunakan token semantic untuk konteks UI.",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:17:117",
+        "com.figma.scopes": [
+          "ALL_FILLS",
+          "STROKE",
+          "EFFECT_COLOR"
+        ]
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Default"
+  }
+}
