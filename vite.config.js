@@ -27,6 +27,13 @@ export default defineConfig({
                     ],
                     optimizedFallbacks: false,
                 }),
+                local('Inter', {
+                    variants: [
+                        { src: 'resources/fonts/Inter/Inter-VariableFont_opsz,wght.ttf', weight: '100 900', style: 'normal' },
+                        { src: 'resources/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf', weight: '100 900', style: 'italic' },
+                    ],
+                    optimizedFallbacks: false,
+                }),
             ],
         }),
         tailwindcss(),
