@@ -18,7 +18,7 @@ use Illuminate\Validation\ValidationException;
 
 class CatalogManager
 {
-    /** @param array{name: string, slug: string, category: string, description?: ?string, sales_unit_label: string, is_active: bool|int|string, archived: bool|int|string} $data */
+    /** @param array{name: string, slug: string, category_id: int, description?: ?string, sales_unit_label: string, is_active: bool|int|string, archived: bool|int|string} $data */
     public function saveProduct(User $actor, array $data, ?Product $product = null): Product
     {
         return DB::transaction(function () use ($actor, $data, $product): Product {
@@ -26,7 +26,7 @@ class CatalogManager
             $current = $product ? Product::query()->whereKey($product->id)->lockForUpdate()->firstOrFail() : new Product;
             $created = ! $current->exists;
             $before = $created ? null : ['is_active' => $current->is_active, 'archived' => $current->archived_at !== null];
-            $current->fill(Arr::only($data, ['name', 'slug', 'category', 'description', 'sales_unit_label', 'is_active']));
+            $current->fill(Arr::only($data, ['name', 'slug', 'category_id', 'description', 'sales_unit_label', 'is_active']));
             $current->archived_at = $data['archived'] ? ($current->archived_at ?? now()->startOfSecond()) : null;
             if ($data['archived']) {
                 $current->is_active = false;

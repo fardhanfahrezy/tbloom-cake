@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\Category;
 use App\Models\DailyAvailability;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\QuotaReleaseReason;
@@ -51,7 +51,7 @@ test('accepts D90 inclusive and never creates availability rows during browsing'
 });
 
 test('filters active products and variants and displays packaging prices images and escaped copy', function () {
-    $product = Product::factory()->create(['name' => 'Cupcake contoh', 'category' => ProductCategory::Cupcake, 'sales_unit_label' => 'box isi 6', 'description' => '<script>alert(1)</script>']);
+    $product = Product::factory()->create(['name' => 'Cupcake contoh', 'category_id' => Category::query()->where('slug', 'cupcake')->value('id'), 'sales_unit_label' => 'box isi 6', 'description' => '<script>alert(1)</script>']);
     ProductVariant::factory()->for($product)->create(['size_label' => 'Ukuran aktif', 'price' => 125000]);
     ProductVariant::factory()->for($product)->create(['size_label' => 'Ukuran nonaktif', 'is_active' => false]);
     ProductImage::factory()->for($product)->create(['path' => 'products/test.jpg', 'alt_text' => 'Foto cupcake contoh']);

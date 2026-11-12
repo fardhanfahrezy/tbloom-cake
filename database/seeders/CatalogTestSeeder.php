@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\DailyAvailability;
 use App\Models\Product;
-use App\Models\ProductCategory;
+use App\Models\Category;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use Illuminate\Database\Seeder;
@@ -26,14 +26,14 @@ class CatalogTestSeeder extends Seeder
             throw new LogicException('Synthetic catalog seeding only allows tbloom_testing.');
         }
 
-        foreach (ProductCategory::cases() as $category) {
+        foreach (Category::query()->whereIn('slug', ['simple', 'cupcake', 'bento'])->orderBy('sort_order')->get() as $category) {
             Product::factory()
                 ->has(ProductVariant::factory()->count(2), 'variants')
                 ->has(ProductImage::factory(), 'images')
                 ->has(DailyAvailability::factory(), 'dailyAvailabilities')
                 ->create([
-                    'name' => '[TEST] '.$category->value,
-                    'category' => $category,
+                    'name' => '[TEST] '.$category->slug,
+                    'category_id' => $category->id,
                     'sales_unit_label' => 'unit uji',
                 ]);
         }

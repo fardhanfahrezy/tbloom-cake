@@ -43,12 +43,7 @@
             <div class="flex flex-col space-y-6 lg:col-span-5">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7B3547]">
-                        {{ match ($card['product']->category) {
-                            \App\Models\ProductCategory::Simple => 'Simple Cake',
-                            \App\Models\ProductCategory::Cupcake => 'Cupcake',
-                            \App\Models\ProductCategory::Bento => 'Bento Cake',
-                            default => 'Cake',
-                        } }}
+                        {{ $card['product']->category?->name ?? 'Cake' }}
                     </p>
                     <h1 class="mt-2 font-lufga text-3xl font-semibold tracking-tight text-[#251306] sm:text-4xl">
                         {{ $card['product']->name }}

@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Testimonial;
@@ -21,7 +21,7 @@ beforeEach(function () {
 test('homepage shows active products and published testimonials without requiring authentication', function () {
     $product = Product::factory()->create([
         'name' => 'Cake Cokelat TBloom',
-        'category' => ProductCategory::Simple,
+        'category_id' => Category::query()->where('slug', 'simple')->value('id'),
         'sales_unit_label' => 'per box',
     ]);
     ProductVariant::factory()->for($product)->create(['size_label' => 'D15', 'price' => 125000]);

@@ -33,7 +33,6 @@ test('rejects padded enum values before they can break model hydration', functio
     expect($record->fresh()->$column)->toBe($original);
 })->with([
     'user role' => [Models\User::class, 'role'],
-    'product category' => [Models\Product::class, 'category'],
     'testimonial publication' => [Models\Testimonial::class, 'publication_status'],
     'order status' => [Models\Order::class, 'status'],
     'pickup method' => [Models\Order::class, 'pickup_method'],

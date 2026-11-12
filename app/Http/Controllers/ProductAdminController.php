@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\CatalogManager;
 use App\Http\Requests\SaveProductRequest;
 use App\Models\Product;
-use App\Models\ProductCategory;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +26,8 @@ class ProductAdminController extends Controller
     {
         Gate::authorize('create', Product::class);
 
-        return view('staff.products.form', ['product' => new Product(['is_active' => true, 'category' => ProductCategory::Simple])]);
+        $defaultCategory = Category::query()->where('slug', 'simple')->where('is_active', true)->first() ?? Category::query()->where('is_active', true)->orderBy('sort_order')->first();
+        return view('staff.products.form', ['product' => new Product(['is_active' => true, 'category_id' => $defaultCategory?->id]), 'categories' => Category::query()->where('is_active', true)->orderBy('sort_order')->orderBy('name')->get()]);
     }
 
     public function edit(Product $product): View
@@ -34,7 +35,8 @@ class ProductAdminController extends Controller
         Gate::authorize('update', $product);
         $product->load(['variants' => fn (HasMany $query) => $query->orderBy('id'), 'images']);
 
-        return view('staff.products.form', ['product' => $product]);
+        $categories = Category::query()->where('is_active', true)->orWhereKey($product->category_id)->orderBy('sort_order')->orderBy('name')->get();
+        return view('staff.products.form', compact('product', 'categories'));
     }
 
     public function store(SaveProductRequest $request, CatalogManager $catalog): RedirectResponse
