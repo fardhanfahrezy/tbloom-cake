@@ -1,20 +1,21 @@
-<footer class="bg-[#251306] text-[#FAF5EF]">
+<footer class="bg-[#726251] text-[#FAF5EF]">
     <div class="mx-auto grid max-w-[1440px] gap-10 px-5 py-14 sm:px-8 md:grid-cols-[1.2fr_.8fr_.8fr] xl:px-16">
         <div>
-            <a href="{{ route('home') }}" class="inline-flex rounded bg-white p-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F7E3DF]">
+            <a href="{{ route('home') }}" aria-label="TBloom Cake, beranda" class="inline-flex rounded focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F7E3DF]">
                 <img src="{{ asset('icon.PNG') }}" width="1475" height="568" alt="TBloom Cake" class="h-auto w-36">
             </a>
-            <p class="mt-5 max-w-sm text-sm leading-7 text-[#E7D9CD]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+            <p class="mt-5 max-w-sm text-sm leading-7 text-[#E7D9CD]">TBloom Cake menghadirkan aneka kreasi kue artisanal, custom cake, cupcake, dan bento cake berkualitas tinggi untuk menyempurnakan setiap momen perayaan Anda di Indramayu.</p>
         </div>
         <div>
             <h2 class="font-lufga text-lg font-semibold">Jelajahi</h2>
             <ul class="mt-4 space-y-3 text-sm text-[#E7D9CD]">
                 <li><a href="{{ route('catalog.index') }}" class="hover:text-white hover:underline">Katalog</a></li>
+                <li><a href="{{ route('about') }}" class="hover:text-white hover:underline">Tentang Kami</a></li>
                 @if (!auth()->check() || auth()->user()->role === \App\Models\UserRole::Customer)
                     <li><a href="{{ route('custom-requests.create') }}" class="hover:text-white hover:underline">Custom Cake</a></li>
                 @endif
                 <li><a href="{{ route('pickup.show').'#policies' }}" class="hover:text-white hover:underline">Informasi Pengambilan</a></li>
-                <li><a href="#how-to-order" class="hover:text-white hover:underline">Cara Pemesanan</a></li>
+                <li><a href="{{ route('home') }}#how-to-order" class="hover:text-white hover:underline">Cara Pemesanan</a></li>
             </ul>
         </div>
         <div>

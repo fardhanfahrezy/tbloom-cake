@@ -24,9 +24,9 @@ class LandingPageController extends Controller
             ]);
 
         $categoryDefinitions = [
-            ['value' => ProductCategory::Simple->value, 'enum' => ProductCategory::Simple, 'name' => 'Simple Cake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
-            ['value' => ProductCategory::Cupcake->value, 'enum' => ProductCategory::Cupcake, 'name' => 'Cupcake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
-            ['value' => ProductCategory::Bento->value, 'enum' => ProductCategory::Bento, 'name' => 'Bento Cake', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'],
+            ['value' => ProductCategory::Simple->value, 'enum' => ProductCategory::Simple, 'name' => 'Simple Cake', 'description' => 'Kue tart lembut berhias minimalis elegan untuk perayaan hangat keluarga.'],
+            ['value' => ProductCategory::Cupcake->value, 'enum' => ProductCategory::Cupcake, 'name' => 'Cupcake', 'description' => 'Porsi personal praktis dengan buttercream lembut dan aneka hiasan cantik.'],
+            ['value' => ProductCategory::Bento->value, 'enum' => ProductCategory::Bento, 'name' => 'Bento Cake', 'description' => 'Kue mini berukuran pas untuk kejutan manis dan momen personal tak terlupakan.'],
         ];
 
         // Select a representative product for each category before applying global product limit.

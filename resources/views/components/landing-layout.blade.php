@@ -1,4 +1,4 @@
-@props(['title' => 'Beranda', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'testimonials' => null])
+@props(['title' => 'Beranda', 'description' => 'TBloom Cake menghadirkan aneka kue artisanal, custom cake, cupcake, dan bento cake berkualitas di Indramayu.', 'testimonials' => null])
 <!DOCTYPE html>
 <html lang="id">
 <head>

@@ -34,9 +34,16 @@ use App\Http\Middleware\EnsureRole;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('home');
+Route::view('/about', 'about')->name('about');
 Route::view('/pickup', 'pickup')->name('pickup.show');
 Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/catalog/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
+Route::get('/resources/img/welcome/{filename}', function (string $filename) {
+    $path = resource_path('img/welcome/'.$filename);
+    abort_unless(file_exists($path), 404);
+
+    return response()->file($path, ['Content-Type' => 'video/mp4']);
+});
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
