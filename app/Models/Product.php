@@ -17,7 +17,7 @@ class Product extends Model
     use HasFactory;
 
     /**
-     * @return array{category: class-string<ProductCategory>, default_daily_quota: string, is_active: string, archived_at: string}
+     * @return array{default_daily_quota: string, is_active: string, archived_at: string}
      */
     protected function casts(): array
     {
