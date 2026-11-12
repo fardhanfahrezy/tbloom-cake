@@ -6,26 +6,32 @@ use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['name', 'slug', 'category', 'description', 'sales_unit_label', 'default_daily_quota', 'is_active', 'archived_at'])]
+#[Fillable(['category_id', 'name', 'slug', 'description', 'sales_unit_label', 'default_daily_quota', 'is_active', 'archived_at'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
     /**
-     * @return array{category: class-string<ProductCategory>, default_daily_quota: string, is_active: string, archived_at: string}
+     * @return array{default_daily_quota: string, is_active: string, archived_at: string}
      */
     protected function casts(): array
     {
         return [
-            'category' => ProductCategory::class,
             'default_daily_quota' => 'integer',
             'is_active' => 'boolean',
             'archived_at' => 'datetime',
         ];
+    }
+
+    /** @return BelongsTo<Category, $this> */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**

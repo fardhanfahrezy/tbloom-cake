@@ -6,13 +6,13 @@
         <x-form-field name="name" label="Nama produk" :value="$product->name" required maxlength="150" />
         <x-form-field name="slug" label="Slug (huruf kecil, angka, tanda hubung)" :value="$product->slug" required maxlength="191" />
         <div class="grid gap-2">
-            <label for="category" class="font-medium">Kategori</label>
-            <select id="category" name="category" required class="rounded-lg border border-brand-beige bg-white p-3 dark:bg-brand-dark">
-                @foreach (['simple' => 'Simple Cake', 'cupcake' => 'Cupcake', 'bento' => 'Bento Cake'] as $value => $label)
-                    <option value="{{ $value }}" @selected(old('category', $product->category?->value) === $value)>{{ $label }}</option>
+            <label for="category_id" class="font-medium">Kategori</label>
+            <select id="category_id" name="category_id" required class="rounded-lg border border-brand-beige bg-white p-3 dark:bg-brand-dark">
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" @selected((string) old('category_id', $product->category_id) === (string) $category->id)>{{ $category->name }}</option>
                 @endforeach
             </select>
-            @error('category')<p role="alert" class="text-sm text-red-700 dark:text-red-300">{{ $message }}</p>@enderror
+            @error('category_id')<p role="alert" class="text-sm text-red-700 dark:text-red-300">{{ $message }}</p>@enderror
         </div>
         <x-form-field name="sales_unit_label" label="Unit jual (contoh: buah, box isi 6)" :value="$product->sales_unit_label" required maxlength="32" />
         <div class="grid gap-2">

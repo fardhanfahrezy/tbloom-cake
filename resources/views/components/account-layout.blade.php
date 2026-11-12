@@ -28,6 +28,8 @@
                     @endif
                     @if (in_array(auth()->user()->role, [\App\Models\UserRole::Admin, \App\Models\UserRole::Owner], true))
                         <a href="{{ route('staff.dashboard') }}" class="underline underline-offset-4">Area staf</a>
+                        @if (Route::has('staff.categories.index'))<a href="{{ route('staff.categories.index') }}" class="underline underline-offset-4">Kategori cake</a>@endif
+                        @if (Route::has('staff.products.index'))<a href="{{ route('staff.products.index') }}" class="underline underline-offset-4">Produk</a>@endif
                         @if (Route::has('staff.custom-requests.index'))<a href="{{ route('staff.custom-requests.index') }}" class="underline underline-offset-4">Request custom</a>@endif
                     @endif
                     @if (Route::has('profile.edit'))

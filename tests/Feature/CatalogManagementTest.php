@@ -2,6 +2,7 @@
 
 use App\CatalogManager;
 use App\Models\AuditLog;
+use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
@@ -25,7 +26,7 @@ beforeEach(function () {
 
 function catalogProductPayload(array $overrides = []): array
 {
-    return array_replace(['name' => 'Kue contoh', 'slug' => 'kue-contoh', 'category' => 'simple', 'description' => 'Deskripsi kue', 'sales_unit_label' => 'buah', 'is_active' => true, 'archived' => false], $overrides);
+    return array_replace(['name' => 'Kue contoh', 'slug' => 'kue-contoh', 'category_id' => Category::query()->where('slug', 'simple')->value('id'), 'description' => 'Deskripsi kue', 'sales_unit_label' => 'buah', 'is_active' => true, 'archived' => false], $overrides);
 }
 
 test('allows Admin and Owner catalog management and denies customers', function (UserRole $role, int $status) {
@@ -64,7 +65,7 @@ test('rejects invalid product inputs without a product or audit', function (arra
 })->with([
     [['name' => ''], 'name'], [['name' => str_repeat('x', 151)], 'name'],
     [['slug' => '../unsafe'], 'slug'], [['slug' => str_repeat('a', 192)], 'slug'],
-    [['category' => 'custom'], 'category'], [['sales_unit_label' => str_repeat('x', 33)], 'sales_unit_label'],
+    [['category_id' => 999999], 'category_id'], [['sales_unit_label' => str_repeat('x', 33)], 'sales_unit_label'],
     [['is_active' => 'yes'], 'is_active'], [['archived' => []], 'archived'],
 ]);
 

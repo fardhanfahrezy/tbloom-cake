@@ -20,24 +20,9 @@
                 <div class="flex flex-col gap-3 border-b border-[#E5D8CC] pb-6">
                     <span class="text-xs font-semibold uppercase tracking-wider text-[#6F594C]">Kategori Kue</span>
                     <nav aria-label="Kategori Produk" class="flex flex-wrap items-center gap-2 sm:gap-3">
-                        @php
-                            $categoriesNav = [
-                                '' => 'Semua Kue',
-                                'simple' => 'Simple Cake',
-                                'bento' => 'Bento Cake',
-                                'cupcake' => 'Cupcake',
-                            ];
-                        @endphp
-                        @foreach ($categoriesNav as $catKey => $catLabel)
-                            @php
-                                $isActive = ($category === $catKey) || ($catKey === '' && empty($category));
-                                $targetUrl = route('catalog.index', array_filter(['category' => $catKey ?: null, 'pickup_date' => $date]));
-                            @endphp
-                            <a href="{{ $targetUrl }}"
-                               @if ($isActive) aria-current="page" @endif
-                               class="inline-flex items-center justify-center rounded-full px-4 py-2 font-inter text-xs font-semibold transition-all sm:text-sm {{ $isActive ? 'bg-[#726251] text-white shadow-sm' : 'border border-[#D6C6B9] bg-white text-[#726251] hover:bg-[#F7E3DF]/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251]' }}">
-                                {{ $catLabel }}
-                            </a>
+                        <a href="{{ route('catalog.index', ['pickup_date' => $date]) }}" @if (empty($category)) aria-current="page" @endif class="inline-flex items-center justify-center rounded-full px-4 py-2 font-inter text-xs font-semibold transition-all sm:text-sm {{ empty($category) ? 'bg-[#726251] text-white shadow-sm' : 'border border-[#D6C6B9] bg-white text-[#726251] hover:bg-[#F7E3DF]/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251]' }}">Semua Kue</a>
+                        @foreach ($categories as $cat)
+                            <a href="{{ route('catalog.index', ['category' => $cat->slug, 'pickup_date' => $date]) }}" @if ($category === $cat->slug) aria-current="page" @endif class="inline-flex items-center justify-center rounded-full px-4 py-2 font-inter text-xs font-semibold transition-all sm:text-sm {{ $category === $cat->slug ? 'bg-[#726251] text-white shadow-sm' : 'border border-[#D6C6B9] bg-white text-[#726251] hover:bg-[#F7E3DF]/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#726251]' }}">{{ $cat->name }}</a>
                         @endforeach
                     </nav>
                 </div>
@@ -76,12 +61,7 @@
                             <div class="mt-4 flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between gap-2 text-xs">
                                     <span class="font-semibold uppercase tracking-wider text-[#7B3547]">
-                                        {{ match ($product->category) {
-                                            \App\Models\ProductCategory::Simple => 'Simple Cake',
-                                            \App\Models\ProductCategory::Cupcake => 'Cupcake',
-                                            \App\Models\ProductCategory::Bento => 'Bento Cake',
-                                            default => 'Cake',
-                                        } }}
+                                        {{ $product->category?->name ?? 'Cake' }}
                                     </span>
                                 </div>
 

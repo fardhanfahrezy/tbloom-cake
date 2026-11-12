@@ -5,7 +5,7 @@
         $cupcakeCategory = $categories->firstWhere('value', 'cupcake');
         $bentoCategory = $categories->firstWhere('value', 'bento');
 
-        $simpleProduct = $simpleCategory['product'] ?? $products->firstWhere('category', \App\Models\ProductCategory::Simple) ?? $heroProduct;
+        $simpleProduct = $simpleCategory['product'] ?? $products->first(fn ($product) => $product->category?->slug === 'simple') ?? $heroProduct;
         $customFeaturedProduct = $bentoCategory['product'] ?? $cupcakeCategory['product'] ?? $products->skip(1)->first() ?? $heroProduct;
 
         $featuredMain = $products->first();

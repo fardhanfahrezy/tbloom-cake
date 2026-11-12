@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CancellationRequestController;
+use App\Http\Controllers\CategoryAdminController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomRequestAdminController;
@@ -108,6 +109,7 @@ Route::middleware(['auth', EnsureActiveAccount::class, 'auth.session'])->group(f
         Route::get('products/{product}/quota', [ProductQuotaAdminController::class, 'edit'])->name('products.quota.edit');
         Route::patch('products/{product}/default-quota', [ProductQuotaAdminController::class, 'updateDefault'])->name('products.quota.default');
         Route::put('products/{product}/availability', [ProductQuotaAdminController::class, 'updateDaily'])->name('products.quota.daily');
+        Route::resource('categories', CategoryAdminController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
         Route::resource('products', ProductAdminController::class)->only(['index', 'create', 'store', 'edit', 'update']);
         Route::resource('products.images', ProductImageAdminController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->scoped();
         Route::resource('products.variants', ProductVariantAdminController::class)->only(['create', 'store', 'edit', 'update'])->scoped();
