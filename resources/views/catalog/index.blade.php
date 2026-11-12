@@ -1,35 +1,7 @@
 <x-landing-layout title="Katalog Kue Artisanal" description="Jelajahi koleksi kue artisanal, simple cake, bento cake, dan cupcake TBloom Cake yang dibuat segar per pesanan di Indramayu.">
     <div data-catalog-page class="bg-[#FAF5EF]">
 
-        {{-- B. Editorial Hero Section --}}
-        <section aria-labelledby="catalog-hero-heading" class="relative overflow-hidden border-b border-[#E5D8CC] bg-[#FAF5EF]">
-            <div class="mx-auto grid max-w-[1440px] items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-12 lg:gap-14 lg:py-16 xl:px-16">
-                <div class="lg:col-span-7">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-[#F7E3DF] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#7B3547]">
-                        Handcrafted Cake Studio
-                    </span>
-                    <h1 id="catalog-hero-heading" class="mt-4 font-lufga text-3xl font-semibold leading-tight tracking-tight text-[#251306] sm:text-4xl lg:text-5xl">
-                        Made with Love, Crafted for Your Moments.
-                    </h1>
-                    <p class="mt-4 max-w-xl font-inter text-base leading-relaxed text-[#6F594C] sm:text-lg">
-                        Discover handcrafted cakes made to make every celebration more meaningful.
-                    </p>
-                    <div class="mt-8 flex flex-wrap items-center gap-4">
-                        <a href="#katalog-koleksi" class="inline-flex items-center justify-center rounded-[8px] bg-[#726251] px-6 py-3.5 font-inter text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#251306] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#726251]">
-                            Lihat Koleksi Kue
-                        </a>
-                        <a href="{{ route('custom-requests.create') }}" class="inline-flex items-center justify-center rounded-[8px] border border-[#D6C6B9] bg-white px-6 py-3.5 font-inter text-sm font-medium text-[#251306] shadow-sm transition-colors hover:bg-[#F7E3DF]/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#726251]">
-                            Pesan Custom Cake
-                        </a>
-                    </div>
-                </div>
-                <div class="lg:col-span-5">
-                    <div class="relative mx-auto w-full max-w-[480px] overflow-hidden rounded-[8px] bg-[#F7E3DF] shadow-md">
-                        <img src="{{ asset('assets/welcome/pexels-gustavo-fring-7447275.jpg') }}" alt="Proses kreasi dan dekorasi kue di studio TBloom Cake" width="480" height="360" class="aspect-[4/3] w-full rounded-[8px] object-cover">
-                    </div>
-                </div>
-            </div>
-        </section>
+
 
         {{-- C. Collection Introduction --}}
         <section id="katalog-koleksi" aria-labelledby="collection-heading" class="mx-auto max-w-[1440px] px-5 pt-12 pb-6 sm:px-8 xl:px-16">

@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T11:56:00Z",
+  "title": "Design System: TBloom Cake",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Warm Taupe",
+        "canonical": "#726251",
+        "tonalRamp": ["#332B24", "#483E34", "#5D4F42", "#726251", "#8D7C6B", "#A89786", "#C4B6A6", "#E5DCD4"]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Dark Espresso",
+        "canonical": "#251306",
+        "tonalRamp": ["#120903", "#251306", "#3D2311", "#59361E", "#774B2E", "#986744", "#BA8965", "#DEC0A7"]
+      },
+      "accent": {
+        "role": "accent",
+        "displayName": "Deep Wine Burgundy",
+        "canonical": "#512323",
+        "tonalRamp": ["#2C1212", "#3E1B1B", "#512323", "#693232", "#844444", "#A25B5B", "#C27878", "#E49E9E"]
+      },
+      "accent-rose": {
+        "role": "accent",
+        "displayName": "Rose Accent",
+        "canonical": "#6B283B",
+        "tonalRamp": ["#36121C", "#501D2A", "#6B283B", "#87374D", "#A54C64", "#C3667E", "#DE879D", "#F5B4C4"]
+      },
+      "blush": {
+        "role": "neutral",
+        "displayName": "Sweet Blush",
+        "canonical": "#F7E3DF",
+        "tonalRamp": ["#856B67", "#A1847F", "#BD9E98", "#D8B9B3", "#ECCECD", "#F7E3DF", "#FAEFEC", "#FFF8F6"]
+      },
+      "latte": {
+        "role": "neutral",
+        "displayName": "Latte Biscuit",
+        "canonical": "#C3B59C",
+        "tonalRamp": ["#5A5141", "#726754", "#8B7F69", "#A69981", "#C3B59C", "#D6CBBA", "#E7DFD4", "#F7F4EF"]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Warm Linen Canvas",
+        "canonical": "#FAF5EF",
+        "tonalRamp": ["#6E6861", "#878077", "#A29A90", "#BEB6AB", "#D9D2C8", "#FAF5EF", "#FCFAF5", "#FFFFFF"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Ivory Paper Surface",
+        "canonical": "#FFFCF8",
+        "tonalRamp": ["#726F6A", "#8D8983", "#A8A49D", "#C4BFB8", "#DFDBD4", "#F4F0E9", "#FFFCF8", "#FFFFFF"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Espresso Ink",
+        "canonical": "#38271F",
+        "tonalRamp": ["#1A120E", "#291D17", "#38271F", "#503B31", "#6B5347", "#8A7164", "#AB9284", "#D1BCB0"]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Biscuit Line",
+        "canonical": "#D6C6B9",
+        "tonalRamp": ["#61574E", "#7B6F64", "#96887B", "#B1A395", "#CDC0B2", "#D6C6B9", "#E8DFD7", "#F7F3EF"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero banner and high-impact headlines (Lufga/Rubik)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings and product categories."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Product card names and modal titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Standard UI copy, product descriptions, and policies."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Category tags, badge pills, and uppercase metadata."
+      }
+    },
+    "shadows": [
+      {
+        "name": "warm-sm",
+        "value": "0 1px 2px 0 rgba(56, 39, 31, 0.08)",
+        "purpose": "Subtle card resting elevation."
+      },
+      {
+        "name": "warm-md",
+        "value": "0 4px 8px 0 rgba(56, 39, 31, 0.10)",
+        "purpose": "Card hover and dropdown surfaces."
+      },
+      {
+        "name": "warm-lg",
+        "value": "0 10px 15px -3px rgba(56, 39, 31, 0.10), 0 4px 6px -4px rgba(56, 39, 31, 0.10)",
+        "purpose": "Modals and mobile navigation overlays."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-patisserie",
+        "value": "cubic-bezier(0.2, 0, 0, 1)",
+        "purpose": "Smooth tactile response for button hovers and dropdowns."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1440px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Tombol aksi utama untuk pemesanan cake dan alur checkout.",
+      "html": "<button class=\"ds-btn-primary\">Pesan Cake</button>",
+      "css": ".ds-btn-primary { background: #726251; color: #FFFCF8; font-family: 'Rubik', sans-serif; font-size: 15px; font-weight: 600; padding: 14px 28px; border-radius: 9999px; border: none; cursor: pointer; transition: background 0.2s ease, transform 0.15s ease; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; } .ds-btn-primary:hover { background: #251306; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid #726251; outline-offset: 4px; }"
+    },
+    {
+      "name": "Secondary Outline Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Tombol sekunder untuk melihat ketentuan, filter, atau aksi alternatif.",
+      "html": "<button class=\"ds-btn-secondary\">Ketentuan Pengambilan</button>",
+      "css": ".ds-btn-secondary { background: #FFFCF8; color: #251306; font-family: 'Rubik', sans-serif; font-size: 15px; font-weight: 500; padding: 14px 28px; border-radius: 9999px; border: 1px solid #D6C6B9; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; } .ds-btn-secondary:hover { background: #FAF5EF; border-color: #726251; }"
+    },
+    {
+      "name": "Product Display Card",
+      "kind": "card",
+      "refersTo": "card-product",
+      "description": "Kartu etalase produk di katalog dan landing page.",
+      "html": "<div class=\"ds-card-product\"><div class=\"ds-card-badge\">SIMPLE CAKE</div><div class=\"ds-card-title\">Classic Strawberry Tart</div><div class=\"ds-card-price\">Mulai Rp185.000</div></div>",
+      "css": ".ds-card-product { background: #FFFCF8; border: 1px solid #D6C6B9; border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px 0 rgba(56, 39, 31, 0.08); font-family: 'Rubik', sans-serif; transition: transform 0.2s ease, box-shadow 0.2s ease; } .ds-card-product:hover { transform: translateY(-2px); box-shadow: 0 4px 8px 0 rgba(56, 39, 31, 0.10); } .ds-card-badge { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; color: #7B3547; text-transform: uppercase; margin-bottom: 6px; } .ds-card-title { font-size: 18px; font-weight: 600; color: #251306; margin-bottom: 8px; } .ds-card-price { font-size: 16px; font-weight: 600; color: #726251; }"
+    },
+    {
+      "name": "Quota Availability Badge",
+      "kind": "chip",
+      "refersTo": "chip-quota",
+      "description": "Badge penanda ketersediaan slot kuota produksi cake pada tanggal tertentu.",
+      "html": "<span class=\"ds-chip-quota\">Tersedia (Sisa 4 slot)</span>",
+      "css": ".ds-chip-quota { display: inline-flex; align-items: center; padding: 4px 12px; background: #F7E3DF; color: #726251; font-family: 'Rubik', sans-serif; font-size: 12px; font-weight: 600; border-radius: 9999px; }"
+    },
+    {
+      "name": "Form Input Pill",
+      "kind": "input",
+      "refersTo": "input-pill",
+      "description": "Input formulir dengan border pill dan floating label yang ramah sentuh.",
+      "html": "<div class=\"ds-input-group\"><label class=\"ds-input-label\">Catatan Pesanan</label><input type=\"text\" class=\"ds-input\" placeholder=\"Tuliskan ucapan kue...\"></div>",
+      "css": ".ds-input-group { position: relative; width: 100%; font-family: 'Rubik', sans-serif; } .ds-input-label { position: absolute; top: -9px; left: 24px; background: #FAF5EF; padding: 0 8px; font-size: 12px; font-weight: 500; color: #6F594C; } .ds-input { width: 100%; min-height: 52px; background: #FAF5EF; border: 1px solid #D6C6B9; border-radius: 9999px; padding: 12px 24px; font-size: 15px; color: #38271F; outline: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; box-sizing: border-box; } .ds-input:focus { border-color: #38271F; box-shadow: 0 0 0 3px rgba(114, 98, 81, 0.2); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Artisanal Patisserie Atelier",
+    "overview": "Sistem desain TBloom Cake memancarkan kehangatan, keanggunan artisanal, dan sentuhan playful dari sebuah studio kue modern di Indramayu. Antarmuka dirancang seperti etalase pastry berkelas: latar kanvas hangat bernuansa linen, kartu display bertekstur kertas lembut (warm paper), dan tipografi display ramah yang mengalir seperti piping cokelat pada kue tart.",
+    "keyCharacteristics": [
+      "Warm Culinary Tones: Seluruh latar, border, dan bayangan menggunakan turunan pigmen cokelat, krem, dan susu hangat alih-alih abu-abu dingin.",
+      "Tactile Soft Forms: Menggunakan kombinasi rounded-full untuk tombol aksi dan radius lengkung lembut (8px–16px) pada kartu produk.",
+      "Authentic Cake-First Focus: Antarmuka mundur menjadi kanvas elegan agar foto kue autentik menjadi fokus utama.",
+      "Clarity & Restraint: Informasi harga, kuota harian, dan panduan serah-terima disajikan dengan keterbacaan tinggi."
+    ],
+    "rules": [
+      {
+        "name": "The Warm Pigment Rule",
+        "body": "Tidak ada warna abu-abu monokromatik murni yang digunakan pada antarmuka. Setiap teks, garis batas, dan bayangan wajib memiliki rona hangat berbasis turunan espresso (#38271F) atau latte (#D6C6B9).",
+        "section": "colors"
+      },
+      {
+        "name": "The 10% Accent Rule",
+        "body": "Warna merah anggur (#512323 dan #6B283B) hanya digunakan pada maksimal 10% luas layar sebagai penunjuk kategori dan titik fokus.",
+        "section": "colors"
+      },
+      {
+        "name": "The Editorial Title Rule",
+        "body": "Nama produk dan judul seksi katalog wajib menggunakan sentence case berbobot semi-bold dengan font display, tidak boleh ditulis kapital semua (ALL CAPS).",
+        "section": "typography"
+      },
+      {
+        "name": "The Ambient Tint Rule",
+        "body": "Tidak diperkenankan menggunakan bayangan hitam murni rgba(0,0,0,x). Seluruh bayangan kartu dan tombol wajib memakai tint pigmen espresso hangat rgba(56, 39, 31, x).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do gunakan foto produk cake asli beresolusi tinggi dengan pencahayaan hangat alami pada kartu katalog dan hero banner.",
+      "Do selalu pasangkan warna latar Canvas (#FAF5EF) dengan Paper (#FFFCF8) untuk menciptakan hierarki kontras yang lembut.",
+      "Do gunakan tombol berujung bulat penuh (rounded-full) untuk call-to-action pemesanan cake dan navigasi utama.",
+      "Do berikan informasi kuota harian dan batas waktu pembayaran secara transparan pada setiap alur checkout.",
+      "Do gunakan tint bayangan espresso hangat rgba(56, 39, 31, 0.08–0.10) alih-alih bayangan abu-abu gelap netral."
+    ],
+    "donts": [
+      "Don't gunakan warna abu-abu netral dingin (#F3F4F6, #9CA3AF, #111827) pada latar, teks, atau garis batas antarmuka.",
+      "Don't tampilkan produk non-cake seperti buket bunga, buket uang, florist, atau hantaran di etalase dan katalog website.",
+      "Don't gunakan layout e-commerce generik yang padat tabel kaku; pertahankan kesan artisanal atelier yang lapang dan bernafas.",
+      "Don't gunakan sudut kotak tajam (rounded-none atau radius 0px) pada tombol interaktif pelanggan.",
+      "Don't gunakan teks promosi yang agresif atau pop-up banner mengganggu yang merusak pengalaman berbelanja santai."
+    ]
+  }
+}

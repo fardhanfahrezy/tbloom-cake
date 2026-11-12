@@ -16,7 +16,8 @@ variabel.json
 /.zed
 /auth.json
 /node_modules
-/graphify-out
+/graphify-out/cache
+/graphify-out/202*
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot
